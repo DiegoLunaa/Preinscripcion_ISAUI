@@ -8,7 +8,7 @@ def mostrar_confirmacion():
     confirmacion.geometry("600x400")
     confirmacion.configure(bg="#1F6680")
 
-    imagen = Image.open("C:/Users/benja/OneDrive/Desktop/Tkinter isaui/Preinscripcion-Isaui/isaui.png")
+    imagen = Image.open("C:/Users/benja/OneDrive/Desktop/Preinscripcion_ISAUI/Interfaz gráfica/isaui.png")
     imagen_redimensionada = imagen.resize((400, 250))  # Tamaño ajustado
     imagen_logo = ImageTk.PhotoImage(imagen_redimensionada)
     label_imagen = Label(confirmacion, image=imagen_logo, bg="#1F6680")

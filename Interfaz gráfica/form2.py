@@ -42,18 +42,25 @@ def abrir_ventana_form2(form):
     #Primera fila
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=180)
-    entry_año_ingreso = Entry(form2, font=("Arial", 16))
-    entry_año_ingreso.place(x=20, y=210, width=150)
+    
+    spin_año_ingreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16),state='readonly')
+    spin_año_ingreso.place(x=20, y=210, width=150)
+    
     label_año_egreso = Label(form2, text="Año egreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=180)
-    entry_año_egreso = Entry(form2, font=("Arial", 16))
-    entry_año_egreso.place(x=190, y=210, width=150)
+    
+    spin_año_egreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16),state='readonly')
+    spin_año_egreso.place(x=190, y=210, width=150)
+    
     label_prov = Label(form2, text="Provincia:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_prov.place(x=370, y=180)
+    
     entry_prov = Entry(form2, font=("Arial", 16))
     entry_prov.place(x=370, y=210, width=400)
+    
     label_titulo = Label(form2, text="Título:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_titulo.place(x=800, y=180)
+    
     entry_titulo = Entry(form2, font=("Arial", 16))
     entry_titulo.place(x=800, y=210, width=400)
 
@@ -76,13 +83,14 @@ def abrir_ventana_form2(form):
     #siguiente fila
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=350)
-    entry_año_ingreso = Entry(form2, font=("Arial", 16))
-    entry_año_ingreso.place(x=20, y=380, width=150)
+    spin_año_ingreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16),state='readonly')
+    spin_año_ingreso_sup.place(x=20, y=380, width=150)
 
     label_año_egreso = Label(form2, text="Año egreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=350)
-    entry_año_egreso = Entry(form2, font=("Arial", 16))
-    entry_año_egreso.place(x=190, y=380, width=150)
+    spin_año_egreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16),state='readonly')
+    spin_año_egreso_sup.place(x=190, y=380, width=150)
+    
 
     #LABEL SITUACION LABORAL Y RESPONSABILIDADES
     label_sit_laboral = Label(form2, text="SITUACIÓN LABORAL:", fg="White", font=("Arial", 24))
@@ -135,13 +143,16 @@ def abrir_ventana_form2(form):
         form.deiconify()
 
     
-    imagen_flecha = Image.open("C:/Users/benja/OneDrive/Desktop/Tkinter isaui/Preinscripcion-Isaui/atras.png")
+    imagen_flecha = Image.open("C:/Users/benja/OneDrive/Desktop/Preinscripcion_ISAUI/Interfaz gráfica/atras.png")
     flecha_atras = ImageTk.PhotoImage(imagen_flecha)
     boton_atras = Button(form2, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=volver)
     boton_atras.place(x=20, y=20)
     boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
 
-    #Para almacenar variables
+    form2.mainloop()
+
+
+    """ #Para almacenar variables
     check_medio_si = IntVar()
     check_medio_no = IntVar()
     check_superior_si = IntVar()
@@ -149,4 +160,17 @@ def abrir_ventana_form2(form):
     check_trabaja_si = IntVar()
     check_trabaja_no = IntVar()
 
-    form2.mainloop()
+    def toggle_entries():
+    if check_medio_si.get() == 1:
+        # Activar las entradas
+        provincia_medio.config(state=tk.NORMAL)
+        año_ingreso.config(state=tk.NORMAL)
+        año_egreso.config(state=tk.NORMAL)
+        titulo_medio_entry.config(state=tk.NORMAL)
+    else:
+        # Desactivar las entradas
+        provincia_medio.config(state=tk.DISABLED)
+        año_ingreso.config(state=tk.DISABLED)
+        año_egreso.config(state=tk.DISABLED)
+        titulo_medio_entry.config(state=tk.DISABLED)"""
+    

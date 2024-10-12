@@ -26,7 +26,7 @@ frame2 = tk.Frame(ventana, bg="#274357", width=75, height=768)
 frame2.place(x=1271, y=0)  # Frame derecho (ajuste para que sea igual)
 
 # Logo Isaui
-imagen = Image.open("C:/Users/benja/OneDrive/Desktop/Tkinter isaui/Preinscripcion-Isaui/isaui.png")
+imagen = Image.open("C:/Users/benja/OneDrive/Desktop/Preinscripcion_ISAUI/Interfaz gráfica/isaui.png")
 imagen_redimensionada = imagen.resize((450, 300))  # Tamaño ajustado
 imagen_logo = ImageTk.PhotoImage(imagen_redimensionada)
 label_imagen = tk.Label(ventana, image=imagen_logo, bg="#1F6680")

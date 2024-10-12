@@ -58,10 +58,20 @@ def abrir_ventana_form1():
     entry_domicilio = Entry(form, font=("Arial", 16))
     entry_domicilio.place(x=450, y=250, width=400)
 
+    lista_provincias = [
+    "Buenos Aires", "CABA", "Catamarca", "Chaco", "Chubut", "Córdoba", 
+    "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa", 
+    "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", 
+    "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe", 
+    "Santiago del Estero", "Tierra del Fuego", "Tucumán"
+    ]
+
     label_provincia = Label(form, text="Provincia:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_provincia.place(x=880, y=220)
-    entry_provincia = Entry(form, font=("Arial", 16))
-    entry_provincia.place(x=880, y=250, width=400)
+    combobox_provincia = ttk.Combobox(form, values=lista_provincias, font=("Arial", 16), state='readonly')
+    combobox_provincia.set("...")
+    combobox_provincia.place(x=880, y=250, width=400)
+  
 
     # Tercera fila
     label_barrio = Label(form, text="Barrio:", bg="#1F6680", fg="White", font=("Arial", 14))
@@ -124,7 +134,7 @@ def abrir_ventana_form1():
     entry_ciudad.place(x=880, y=630, width=400)
 
     # Botón para volver atrás
-    imagen_flecha = Image.open("C:/Users/benja/OneDrive/Desktop/Tkinter isaui/Preinscripcion-Isaui/atras.png")
+    imagen_flecha = Image.open("C:/Users/benja/OneDrive/Desktop/Preinscripcion_ISAUI/Interfaz gráfica/atras.png")
     flecha_atras = ImageTk.PhotoImage(imagen_flecha)
     boton_atras = Button(form, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=form.destroy)
     boton_atras.place(x=20, y=20)
