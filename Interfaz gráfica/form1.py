@@ -3,12 +3,47 @@ from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 from tkinter import ttk
 from form2 import abrir_ventana_form2
+# from validaciones import mostrar_errores
 
 def abrir_ventana_form1():
     form = Toplevel()
     form.title("Formulario de preinscripción")
     form.geometry("1366x768")
     form.configure(bg="#1F6680")
+
+    def getEntradasUsuario():
+        apellido = entry_apellido.get().strip()
+        nombre = entry_nombre.get().strip() 
+        dni = entry_dni.get().strip()
+        telefono = entry_telefono.get().strip()
+        correo = entry_email.get().strip()
+        domicilio = entry_domicilio.get().strip()
+        cuil = entry_cuil.get().strip()
+        provincia_personal = entry_prov.get().strip()
+        barrio = entry_barrio.get().strip()
+        codigo_postal = entry_cod_postal.get().strip()
+        fecha_nacimiento = fecha_entry.get_date()
+        sexo = combobox_sexo.get()
+        pais_nacimiento = entry_pais.get().strip()
+        provincia_nacimiento = entry_prov.get().strip()
+        ciudad_nacimiento = entry_ciudad.get().strip()
+        return (
+    apellido, 
+    nombre, 
+    dni, 
+    telefono, 
+    correo, 
+    domicilio, 
+    cuil, 
+    provincia_personal, 
+    barrio, 
+    codigo_postal, 
+    fecha_nacimiento, 
+    sexo, 
+    pais_nacimiento, 
+    provincia_nacimiento, 
+    ciudad_nacimiento
+)
 
     def activar_pantalla_completa(event=None):
         form.attributes("-fullscreen", True)
@@ -21,7 +56,7 @@ def abrir_ventana_form1():
     form.bind("<F11>", activar_pantalla_completa)
 
     # Título
-    label_texto = Label(form, text="FORMULARIO\nPreinscripción", fg="White", font=("Arial", 36))  # Tamaño ajustado
+    label_texto = Label(form, text="FORMULARIO/nPreinscripción", fg="White", font=("Arial", 36))  # Tamaño ajustado
     label_texto.configure(bg="#274357")
     label_texto.place(relx=0.5, y=10, anchor='n')  # Centrar horizontalmente
 

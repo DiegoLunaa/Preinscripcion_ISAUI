@@ -35,12 +35,12 @@ def validar_domicilio(domicilio, errores):
     if len(domicilio) < 5 or len(domicilio) > 50:
         errores.append("El nombre debe tener entre 5 y 50 caracteres.")
 
-def validar_provincia(provincia, errores):
-    if provincia.get() == "" or provincia.get() == "Seleccione una provincia": 
+def validar_provincia(provincia_personal, errores):
+    if provincia_personal == "": 
         errores.append("Debes seleccionar una provincia.")
 
 def validar_barrio(barrio, errores):
-    if barrio.get() == "" or barrio.get() == "Seleccione un barrio": 
+    if barrio == "": 
         errores.append("Debes seleccionar un barrio.")
 
 def validar_codigo_postal(codigo_postal, errores):
@@ -60,31 +60,30 @@ def verificar_correo(correo, errores):
     if not re.match(patron, correo):
         errores.append("El correo no es válido o no existe.")
 
-def validar_fecha(fecha_entry, errores):
-    fecha_seleccionada = fecha_entry.get_date()
+def validar_fecha(fecha_nacimiento, errores):
 
     fecha_actual = datetime.now().date()
 
-    if fecha_seleccionada < fecha_actual:
+    if fecha_nacimiento < fecha_actual:
         errores.append("La fecha seleccionada no puede ser anterior a la fecha actual.")
-    if fecha_seleccionada == "" or fecha_seleccionada == "Fecha de nacimiento":
+    if fecha_nacimiento == "":
         errores.append("La selección de una fecha es obligatoria.")
 
 
 def validar_sexo(sexo, errores):
-    if sexo.get() == "" or sexo.get() == "Seleccione su sexo": 
+    if sexo == "": 
         errores.append("Debes seleccionar un sexo.")
 
 def validar_pais_nacimiento(pais_nacimiento, errores):
-    if pais_nacimiento.get() == "" or pais_nacimiento.get() == "Seleccione país de nacimiento": 
+    if pais_nacimiento == "": 
         errores.append("Debes seleccionar un país de nacimiento.")
 
 def validar_provincia_nacimiento(provincia_nacimiento, errores):
-    if provincia_nacimiento.get() == "" or provincia_nacimiento.get() == "Seleccione provincia de nacimiento": 
+    if provincia_nacimiento == "": 
         errores.append("Debes seleccionar una provincia de nacimiento.")
 
 def validar_ciudad_nacimiento(ciudad_nacimiento, errores):
-    if ciudad_nacimiento.get() == "" or ciudad_nacimiento.get() == "Seleccione ciudad de nacimiento": 
+    if ciudad_nacimiento == "": 
         errores.append("Debes seleccionar una ciudad de nacimiento.")
 
 def validar_campos_obligatorios(entries, errores):
@@ -94,46 +93,75 @@ def validar_campos_obligatorios(entries, errores):
 # VALIDACIONES FORMULARIO 2
 
 # Valida que solamente seleccione un checkbutton.
-def validar_seleccion(check_medio_si, check_medio_no, check_superior_si, check_superior_no, check_trabaja_si, check_trabaja_no, errores):
-    if (check_medio_si.get() == 1 and check_medio_no.get() == 1) or (check_medio_si.get() == 0 and check_medio_no.get() == 0):
-        errores.append("Debes elegir solamente una opción para estudios medios.")
+def validar_seleccion(check_medio_si, check_medio_no, check_superior_si, check_superior_no, check_trabaja_si, check_trabaja_no, check_cargo_si, check_cargo_no, errores): # Habria que añadir check curso
+    if (check_medio_si == 1 and check_medio_no == 1) or (check_medio_si == 0 and check_medio_no == 0):
+        errores.append("Debes elegir una opción para estudios medios.")
 
-    if (check_superior_si.get() == 1 and check_superior_no.get() == 1) or (check_superior_si.get() == 0 and check_superior_no.get() == 0):
-        errores.append("Debes elegir solamente una opción para estudios superiores.")
+    if (check_superior_si == 1 and check_superior_no == 1) or (check_superior_si == 0 and check_superior_no == 0): # check curso también.
+        errores.append("Debes elegir una opción para estudios superiores.")
     
-    if (check_trabaja_si.get() == 1 and check_trabaja_no.get() == 1) or (check_trabaja_si.get() == 0 and check_trabaja_no.get() == 0):
-        errores.append("Debes elegir solamente una opción para situación laboral.")
+    if (check_trabaja_si == 1 and check_trabaja_no == 1) or (check_trabaja_si == 0 and check_trabaja_no == 0):
+        errores.append("Debes elegir una opción para situación laboral.")
+    
+    if (check_cargo_si == 1 and check_cargo_no == 1) or (check_cargo_si == 0 and check_cargo_no == 0):
+        errores.append("Debes elegir una opción para las personas a cargo.")
 
-# def validar_provincia_2(check_medio_si, check_superior_si, provincia_medio, provincia_superior, errores):
-#     if check_medio_si.get() == 1: # Valida si tiene estudios medios.
-#         if provincia_medio.get() == "" or provincia_medio.get() == "Seleccione una provincia":
-#             errores.append("Debes seleccionar una provincia.")
-#     if check_superior_si.get() == 1: # Valida si tiene estudios superiores.
-#         if provincia_superior.get() == "" or provincia_superior.get() == "Seleccione una provincia": 
-#             errores.append("Debes seleccionar una provincia.")
 
 def nivel_medio(check_medio_si, provincia_medio, año_ingreso_medio, año_egreso_medio, titulo_medio, errores):
-    if check_medio_si.get() == 1: # Valida si tiene estudios medios.
+    if check_medio_si == 1: # Valida si tiene estudios medios.
         
+        # provincia_medio.config(state=tk.NORMAL)
+        # año_ingreso.config(state=tk.NORMAL)
+        # año_egreso.config(state=tk.NORMAL)
+        # titulo_medio_entry.config(state=tk.NORMAL) # LA IDEA ES BLOQUEAR LOS ENTRYS.
 
-        if provincia_medio.get() == "" or provincia_medio.get() == "Seleccione una provincia":
-            errores.append("Debes seleccionar una provincia.")
+        if provincia_medio == "":
+            errores.append("Debes seleccionar una provincia en el nivel medio.")
 
-        if año_ingreso_medio.get() == "" or año_ingreso_medio.get() == "Seleccione año ingreso": 
-            errores.append("Debes seleccionar un año de ingreso")
-        if año_egreso_medio.get() == "" or año_egreso_medio.get() == "Seleccione año egreso": 
-            errores.append("Debes seleccionar un año de egreso")
+        if año_ingreso_medio == "": 
+            errores.append("Debes seleccionar un año de ingreso medio")
+        if año_egreso_medio == "": 
+            errores.append("Debes seleccionar un año de egreso medio")
 
         if not titulo_medio.isalpha():
             errores.append("El título debe ser escrito solo con letras.")
         elif len(titulo_medio) < 5 or len(titulo_medio) > 30:
             errores.append("El nombre debe tener entre 5 y 30 caracteres.")
+            
 
-def nivel_superior(check_superior_si, check_superior_curso, carrera_superior, errores):
-    if check_superior_si.get() == 1 or check_superior_curso == 1: # Valida si tiene estudios medios.
+def nivel_superior(check_superior_si, check_curso_si, carrera_superior, institucion, provincia_superior, año_ingreso_superior, año_egreso_superior, errores):
+    if check_superior_si == 1: # or check_curso_si == 1 / Hay que poner el check en curso # Valida si tiene estudios superiores.
 
         if not carrera_superior.isalpha():
             errores.append("La carrera debe ser escrita solo con letras.")
         elif len(carrera_superior) < 5 or len(carrera_superior) > 30:
-            errores.append("El nombre de la carreradebe tener entre 5 y 30 caracteres.")
+            errores.append("El nombre de la carrera debe tener entre 5 y 30 caracteres.")
 
+        if not institucion.isalpha():
+            errores.append("La institución debe ser escrita solo con letras.")
+        elif len(institucion) < 5 or len(institucion) > 30:
+            errores.append("El nombre de la institución debe tener entre 5 y 30 caracteres.")
+        
+        if institucion == "" or institucion == "Seleccione una provincia":
+            errores.append("Debes seleccionar una provincia.")
+        
+        if provincia_superior == "":
+            errores.append("Debes seleccionar una provincia en el nivel superior.")
+        
+        if año_ingreso_superior == "": 
+            errores.append("Debes seleccionar un año de ingreso superior")
+        if check_superior_si == 1:
+            if año_egreso_superior == "": 
+                errores.append("Debes seleccionar un año de egreso superior")
+        
+def situacion_laboral(check_trabaja_si, horas_lab, descripcion_laboral, errores):
+    if check_trabaja_si == 1:
+        if not horas_lab.isdigit():
+            errores.append("Las horas deben ser escrita solo con digitos.")
+        elif horas_lab < 1 or horas_lab > 24:
+            errores.append("Las horas diarias trabajadas no pueden ser superiores a 24.")
+        
+        if descripcion_laboral == "":
+            errores.append("Se debe ingresar una breve descripción sobre el trabajo.")
+        elif len(descripcion_laboral) < 5 or len(descripcion_laboral) > 300:
+            errores.append("La descripción debe tener entre 5 y 300 caracteres.")

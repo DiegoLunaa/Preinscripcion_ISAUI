@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import ttk
 from confirmacion import mostrar_confirmacion
+# from validaciones import mostrar_errores
 
 def abrir_ventana_form2(form):
     form2 = Toplevel()
@@ -9,6 +10,48 @@ def abrir_ventana_form2(form):
     form2.geometry("1366x768")
     form2.configure(bg="#1F6680")
 
+    def getEntradasUsuario():
+        check_medio_si = check_medio_si.get()
+        check_medio_no = check_medio_no.get()
+        check_superior_si = check_superior_si.get()
+        check_superior__no = check_superior__no.get()
+        check_trabaja_si = check_trabaja_si.get()
+        check_trabaja_no = check_trabaja_no.get()
+        check_cargo_si = check_cargo_si.get()
+        check_cargo_no = check_cargo_no.get()
+        # check_curso = check_curso.get() / No hay check de en curso
+        provincia_medio = entry_prov.get().strip()
+        provincia_superior = entry_prov_ins.get().strip()
+        año_ingreso_medio = spin_año_ingreso.get()
+        año_egreso_medio = spin_año_egreso.get()
+        año_ingreso_superior = spin_año_ingreso_sup.get()
+        año_egreso_superior = spin_año_egreso_sup.get()
+        titulo_medio = entry_titulo.get().strip()
+        carrera_superior = entry_carrera.get().strip()
+        institucion = entry_institucion.get().strip()
+        horas_lab = entry_horas.get().strip()
+        descripcion_laboral = texto_descrip.get().strip()
+        return (
+    check_medio_si, 
+    check_medio_no, 
+    check_superior_si, 
+    check_superior_no, 
+    check_trabaja_si, 
+    check_trabaja_no, 
+    check_cargo_si, 
+    check_cargo_no, 
+    provincia_medio,
+    provincia_superior, 
+    año_ingreso_medio, 
+    año_egreso_medio, 
+    año_ingreso_superior,
+    año_egreso_superior,
+    titulo_medio,
+    carrera_superior,
+    institucion,
+    horas_lab,
+    descripcion_laboral
+)
     def activar_pantalla_completa(event=None):
         form2.attributes("-fullscreen", True)
 
@@ -31,14 +74,14 @@ def abrir_ventana_form2(form):
     label_nivel.configure(bg="#1F6680")
     label_nivel.place(x=20, y=250)
     #CheckButtons
-    check_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_si.place(x=170, y=140)
-    check_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_no.place(x=220, y=140)
-    check_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_si.place(x=200, y=250)
-    check_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_no.place(x=250, y=250)
+    check_medio_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
+    check_medio_si.place(x=170, y=140)
+    check_medio_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
+    check_medio_no.place(x=220, y=140)
+    check_superior_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
+    check_superior_si.place(x=200, y=250)
+    check_superior_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
+    check_superior_no.place(x=250, y=250)
     #Primera fila
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=180)
@@ -107,16 +150,16 @@ def abrir_ventana_form2(form):
     label_cargo.configure(bg="#1F6680")
     label_cargo.place(x=650, y=490)
 
-    check_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_si.place(x=170, y=490)
-    check_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_no.place(x=220, y=490)
+    check_trabaja_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
+    check_trabaja_si.place(x=170, y=490)
+    check_trabaja_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
+    check_trabaja_no.place(x=220, y=490)
 
     #check responsabilidades
-    check_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_si.place(x=950, y=490)
-    check_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_no.place(x=1000, y=490)
+    check_cargo_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
+    check_cargo_si.place(x=950, y=490)
+    check_cargo_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
+    check_cargo_no.place(x=1000, y=490)
 
     #entrys situacion laboral
     label_horas = Label(form2, text="Horas diarias:", bg="#1F6680", fg="White", font=("Arial", 14))
