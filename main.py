@@ -4,6 +4,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 from interfaz_grafica.form1 import abrir_ventana_form1
 from interfaz_grafica.config import path_isaui
+from interfaz_grafica.login import abrir_ventana_login
 from db.funciones_db import obtener_carreras_disponibles
 
 # Funciones para poner la pantalla completa
@@ -88,7 +89,7 @@ combobox_carreras.pack(pady=10, padx=20, fill='x')
 cargar_carreras()
 
 # Botones
-boton_admin = tk.Button(ventana, text="Ingreso Admin", width=12, fg="White", font=("Arial", 12), bg="#274357")
+boton_admin = tk.Button(ventana, text="Ingreso Admin", width=12, fg="White", font=("Arial", 12), bg="#274357", command= abrir_ventana_login)
 boton_admin.place(x=1150, y=20)  # Ajuste de posición
 
 # Cambiar el comando del botón "Avanzar" para usar la nueva función
