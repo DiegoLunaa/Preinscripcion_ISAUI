@@ -1,8 +1,8 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import ttk
-from confirmacion import mostrar_confirmacion
-from config import path_flecha
+from interfaz_grafica.confirmacion import mostrar_confirmacion
+from interfaz_grafica.config import path_flecha
 # from validaciones import mostrar_errores
 
 def abrir_ventana_form2(form):

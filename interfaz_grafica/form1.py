@@ -2,11 +2,19 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 from tkinter import ttk
-from form2 import abrir_ventana_form2
-from config import path_flecha
+from interfaz_grafica.form2 import abrir_ventana_form2
+from interfaz_grafica.config import path_flecha
+from interfaz_grafica.validaciones import *
 # from validaciones import mostrar_errores
 
-def abrir_ventana_form1():
+# Variable global para almacenar el id_carrera y los datos temporalmente
+id_carrera_seleccionada = None
+datos_aspirante = {}
+
+def abrir_ventana_form1(id_carrera):
+    global id_carrera_seleccionada
+    id_carrera_seleccionada = id_carrera
+
     form = Toplevel()
     form.title("Formulario de preinscripción")
     form.geometry("1366x768")
@@ -23,11 +31,12 @@ def abrir_ventana_form1():
         provincia_personal = entry_prov.get().strip()
         barrio = entry_barrio.get().strip()
         codigo_postal = entry_cod_postal.get().strip()
-        fecha_nacimiento = fecha_entry.get_date()
+        fecha_nacimiento = entry_fecha.get_date()
         sexo = combobox_sexo.get()
         pais_nacimiento = entry_pais.get().strip()
         provincia_nacimiento = entry_prov.get().strip()
         ciudad_nacimiento = entry_ciudad.get().strip()
+        
         return (
     apellido, 
     nombre, 
@@ -133,8 +142,8 @@ def abrir_ventana_form1():
     # Cuarta fila
     label_fecha = Label(form, text="Fecha de nacimiento:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_fecha.place(x=20, y=450)
-    fecha_entry = DateEntry(form, font=("Arial", 16), borderwidth=2, state='readonly')
-    fecha_entry.place(x=20, y=480, width=400)
+    entry_fecha = DateEntry(form, font=("Arial", 16), borderwidth=2, state='readonly')
+    entry_fecha.place(x=20, y=480, width=400)
 
     sexo = {
         1: "Masculino",
@@ -142,7 +151,7 @@ def abrir_ventana_form1():
         3: "Indefinido",
     }
     lista_sexo = list(sexo.values())
-    label_sexo = Label(form, text="Sexo:", bg="#1F6680", fg="White", font=("Arial", 14))
+    label_sexo = Label(form, text="Género:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_sexo.place(x=450, y=450)
     combobox_sexo = ttk.Combobox(form, values=lista_sexo, font=("Arial", 16), state='readonly')
     combobox_sexo.set("...")
@@ -177,11 +186,45 @@ def abrir_ventana_form1():
     boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
 
     #Funcion para pasar al siguiente form
-    def avanzar():
-        form.withdraw()
-        abrir_ventana_form2(form)
+    def avanzar_form2():
+
+        apellido, nombre, dni, telefono, correo, domicilio, cuil, provincia_personal, barrio, codigo_postal, fecha_nacimiento, sexo, pais_nacimiento, provincia_nacimiento, ciudad_nacimiento = getEntradasUsuario()
+
+        # Lista para almacenar errores
+        errores = []
+
+        # Validaciones del formulario 1
+        validar_nombre_apellido(nombre, apellido, errores)
+        validar_dni(dni, errores)
+        validar_cuil(cuil, errores)
+        validar_domicilio(domicilio, errores)
+        validar_provincia(provincia_personal, errores)
+        validar_barrio(barrio, errores)
+        validar_codigo_postal(codigo_postal, errores)
+        validar_telefono(telefono, errores)
+        verificar_correo(correo, errores)
+        validar_fecha(fecha_nacimiento, errores)
+        validar_sexo(sexo, errores)
+        validar_pais_nacimiento(pais_nacimiento, errores)
+        validar_provincia_nacimiento(provincia_nacimiento, errores)
+        validar_ciudad_nacimiento(ciudad_nacimiento, errores)
+
+        # Validaciones de campos obligatorios
+        entries = [entry_nombre, entry_apellido, entry_dni, entry_cuil, entry_domicilio, 
+                   combobox_provincia, entry_barrio, entry_cod_postal, entry_telefono, entry_email, 
+                   combobox_sexo, entry_pais, entry_prov, entry_ciudad, entry_fecha]
+        validar_campos_obligatorios(entries, errores)
+
+        # Si hay errores, mostrar y no avanzar
+        if errores:
+            mostrar_errores(errores)
+        else:
+            # Código para avanzar a la siguiente parte del formulario
+            form.withdraw()
+            abrir_ventana_form2(form)
+
     # Botón siguiente
-    boton_siguiente = Button(form, text="Siguiente", bg="White", fg="Black", font=("Arial", 12), borderwidth=2, command=avanzar)
+    boton_siguiente = Button(form, text="Siguiente", bg="White", fg="Black", font=("Arial", 12), borderwidth=2, command=avanzar_form2)
     boton_siguiente.place(x=1240, y=700, width=120, height=64)
 
     form.mainloop()

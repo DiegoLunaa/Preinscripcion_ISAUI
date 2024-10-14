@@ -1,7 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import ttk
-from config import path_isaui
+from interfaz_grafica.config import path_isaui
 
 def mostrar_confirmacion():
     confirmacion = Toplevel()

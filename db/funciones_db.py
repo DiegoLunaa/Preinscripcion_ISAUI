@@ -1,5 +1,5 @@
 import bcrypt
-from conexion_db import conectar
+from .conexion_db import conectar
 
 # Funciones de inicio de sesión y gestión de usuarios
 
