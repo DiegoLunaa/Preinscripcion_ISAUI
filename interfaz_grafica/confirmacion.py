@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import ttk
+from interfaz_grafica.config import path_isaui
 
 def mostrar_confirmacion():
     confirmacion = Toplevel()
@@ -8,7 +9,7 @@ def mostrar_confirmacion():
     confirmacion.geometry("600x400")
     confirmacion.configure(bg="#1F6680")
 
-    imagen = Image.open("C:/Users/benja/OneDrive/Desktop/Preinscripcion_ISAUI/Interfaz gráfica/isaui.png")
+    imagen = Image.open(path_isaui)
     imagen_redimensionada = imagen.resize((400, 250))  # Tamaño ajustado
     imagen_logo = ImageTk.PhotoImage(imagen_redimensionada)
     label_imagen = Label(confirmacion, image=imagen_logo, bg="#1F6680")
