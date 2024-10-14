@@ -33,7 +33,7 @@ def validar_cuil(cuil, errores):
 
 def validar_domicilio(domicilio, errores):
     if len(domicilio) < 5 or len(domicilio) > 50:
-        errores.append("El nombre debe tener entre 5 y 50 caracteres.")
+        errores.append("El domicilio debe tener entre 5 y 50 caracteres.")
 
 def validar_provincia(provincia_personal, errores):
     if provincia_personal == "": 
@@ -58,14 +58,14 @@ def validar_telefono(telefono, errores):
 def verificar_correo(correo, errores):
     patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not re.match(patron, correo):
-        errores.append("El correo no es válido o no existe.")
+        errores.append("El correo ingresado no tiene un formato válido.")
 
 def validar_fecha(fecha_nacimiento, errores):
 
     fecha_actual = datetime.now().date()
 
-    if fecha_nacimiento < fecha_actual:
-        errores.append("La fecha seleccionada no puede ser anterior a la fecha actual.")
+    if fecha_nacimiento >= fecha_actual:
+        errores.append("La fecha de nacimiento no puede ser mayor o igual a la fecha actual.")
     if fecha_nacimiento == "":
         errores.append("La selección de una fecha es obligatoria.")
 
@@ -93,19 +93,16 @@ def validar_campos_obligatorios(entries, errores):
 # VALIDACIONES FORMULARIO 2
 
 # Valida que solamente seleccione un checkbutton.
+def validar_check_opcion(check_si, check_no, mensaje, errores):
+    if (check_si == check_no):
+        errores.append(mensaje)
+
 def validar_seleccion(check_medio_si, check_medio_no, check_superior_si, check_superior_no, check_trabaja_si, check_trabaja_no, check_cargo_si, check_cargo_no, errores): # Habria que añadir check curso
-    if (check_medio_si == 1 and check_medio_no == 1) or (check_medio_si == 0 and check_medio_no == 0):
-        errores.append("Debes elegir una opción para estudios medios.")
 
-    if (check_superior_si == 1 and check_superior_no == 1) or (check_superior_si == 0 and check_superior_no == 0): # check curso también.
-        errores.append("Debes elegir una opción para estudios superiores.")
-    
-    if (check_trabaja_si == 1 and check_trabaja_no == 1) or (check_trabaja_si == 0 and check_trabaja_no == 0):
-        errores.append("Debes elegir una opción para situación laboral.")
-    
-    if (check_cargo_si == 1 and check_cargo_no == 1) or (check_cargo_si == 0 and check_cargo_no == 0):
-        errores.append("Debes elegir una opción para las personas a cargo.")
-
+    validar_check_opcion(check_medio_si, check_medio_no, "Debes elegir una opción para estudios medios.", errores)
+    validar_check_opcion(check_superior_si, check_superior_no, "Debes elegir una opción para estudios medios.", errores) # falta en curso
+    validar_check_opcion(check_trabaja_si, check_trabaja_no, "Debes elegir una opción para estudios medios.", errores)
+    validar_check_opcion(check_cargo_si, check_cargo_no, "Debes elegir una opción para estudios medios.", errores)
 
 def nivel_medio(check_medio_si, provincia_medio, año_ingreso_medio, año_egreso_medio, titulo_medio, errores):
     if check_medio_si == 1: # Valida si tiene estudios medios.
@@ -156,10 +153,13 @@ def nivel_superior(check_superior_si, check_curso_si, carrera_superior, instituc
         
 def situacion_laboral(check_trabaja_si, horas_lab, descripcion_laboral, errores):
     if check_trabaja_si == 1:
-        if not horas_lab.isdigit():
-            errores.append("Las horas deben ser escrita solo con digitos.")
-        elif horas_lab < 1 or horas_lab > 24:
-            errores.append("Las horas diarias trabajadas no pueden ser superiores a 24.")
+        # Validación de las horas laborales
+        try:
+            horas = int(horas_lab)
+            if horas < 1 or horas > 24:
+                errores.append("Las horas diarias trabajadas no pueden ser superiores a 24.")
+        except ValueError:
+            errores.append("Las horas deben ser escritas solo con dígitos.")
         
         if descripcion_laboral == "":
             errores.append("Se debe ingresar una breve descripción sobre el trabajo.")

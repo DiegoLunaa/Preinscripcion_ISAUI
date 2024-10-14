@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 from form1 import abrir_ventana_form1
-
+from config import path_isaui
 
 # Funciones para poner la pantalla completa
 def activar_pantalla_completa(event=None):
@@ -26,7 +26,7 @@ frame2 = tk.Frame(ventana, bg="#274357", width=75, height=768)
 frame2.place(x=1271, y=0)  # Frame derecho (ajuste para que sea igual)
 
 # Logo Isaui
-imagen = Image.open("C:/Users/benja/OneDrive/Desktop/Preinscripcion_ISAUI/Interfaz gráfica/isaui.png")
+imagen = Image.open(path_isaui)
 imagen_redimensionada = imagen.resize((450, 300))  # Tamaño ajustado
 imagen_logo = ImageTk.PhotoImage(imagen_redimensionada)
 label_imagen = tk.Label(ventana, image=imagen_logo, bg="#1F6680")

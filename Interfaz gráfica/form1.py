@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 from tkinter import ttk
 from form2 import abrir_ventana_form2
+from config import path_flecha
 # from validaciones import mostrar_errores
 
 def abrir_ventana_form1():
@@ -169,7 +170,7 @@ def abrir_ventana_form1():
     entry_ciudad.place(x=880, y=630, width=400)
 
     # Botón para volver atrás
-    imagen_flecha = Image.open("C:/Users/benja/OneDrive/Desktop/Preinscripcion_ISAUI/Interfaz gráfica/atras.png")
+    imagen_flecha = Image.open(path_flecha)
     flecha_atras = ImageTk.PhotoImage(imagen_flecha)
     boton_atras = Button(form, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=form.destroy)
     boton_atras.place(x=20, y=20)

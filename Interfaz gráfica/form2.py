@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import ttk
 from confirmacion import mostrar_confirmacion
+from config import path_flecha
 # from validaciones import mostrar_errores
 
 def abrir_ventana_form2(form):
@@ -186,7 +187,7 @@ def abrir_ventana_form2(form):
         form.deiconify()
 
     
-    imagen_flecha = Image.open("C:/Users/benja/OneDrive/Desktop/Preinscripcion_ISAUI/Interfaz gráfica/atras.png")
+    imagen_flecha = Image.open(path_flecha)
     flecha_atras = ImageTk.PhotoImage(imagen_flecha)
     boton_atras = Button(form2, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=volver)
     boton_atras.place(x=20, y=20)
