@@ -29,14 +29,14 @@ def validar_cuil(cuil, errores):
     if not cuil.isdigit():
         errores.append("El CUIL solo debe contener dígitos.")
     elif len(cuil) != 11:
-        errores.append("El número de CUIL debe tener 11.")
+        errores.append("El número de CUIL debe tener 11 dígitos.")
 
 def validar_domicilio(domicilio, errores):
     if len(domicilio) < 5 or len(domicilio) > 50:
         errores.append("El domicilio debe tener entre 5 y 50 caracteres.")
 
 def validar_provincia(provincia_personal, errores):
-    if provincia_personal == "": 
+    if provincia_personal == "...": 
         errores.append("Debes seleccionar una provincia.")
 
 def validar_barrio(barrio, errores):
@@ -71,7 +71,7 @@ def validar_fecha(fecha_nacimiento, errores):
 
 
 def validar_sexo(sexo, errores):
-    if sexo == "": 
+    if sexo == "...": 
         errores.append("Debes seleccionar un sexo.")
 
 def validar_pais_nacimiento(pais_nacimiento, errores):
