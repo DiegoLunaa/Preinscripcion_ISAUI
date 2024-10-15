@@ -3,6 +3,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from tkinter import *
 from tkinter import messagebox, ttk
+from PIL import Image, ImageTk
+from interfaz_grafica.config import path_flecha
 
 # Función para enviar correo
 def enviar_notificacion():
@@ -59,28 +61,30 @@ def actualizar_mensaje(event):
 
 ventana = Tk()
 ventana.title("Enviar Notificaciones vía Gmail")
+ventana.configure(bg="#1F6680")
 ventana.geometry("800x600") 
+
 
 
 padding = 10
 
 
-label_destinatario = Label(ventana, text="Destinatario:", font=("Arial", 12))
+label_destinatario = Label(ventana, text="Destinatario:", bg="#1F6680", fg="White", font=("Arial", 14))
 label_destinatario.pack(pady=padding)
 entrada_destinatario = Entry(ventana, width=60, font=("Arial", 12))
 entrada_destinatario.pack(pady=padding)
 
-label_asunto = Label(ventana, text="Asunto:", font=("Arial", 12))
+label_asunto = Label(ventana, text="Asunto:", bg="#1F6680", fg="White", font=("Arial", 14))
 label_asunto.pack(pady=padding)
 entrada_asunto = Entry(ventana, width=60, font=("Arial", 12))
 entrada_asunto.pack(pady=padding)
 
-label_cuerpo = Label(ventana, text="Cuerpo del Mensaje:", font=("Arial", 12))
+label_cuerpo = Label(ventana, text="Cuerpo del Mensaje:", bg="#1F6680", fg="White", font=("Arial", 14))
 label_cuerpo.pack(pady=padding)
 entrada_cuerpo = Text(ventana, width=60, height=10, font=("Arial", 12), wrap=WORD)
 entrada_cuerpo.pack(pady=padding)
 
-label_mensajes = Label(ventana, text="Seleccionar Mensaje Predeterminado:", font=("Arial", 12))
+label_mensajes = Label(ventana, text="Seleccionar Mensaje Predeterminado:", bg="#1F6680", fg="White", font=("Arial", 14))
 label_mensajes.pack(pady=padding)
 
 mensajes_predeterminados = {
@@ -115,8 +119,14 @@ secretaria@isaui.edu.ar"""),
 # ComboBox con mensajes predeterminados
 combobox_mensajes = ttk.Combobox(ventana, values=list(mensajes_predeterminados.keys()), width=60, font=("Arial", 12))
 combobox_mensajes.pack(pady=padding)
-combobox_mensajes.current(0)  # Seleccionar por defecto el primer mensaje
+combobox_mensajes.set("Seleccione un mensaje predeterminado.")  # Seleccionar por defecto el primer mensaje
 combobox_mensajes.bind("<<ComboboxSelected>>", actualizar_mensaje)  # Vincular la función
+
+imagen_flecha = Image.open(path_flecha)
+flecha_atras = ImageTk.PhotoImage(imagen_flecha)
+boton_atras = Button(ventana, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=ventana.destroy)
+boton_atras.place(x=20, y=20)
+boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
 
 
 boton_enviar = Button(ventana, text="Enviar Correo", command=enviar_notificacion, font=("Arial", 12), bg="lightblue")
