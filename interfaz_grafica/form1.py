@@ -215,31 +215,31 @@ def abrir_ventana_form1(id_carrera):
         validar_campos_obligatorios(entries, errores)
 
         # Si hay errores, mostrar y no avanzar
-        if errores:
-            mostrar_errores(errores, form)
-        else:
-            # Guardar los datos temporalmente en el diccionario
-            datos_temporales["nombre"] = nombre
-            datos_temporales["apellido"] = apellido
-            datos_temporales["dni"] = dni
-            datos_temporales["cuil"] = cuil
-            datos_temporales["domicilio"] = domicilio
-            datos_temporales["provincia_per"] = provincia_personal
-            datos_temporales["barrio"] = barrio
-            datos_temporales["codigo_postal"] = codigo_postal
-            datos_temporales["telefono"] = telefono
-            datos_temporales["email"] = correo
-            datos_temporales["sexo"] = sexo
-            datos_temporales["pais_nac"] = pais_nacimiento
-            datos_temporales["provincia_nac"] = provincia_nacimiento
-            datos_temporales["ciudad_nac"] = ciudad_nacimiento
-            datos_temporales["fecha_nac"] = fecha_nacimiento
+        # if errores:
+        #     mostrar_errores(errores, form)
+        # else:
+        #     # Guardar los datos temporalmente en el diccionario
+        #     datos_temporales["nombre"] = nombre
+        #     datos_temporales["apellido"] = apellido
+        #     datos_temporales["dni"] = dni
+        #     datos_temporales["cuil"] = cuil
+        #     datos_temporales["domicilio"] = domicilio
+        #     datos_temporales["provincia_per"] = provincia_personal
+        #     datos_temporales["barrio"] = barrio
+        #     datos_temporales["codigo_postal"] = codigo_postal
+        #     datos_temporales["telefono"] = telefono
+        #     datos_temporales["email"] = correo
+        #     datos_temporales["sexo"] = sexo
+        #     datos_temporales["pais_nac"] = pais_nacimiento
+        #     datos_temporales["provincia_nac"] = provincia_nacimiento
+        #     datos_temporales["ciudad_nac"] = ciudad_nacimiento
+        #     datos_temporales["fecha_nac"] = fecha_nacimiento
 
-            print("Datos guardados:", datos_temporales)  # Para verificar en consola
+        #     print("Datos guardados:", datos_temporales)  # Para verificar en consola
 
             # Código para avanzar a la siguiente parte del formulario
-            form.withdraw()
-            abrir_ventana_form2(form)
+        form.withdraw()
+        abrir_ventana_form2(form)
 
     # Botón siguiente
     boton_siguiente = Button(form, text="Siguiente", bg="White", fg="Black", font=("Arial", 12), borderwidth=2, command=avanzar_form2)
