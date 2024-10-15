@@ -1,5 +1,5 @@
 # Variables para imagenes
-path_isaui = "C:/Users/vanes/Desktop/agu/programacion/Preinscripcion_ISAUI/interfaz_grafica/isaui.png"
-path_flecha = "C:/Users/vanes/Desktop/agu/programacion/Preinscripcion_ISAUI/interfaz_grafica/atras.png"
-path_usuario = "C:/Users/vanes/Desktop/agu/programacion/Preinscripcion_ISAUI/interfaz_grafica/usuario.png"
-path_facu = "C:/Users/vanes/Desktop/agu/programacion/Preinscripcion_ISAUI/interfaz_grafica/facu.png"
+path_isaui = "C:/Preinscripcion_ISAUI/interfaz_grafica/media/isaui.png"
+path_flecha = "C:/Preinscripcion_ISAUIinterfaz_grafica/media/atras.png"
+path_usuario = "C:/Preinscripcion_ISAUI/interfaz_grafica/media/usuario.png"
+path_facu = "C:/Preinscripcion_ISAUI/interfaz_grafica/media/.png"
