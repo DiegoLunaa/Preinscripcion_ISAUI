@@ -5,11 +5,10 @@ from tkinter import ttk
 from interfaz_grafica.form2 import abrir_ventana_form2
 from interfaz_grafica.config import path_flecha
 from interfaz_grafica.validaciones import *
-# from validaciones import mostrar_errores
 
 # Variable global para almacenar el id_carrera y los datos temporalmente
 id_carrera_seleccionada = None
-datos_aspirante = {}
+datos_temporales = {}
 
 def abrir_ventana_form1(id_carrera):
     global id_carrera_seleccionada
@@ -61,7 +60,7 @@ def abrir_ventana_form1(id_carrera):
     def desactivar_pantalla_completa(event=None):
         form.attributes("-fullscreen", False)
 
-    form.attributes("-fullscreen", True)  # Iniciar en pantalla completa
+    # form.attributes("-fullscreen", True)  # Iniciar en pantalla completa
     form.bind("<Escape>", desactivar_pantalla_completa)
     form.bind("<F11>", activar_pantalla_completa)
 
@@ -217,8 +216,27 @@ def abrir_ventana_form1(id_carrera):
 
         # Si hay errores, mostrar y no avanzar
         if errores:
-            mostrar_errores(errores)
+            mostrar_errores(errores, form)
         else:
+            # Guardar los datos temporalmente en el diccionario
+            datos_temporales["nombre"] = nombre
+            datos_temporales["apellido"] = apellido
+            datos_temporales["dni"] = dni
+            datos_temporales["cuil"] = cuil
+            datos_temporales["domicilio"] = domicilio
+            datos_temporales["provincia_per"] = provincia_personal
+            datos_temporales["barrio"] = barrio
+            datos_temporales["codigo_postal"] = codigo_postal
+            datos_temporales["telefono"] = telefono
+            datos_temporales["email"] = correo
+            datos_temporales["sexo"] = sexo
+            datos_temporales["pais_nac"] = pais_nacimiento
+            datos_temporales["provincia_nac"] = provincia_nacimiento
+            datos_temporales["ciudad_nac"] = ciudad_nacimiento
+            datos_temporales["fecha_nac"] = fecha_nacimiento
+
+            print("Datos guardados:", datos_temporales)  # Para verificar en consola
+
             # Código para avanzar a la siguiente parte del formulario
             form.withdraw()
             abrir_ventana_form2(form)

@@ -3,13 +3,24 @@ from PIL import Image, ImageTk
 from tkinter import ttk
 from interfaz_grafica.confirmacion import mostrar_confirmacion
 from interfaz_grafica.config import path_flecha
-# from validaciones import mostrar_errores
+from interfaz_grafica.validaciones import mostrar_errores
 
 def abrir_ventana_form2(form):
     form2 = Toplevel()
     form2.title("Formulario de preinscripción")
     form2.geometry("1366x768")
     form2.configure(bg="#1F6680")
+
+    # # VARIABLES
+    # check_medio_si = IntVar()
+    # check_medio_no = IntVar()
+    # check_superior_si = IntVar()
+    # check_superior_no = IntVar()
+    # check_superior_en_curso = IntVar()
+    # check_trabaja_si = IntVar()
+    # check_trabaja_no = IntVar()
+    # check_cargo_si = IntVar()
+    # check_cargo_no = IntVar()
 
     def getEntradasUsuario():
         check_medio_si = check_medio_si.get()
@@ -20,7 +31,7 @@ def abrir_ventana_form2(form):
         check_trabaja_no = check_trabaja_no.get()
         check_cargo_si = check_cargo_si.get()
         check_cargo_no = check_cargo_no.get()
-        # check_curso = check_curso.get() / No hay check de en curso
+        check_superior_en_curso = check_superior_en_curso.get()
         provincia_medio = entry_prov.get().strip()
         provincia_superior = entry_prov_ins.get().strip()
         año_ingreso_medio = spin_año_ingreso.get()
@@ -85,7 +96,7 @@ def abrir_ventana_form2(form):
     check_superior_no.place(x=250, y=250)
     check_superior_en_curso = Checkbutton(form2, text="En curso",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
     check_superior_en_curso.place(x=300, y=250)
-    
+
     #Primera fila
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=180)
@@ -188,7 +199,6 @@ def abrir_ventana_form2(form):
     def volver():
         form2.destroy()
         form.deiconify()
-
     
     imagen_flecha = Image.open(path_flecha)
     flecha_atras = ImageTk.PhotoImage(imagen_flecha)
@@ -199,14 +209,7 @@ def abrir_ventana_form2(form):
     form2.mainloop()
 
 
-    """ #Para almacenar variables
-    check_medio_si = IntVar()
-    check_medio_no = IntVar()
-    check_superior_si = IntVar()
-    check_superior_no = IntVar()
-    check_trabaja_si = IntVar()
-    check_trabaja_no = IntVar()
-
+"""
     def toggle_entries():
     if check_medio_si.get() == 1:
         # Activar las entradas

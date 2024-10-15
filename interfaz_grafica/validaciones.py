@@ -4,9 +4,9 @@ from datetime import datetime
 
 # VALIDACIONES FORMULARIO 1
 
-def mostrar_errores(errores):
+def mostrar_errores(errores, padre):
     if errores:
-        messagebox.showerror("ATENCIÓN", "\n".join(errores))
+        messagebox.showerror("ATENCIÓN", "\n".join(errores), parent=padre)
 
 def validar_nombre_apellido(nombre, apellido, errores):
     if not nombre.isalpha():

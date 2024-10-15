@@ -78,3 +78,16 @@ CREATE TABLE Constancia (
     ID_Formulario INT,
     FOREIGN KEY (ID_Formulario) REFERENCES Formulario(ID_Formulario)
 );
+
+-- Insertar carreras
+INSERT INTO Carrera (Nombre_Carrera, Duracion, Facultad, Cupos_Disponibles) VALUES
+('Tecnicatura Superior en Desarrollo de Software', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Diseño de Espacios', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Enfermería', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Turismo y Hotelería', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Guía de Turismo', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Guía de Trekking y Guía de Turismo', 3, 'ISAUI', 50);
+
+-- Insertar administrador
+INSERT INTO Administrador (Nombre, Apellido, Cargo, Usuario, Password) VALUES
+('Jorge', 'Aperlo', 'Administrador', 'admin', 'b'$2b$12$UzRFtiVFgRqynR9PLlOw9ONxli4T0YW/s.hq7RwuXg6BLGZjt06lm'');
