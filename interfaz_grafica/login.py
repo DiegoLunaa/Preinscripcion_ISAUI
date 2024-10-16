@@ -1,7 +1,8 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from main_adm import abrir_ventana_main_adm
-from interfaz_grafica.config import path_usuario
+from interfaz_grafica.config import path_usuario, path_flecha
+
 
 
 def abrir_ventana_login():
@@ -64,4 +65,11 @@ def abrir_ventana_login():
         abrir_ventana_main_adm(login)
 
     boton_ingresar = Button(login, text="Ingresar", width=12, fg="Black", font=("Arial", 12), bg="White", command=ingresar)
-    boton_ingresar.place(x=930, y=620)  
+    boton_ingresar.place(x=930, y=620)
+
+    # Botón para volver atrás
+    imagen_flecha = Image.open(path_flecha)
+    flecha_atras = ImageTk.PhotoImage(imagen_flecha)
+    boton_atras = Button(login, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=login.destroy)
+    boton_atras.place(x=140, y=20)
+    boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen  
