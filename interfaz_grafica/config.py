@@ -1,6 +1,6 @@
 # Variables para imagenes
 path_isaui = "C:/Preinscripcion_ISAUI/interfaz_grafica/media/isaui.png"
-path_flecha = "C:/Preinscripcion_ISAUIinterfaz_grafica/media/atras.png"
+path_flecha = "C:/Preinscripcion_ISAUI/interfaz_grafica/media/atras.png"
 path_usuario = "C:/Preinscripcion_ISAUI/interfaz_grafica/media/usuario.png"
 path_facu = "C:/Preinscripcion_ISAUI/interfaz_grafica/media/facu.png"
 path_basura = "C:/Preinscripcion_ISAUI/interfaz_grafica/media/basura.png"

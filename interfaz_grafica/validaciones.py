@@ -1,6 +1,15 @@
 import re
 from tkinter import messagebox
 from datetime import datetime
+# nombre, apellido, ciudad, titulo, carrera, institucion
+
+def validar_entrada(texto):
+# Expresión regular que permite letras y espacios
+    patron = r'^[a-zA-Z\s]+$'
+    return bool(re.match(patron, texto))
+
+
+
 
 # VALIDACIONES FORMULARIO 1
 
@@ -9,12 +18,12 @@ def mostrar_errores(errores):
         messagebox.showerror("ATENCIÓN", "\n".join(errores))
 
 def validar_nombre_apellido(nombre, apellido, errores):
-    if not nombre.isalpha():
+    if not validar_entrada(nombre):
         errores.append("El nombre debe ser escrito solo con letras.")
     elif len(nombre) < 2 or len(nombre) > 20:
         errores.append("El nombre debe tener entre 2 y 20 caracteres.")
     
-    if not apellido.isalpha():
+    if not validar_entrada(apellido):
         errores.append("El apellido debe ser escrito solo con letras.")
     elif len(apellido) < 2 or len(apellido) > 20:
         errores.append("El apellido debe tener entre 2 y 20 caracteres.")
@@ -75,15 +84,21 @@ def validar_sexo(sexo, errores):
         errores.append("Debes seleccionar un sexo.")
 
 def validar_pais_nacimiento(pais_nacimiento, errores):
+    if not validar_entrada(pais_nacimiento):
+        errores.append("El país de nacimiento debe ser escrito con letras")
     if pais_nacimiento == "": 
         errores.append("Debes seleccionar un país de nacimiento.")
 
 def validar_provincia_nacimiento(provincia_nacimiento, errores):
-    if provincia_nacimiento == "": 
+    if not validar_entrada(provincia_nacimiento):
+        errores.append("La provincia de nacimiento debe ser escrita con letras")
+    elif provincia_nacimiento == "": 
         errores.append("Debes seleccionar una provincia de nacimiento.")
 
 def validar_ciudad_nacimiento(ciudad_nacimiento, errores):
-    if ciudad_nacimiento == "": 
+    if not validar_entrada(ciudad_nacimiento):
+        errores.append("La ciudad de nacimiento debe ser escrita con letras")
+    elif ciudad_nacimiento == "": 
         errores.append("Debes seleccionar una ciudad de nacimiento.")
 
 def validar_campos_obligatorios(entries, errores):
