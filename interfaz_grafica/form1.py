@@ -28,7 +28,7 @@ def abrir_ventana_form1(id_carrera):
         correo = entry_email.get().strip()
         domicilio = entry_domicilio.get().strip()
         cuil = entry_cuil.get().strip()
-        provincia_personal = entry_prov.get().strip()
+        provincia_personal = combobox_provincia.get()
         barrio = entry_barrio.get().strip()
         codigo_postal = entry_cod_postal.get().strip()
         fecha_nacimiento = entry_fecha.get_date()
