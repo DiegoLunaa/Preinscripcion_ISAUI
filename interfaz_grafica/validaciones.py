@@ -7,8 +7,10 @@ def validar_entrada(texto):
     patron = r'^[a-zA-Z\s]+$'
     return bool(re.match(patron, texto))
 
-
-
+def validar_alfanumerico_espacios(texto):
+    # Usamos una expresión regular que permite letras, números y espacios
+    patron = r'^[a-zA-Z0-9\s]+$'
+    return bool(re.match(patron, texto))
 
 # VALIDACIONES FORMULARIO 1
 
@@ -40,6 +42,8 @@ def validar_cuil(cuil, errores):
         errores.append("El número de CUIL debe tener 11 dígitos.")
 
 def validar_domicilio(domicilio, errores):
+    if not validar_alfanumerico_espacios(domicilio):
+        errores.append("No se aceptan signos y/o caracteres no alfanuméricos en el domicilio.")
     if len(domicilio) < 5 or len(domicilio) > 50:
         errores.append("El domicilio debe tener entre 5 y 50 caracteres.")
 
@@ -48,8 +52,10 @@ def validar_provincia(provincia_personal, errores):
         errores.append("Debes seleccionar una provincia.")
 
 def validar_barrio(barrio, errores):
-    if barrio == "": 
-        errores.append("Debes seleccionar un barrio.")
+    if not validar_entrada(barrio):
+        errores.append("El barrio debe ser escrito solo con letras.")
+    elif len(barrio) < 2 or len(barrio) > 30:
+        errores.append("El barrio debe tener entre 2 y 30 caracteres.")
 
 def validar_codigo_postal(codigo_postal, errores):
     if not codigo_postal.isdigit():
@@ -166,8 +172,10 @@ def situacion_laboral(check_trabaja_si, horas_lab, descripcion_laboral, errores)
                 errores.append("Las horas diarias trabajadas no pueden ser superiores a 24.")
         except ValueError:
             errores.append("Las horas deben ser escritas solo con dígitos.")
-        
+
         if descripcion_laboral == "":
             errores.append("Se debe ingresar una breve descripción sobre el trabajo.")
+        elif not validar_alfanumerico_espacios(descripcion_laboral):
+            errores.append("No se aceptan signos y/o caracteres no alfanuméricos en la descripción laboral.")
         elif len(descripcion_laboral) < 5 or len(descripcion_laboral) > 300:
             errores.append("La descripción debe tener entre 5 y 300 caracteres.")
