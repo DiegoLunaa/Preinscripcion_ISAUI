@@ -1,7 +1,6 @@
 import re
 from tkinter import messagebox
 from datetime import datetime
-# nombre, apellido, ciudad, titulo, carrera, institucion
 
 def validar_entrada(texto):
 # Expresión regular que permite letras y espacios
@@ -120,14 +119,9 @@ def validar_seleccion(check_medio_si, check_medio_no, check_superior_si, check_s
     validar_check_opcion(check_cargo_si, check_cargo_no, "Debes elegir una opción para estudios medios.", errores)
 
 def nivel_medio(check_medio_si, provincia_medio, año_ingreso_medio, año_egreso_medio, titulo_medio, errores):
-    if check_medio_si == 1: # Valida si tiene estudios medios.
-        
-        # provincia_medio.config(state=tk.NORMAL)
-        # año_ingreso.config(state=tk.NORMAL)
-        # año_egreso.config(state=tk.NORMAL)
-        # titulo_medio_entry.config(state=tk.NORMAL) # LA IDEA ES BLOQUEAR LOS ENTRYS.
+    if check_medio_si == 1: 
 
-        if provincia_medio == "":
+        if provincia_medio == "...":
             errores.append("Debes seleccionar una provincia en el nivel medio.")
 
         if año_ingreso_medio == "": 
@@ -135,7 +129,7 @@ def nivel_medio(check_medio_si, provincia_medio, año_ingreso_medio, año_egreso
         if año_egreso_medio == "": 
             errores.append("Debes seleccionar un año de egreso medio")
 
-        if not titulo_medio.isalpha():
+        if not validar_entrada(titulo_medio):
             errores.append("El título debe ser escrito solo con letras.")
         elif len(titulo_medio) < 5 or len(titulo_medio) > 30:
             errores.append("El nombre debe tener entre 5 y 30 caracteres.")
@@ -144,20 +138,17 @@ def nivel_medio(check_medio_si, provincia_medio, año_ingreso_medio, año_egreso
 def nivel_superior(check_superior_si, check_curso_si, carrera_superior, institucion, provincia_superior, año_ingreso_superior, año_egreso_superior, errores):
     if check_superior_si == 1: # or check_curso_si == 1 / Hay que poner el check en curso # Valida si tiene estudios superiores.
 
-        if not carrera_superior.isalpha():
+        if not validar_entrada(carrera_superior):
             errores.append("La carrera debe ser escrita solo con letras.")
         elif len(carrera_superior) < 5 or len(carrera_superior) > 30:
             errores.append("El nombre de la carrera debe tener entre 5 y 30 caracteres.")
 
-        if not institucion.isalpha():
+        if not validar_entrada(institucion):
             errores.append("La institución debe ser escrita solo con letras.")
         elif len(institucion) < 5 or len(institucion) > 30:
             errores.append("El nombre de la institución debe tener entre 5 y 30 caracteres.")
         
-        if institucion == "" or institucion == "Seleccione una provincia":
-            errores.append("Debes seleccionar una provincia.")
-        
-        if provincia_superior == "":
+        if provincia_superior == "...":
             errores.append("Debes seleccionar una provincia en el nivel superior.")
         
         if año_ingreso_superior == "": 
