@@ -3,13 +3,18 @@ from tkinter import messagebox
 from datetime import datetime
 
 def validar_entrada(texto):
-# Expresión regular que permite letras y espacios
+# Expresión regular que permite letras y espacios.
     patron = r'^[a-zA-Z\s]+$'
     return bool(re.match(patron, texto))
 
 def validar_alfanumerico_espacios(texto):
-    # Usamos una expresión regular que permite letras, números y espacios
+# Expresión regular que permite letras, números y espacios.
     patron = r'^[a-zA-Z0-9\s]+$'
+    return bool(re.match(patron, texto))
+
+def validar_alfanumerico_pyc(texto):
+# Se le añade punto y coma.
+    patron = r'^[a-zA-Z0-9\s.,]+$'
     return bool(re.match(patron, texto))
 
 # VALIDACIONES FORMULARIO 1
@@ -175,7 +180,7 @@ def situacion_laboral(check_trabaja_si, horas_lab, descripcion_laboral, errores)
 
         if descripcion_laboral == "":
             errores.append("Se debe ingresar una breve descripción sobre el trabajo.")
-        elif not validar_alfanumerico_espacios(descripcion_laboral):
+        elif not validar_alfanumerico_pyc(descripcion_laboral):
             errores.append("No se aceptan signos y/o caracteres no alfanuméricos en la descripción laboral.")
         elif len(descripcion_laboral) < 5 or len(descripcion_laboral) > 300:
             errores.append("La descripción debe tener entre 5 y 300 caracteres.")
