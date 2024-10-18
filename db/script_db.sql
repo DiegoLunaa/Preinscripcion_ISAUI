@@ -78,3 +78,40 @@ CREATE TABLE Constancia (
     ID_Formulario INT,
     FOREIGN KEY (ID_Formulario) REFERENCES Formulario(ID_Formulario)
 );
+
+-- Insertar carreras
+INSERT INTO Carrera (Nombre_Carrera, Duracion, Facultad, Cupos_Disponibles) VALUES
+('Tecnicatura Superior en Desarrollo de Software', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Diseño de Espacios', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Enfermería', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Turismo y Hotelería', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Guía de Turismo', 3, 'ISAUI', 50),
+('Tecnicatura Superior en Guía de Trekking y Guía de Turismo', 3, 'ISAUI', 50);
+
+-- Insertar administrador
+INSERT INTO Administrador (Nombre, Apellido, Cargo, Usuario, Password) VALUES
+('Jorge', 'Aperlo', 'Administrador', 'admin', 'b'$2b$12$UzRFtiVFgRqynR9PLlOw9ONxli4T0YW/s.hq7RwuXg6BLGZjt06lm'');
+
+ALTER TABLE Aspirante
+MODIFY Completo_Nivel_Medio TINYINT DEFAULT 0,
+MODIFY Año_Ingreso_Medio INT DEFAULT NULL,
+MODIFY Año_Egreso_Medio INT DEFAULT NULL,
+MODIFY Provincia_Medio VARCHAR(100) DEFAULT NULL,
+MODIFY Titulo_Medio VARCHAR(100) DEFAULT NULL,
+MODIFY Completo_Nivel_Superior TINYINT DEFAULT 0,
+MODIFY Carrera_Superior VARCHAR(100) DEFAULT NULL,
+MODIFY Institucion_Superior VARCHAR(100) DEFAULT NULL,
+MODIFY Provincia_Superior VARCHAR(100) DEFAULT NULL,
+MODIFY Año_Ingreso_Superior INT DEFAULT NULL,
+MODIFY Año_Egreso_Superior INT DEFAULT NULL,
+MODIFY Trabajo TINYINT DEFAULT 0,
+MODIFY Descripcion_Trabajo TEXT DEFAULT NULL,
+MODIFY Personas_Cargo TINYINT DEFAULT 0;
+
+ALTER TABLE Aspirante 
+CHANGE COLUMN Lugar_Nacimiento Pais_Nacimiento VARCHAR(100);
+
+ALTER TABLE Aspirante 
+ADD COLUMN Provincia_Nacimiento VARCHAR(100) AFTER Pais_Nacimiento,
+ADD COLUMN Localidad_Nacimiento VARCHAR(100) AFTER Ciudad_Nacimiento,
+ADD COLUMN Horas_Trabajo INT DEFAULT NULL AFTER Trabajo;

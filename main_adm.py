@@ -37,7 +37,7 @@ def abrir_ventana_main_adm(login):
 
     #foto Isaui 40 años
     imagen = Image.open(path_facu)
-    imagen_redimensionada = imagen.resize((889, 540)) 
+    imagen_redimensionada = imagen.resize((889, 540))
     imagen_logo = ImageTk.PhotoImage(imagen_redimensionada)
     label_imagen_isaui40 = Label(main_adm, image=imagen_logo, bg="#1F6680")
     label_imagen_isaui40.place(x=395, y=130)

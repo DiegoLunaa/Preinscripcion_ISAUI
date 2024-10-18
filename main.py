@@ -50,9 +50,9 @@ def avanzar_form1():
 
 ventana = tk.Tk()
 ventana.title("PREINSCRIPCIÓN ISAUI")
-ventana.geometry("1366x768")  # Tamaño inicial para pruebas
+ventana.geometry(f"1366x768")  # Tamaño inicial para pruebas
 ventana.configure(bg="#1F6680")
-ventana.attributes("-fullscreen", True)  # Inicia en modo pantalla completa
+# ventana.attributes("-fullscreen", True)  # Inicia en modo pantalla completa
 ventana.bind("<Escape>", desactivar_pantalla_completa)
 ventana.bind("<F11>", activar_pantalla_completa)
 

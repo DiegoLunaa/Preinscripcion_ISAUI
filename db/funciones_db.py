@@ -56,6 +56,12 @@ def cerrar_sesion():
     else:
         print("Cierre de sesión cancelado.")
 
+# Funciones auxiliares
+
+def preparar_datos_para_sql(diccionario):
+    # Extraemos los valores en el mismo orden que en la consulta SQL
+    return tuple(diccionario.values())
+
 # Funciones CRUD
 
 def crear_aspirante(datos): # ANDA
@@ -63,13 +69,13 @@ def crear_aspirante(datos): # ANDA
     conexion = conectar()
     cursor = conexion.cursor()
     query = """INSERT INTO Aspirante (Nombre, Apellido, DNI, Genero, CUIL, Domicilio, Barrio, 
-               Localidad, Codigo_Postal, Telefono, Mail, Fecha_Nacimiento, Lugar_Nacimiento, 
-               Completo_Nivel_Medio, Año_Ingreso_Medio, Año_Egreso_Medio, Provincia_Medio, 
-               Titulo_Medio, Completo_Nivel_Superior, Carrera_Superior, Institucion_Superior, 
-               Provincia_Superior, Año_Ingreso_Superior, Año_Egreso_Superior, Trabajo, 
-               Descripcion_Trabajo, Personas_Cargo) 
+               Localidad, Codigo_Postal, Telefono, Mail, Fecha_Nacimiento, Pais_Nacimiento,
+               Provincia_Nacimiento, Localidad_Nacimiento, Completo_Nivel_Medio, Completo_Nivel_Superior, 
+               Trabajo, Personas_Cargo, Año_Ingreso_Medio, Año_Egreso_Medio, Provincia_Medio, 
+               Titulo_Medio, Carrera_Superior, Institucion_Superior, Provincia_Superior, 
+               Año_Ingreso_Superior, Año_Egreso_Superior, Horas_Trabajo, Descripcion_Trabajo) 
                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-               %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+               %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     cursor.execute(query, datos)
     conexion.commit()
     print("Aspirante creado exitosamente.")
