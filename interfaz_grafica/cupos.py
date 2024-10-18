@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 from interfaz_grafica.config import path_isaui
+from interfaz_grafica.max_cupos import abrir_ventana_max_cupos
 
 def abrir_ventana_cupos(main_adm):
     cupos = Toplevel()
@@ -52,6 +53,9 @@ def abrir_ventana_cupos(main_adm):
 
     boton_volver = Button(cupos, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#1F6680",borderwidth=2,command= volver)
     boton_volver.place(x=1215, y=10)
+
+    boton_confirmados = Button(cupos, text="MÁXIMO DE CUPOS", width=16, fg="White", font=("Arial", 10), bg="#274357",borderwidth=2,command=abrir_ventana_max_cupos)
+    boton_confirmados.place(x=1184, y=679)  
 
         #Botones superiores
 
