@@ -152,6 +152,23 @@ def actualizar_carrera(id_carrera, datos_actualizados):
     conexion.close()
     print("Carrera actualizada exitosamente.")
 
+def actualizar_cupo(id_carrera, nuevo_cupo):
+
+    if not verificar_acceso():
+        return
+    
+    conexion = conectar()
+    cursor = conexion.cursor()
+    
+    query = "UPDATE Carrera SET Cupos_Disponibles = %s WHERE ID_Carrera = %s"
+    cursor.execute(query, (nuevo_cupo, id_carrera))
+    
+    conexion.commit()
+    cursor.close()
+    conexion.close()
+    
+    print(f"Cupo de la carrera con ID {id_carrera} actualizado a {nuevo_cupo}.")
+
 def crear_formulario(datos):
     
     conexion = conectar()
