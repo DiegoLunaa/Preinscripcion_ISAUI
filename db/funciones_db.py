@@ -1,5 +1,6 @@
 import bcrypt
 from db.conexion_db import conectar
+from tkinter import messagebox
 
 # Funciones de inicio de sesión y gestión de usuarios
 
@@ -26,17 +27,18 @@ def verificar_login(usuario, contrasena_plana):
             usuario_autenticado = usuario
             cursor.close()
             conexion.close()  
-            return True
+            return True, usuario_autenticado
         else:
             print("Contraseña incorrecta.")
+            #messagebox.showerror("Error de autenticación", "Usuario o contraseña incorrectos.")
             cursor.close()
             conexion.close()
-            return False
+            return False, usuario_autenticado
     else:
         print("Usuario no encontrado.")
         cursor.close()
         conexion.close()  # Mueve esto aquí
-        return False
+        return False, usuario_autenticado
 
 def verificar_acceso():
     global usuario_autenticado
@@ -48,11 +50,11 @@ def verificar_acceso():
 def cerrar_sesion():
     global usuario_autenticado
     # Confirmación de cierre de sesión
-    confirmar = input("¿Está seguro de que desea cerrar sesión? (s/n): ")
-    if confirmar.lower() == 's':
+    confirmar = messagebox.askyesno("Confirmar", "¿Estás seguro de que deseas cerrar sesión?")
+    if confirmar:
         usuario_autenticado = None
         print("Sesión cerrada exitosamente.")
-        # Aquí podrías agregar código para manejar el estado de la interfaz, si es necesario.
+        return usuario_autenticado
     else:
         print("Cierre de sesión cancelado.")
 

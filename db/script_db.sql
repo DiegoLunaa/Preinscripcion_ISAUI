@@ -90,7 +90,8 @@ INSERT INTO Carrera (Nombre_Carrera, Duracion, Facultad, Cupos_Disponibles) VALU
 
 -- Insertar administrador
 INSERT INTO Administrador (Nombre, Apellido, Cargo, Usuario, Password) VALUES
-('Jorge', 'Aperlo', 'Administrador', 'admin', 'b'$2b$12$UzRFtiVFgRqynR9PLlOw9ONxli4T0YW/s.hq7RwuXg6BLGZjt06lm'');
+('Jorge', 'Aperlo', 'Administrador', 'admin', '$2b$12$UzRFtiVFgRqynR9PLlOw9ONxli4T0YW/s.hq7RwuXg6BLGZjt06lm');
+VALUES ('admin', 'admin', 'Administrador', 'adm', '$2b$12$g65hJdyYvneSALBS.3bQNeAwaZkxkeyLp9Hj2rxV3v1f2SP36zply');
 
 ALTER TABLE Aspirante
 MODIFY Completo_Nivel_Medio TINYINT DEFAULT 0,

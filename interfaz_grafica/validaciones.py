@@ -4,8 +4,8 @@ from datetime import datetime
 import tkinter as tk
 
 def validar_entrada(texto):
-# Expresión regular que permite letras y espacios.
-    patron = r'^[a-zA-Z\s]+$'
+    # Expresión regular que permite letras (incluyendo tildes) y espacios.
+    patron = r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$'
     return bool(re.match(patron, texto))
 
 def validar_alfanumerico_espacios(texto):
@@ -134,8 +134,8 @@ def validar_nivel_medio(nivel_medio, provincia_medio, año_ingreso_medio, año_e
 
         if not validar_entrada(titulo_medio):
             errores.append("El título debe ser escrito solo con letras.")
-        elif len(titulo_medio) < 5 or len(titulo_medio) > 30:
-            errores.append("El nombre debe tener entre 5 y 30 caracteres.")
+        elif len(titulo_medio) < 1 or len(titulo_medio) > 100:
+            errores.append("El título debe tener entre 1 y 1000 caracteres.")
             
 
 def validar_nivel_superior(nivel_superior, carrera_superior, institucion, provincia_superior, año_ingreso_superior, año_egreso_superior, errores):
@@ -143,13 +143,13 @@ def validar_nivel_superior(nivel_superior, carrera_superior, institucion, provin
 
         if not validar_entrada(carrera_superior):
             errores.append("La carrera debe ser escrita solo con letras.")
-        elif len(carrera_superior) < 5 or len(carrera_superior) > 30:
-            errores.append("El nombre de la carrera debe tener entre 5 y 30 caracteres.")
+        elif len(carrera_superior) < 1 or len(carrera_superior) > 100:
+            errores.append("El nombre de la carrera debe tener entre 1 y 100 caracteres.")
 
         if not validar_entrada(institucion):
             errores.append("La institución debe ser escrita solo con letras.")
-        elif len(institucion) < 5 or len(institucion) > 30:
-            errores.append("El nombre de la institución debe tener entre 5 y 30 caracteres.")
+        elif len(institucion) < 1 or len(institucion) > 100:
+            errores.append("El nombre de la institución debe tener entre 1 y 100 caracteres.")
         
         if provincia_superior == "":
             errores.append("Debes seleccionar una provincia en el nivel superior.")
