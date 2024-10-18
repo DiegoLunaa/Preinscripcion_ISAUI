@@ -1,6 +1,7 @@
 import re
 from tkinter import messagebox
 from datetime import datetime
+import tkinter as tk
 
 # VALIDACIONES FORMULARIO 1
 
@@ -35,8 +36,8 @@ def validar_domicilio(domicilio, errores):
     if len(domicilio) < 5 or len(domicilio) > 50:
         errores.append("El domicilio debe tener entre 5 y 50 caracteres.")
 
-def validar_provincia(provincia_personal, errores):
-    if provincia_personal == "": 
+def validar_localidad(localidad, errores):
+    if localidad == "": 
         errores.append("Debes seleccionar una provincia.")
 
 def validar_barrio(barrio, errores):
@@ -65,9 +66,9 @@ def validar_fecha(fecha_nacimiento, errores):
     fecha_actual = datetime.now().date()
 
     if fecha_nacimiento >= fecha_actual:
-        errores.append("La fecha de nacimiento no puede ser mayor o igual a la fecha actual.")
+        errores.append("La fecha de nacimiento no puede ser posterior o igual a la fecha actual.")
     if fecha_nacimiento == "":
-        errores.append("La selección de una fecha es obligatoria.")
+        errores.append("Debes seleccionar una fecha de nacimiento.")
 
 
 def validar_sexo(sexo, errores):
@@ -87,30 +88,16 @@ def validar_ciudad_nacimiento(ciudad_nacimiento, errores):
         errores.append("Debes seleccionar una ciudad de nacimiento.")
 
 def validar_campos_obligatorios(entries, errores):
-    if any(entry.get().strip() == "" for entry in entries):
+    if any(
+        (entry.get("1.0", "end").strip() if isinstance(entry, tk.Text) else entry.get().strip()) == ""
+        for entry in entries
+    ):
         errores.append("Todos los campos del formulario son obligatorios.")
-    
+  
 # VALIDACIONES FORMULARIO 2
 
-# Valida que solamente seleccione un checkbutton.
-def validar_check_opcion(check_si, check_no, mensaje, errores):
-    if (check_si == check_no):
-        errores.append(mensaje)
-
-def validar_seleccion(check_medio_si, check_medio_no, check_superior_si, check_superior_no, check_trabaja_si, check_trabaja_no, check_cargo_si, check_cargo_no, errores): # Habria que añadir check curso
-
-    validar_check_opcion(check_medio_si, check_medio_no, "Debes elegir una opción para estudios medios.", errores)
-    validar_check_opcion(check_superior_si, check_superior_no, "Debes elegir una opción para estudios medios.", errores) # falta en curso
-    validar_check_opcion(check_trabaja_si, check_trabaja_no, "Debes elegir una opción para estudios medios.", errores)
-    validar_check_opcion(check_cargo_si, check_cargo_no, "Debes elegir una opción para estudios medios.", errores)
-
-def nivel_medio(check_medio_si, provincia_medio, año_ingreso_medio, año_egreso_medio, titulo_medio, errores):
-    if check_medio_si == 1: # Valida si tiene estudios medios.
-        
-        # provincia_medio.config(state=tk.NORMAL)
-        # año_ingreso.config(state=tk.NORMAL)
-        # año_egreso.config(state=tk.NORMAL)
-        # titulo_medio_entry.config(state=tk.NORMAL) # LA IDEA ES BLOQUEAR LOS ENTRYS.
+def validar_nivel_medio(nivel_medio, provincia_medio, año_ingreso_medio, año_egreso_medio, titulo_medio, errores):
+    if nivel_medio == 1: # Valida si tiene estudios medios.
 
         if provincia_medio == "":
             errores.append("Debes seleccionar una provincia en el nivel medio.")
@@ -126,8 +113,8 @@ def nivel_medio(check_medio_si, provincia_medio, año_ingreso_medio, año_egreso
             errores.append("El nombre debe tener entre 5 y 30 caracteres.")
             
 
-def nivel_superior(check_superior_si, check_curso_si, carrera_superior, institucion, provincia_superior, año_ingreso_superior, año_egreso_superior, errores):
-    if check_superior_si == 1: # or check_curso_si == 1 / Hay que poner el check en curso # Valida si tiene estudios superiores.
+def validar_nivel_superior(nivel_superior, carrera_superior, institucion, provincia_superior, año_ingreso_superior, año_egreso_superior, errores):
+    if nivel_superior in [1,2]:
 
         if not carrera_superior.isalpha():
             errores.append("La carrera debe ser escrita solo con letras.")
@@ -139,19 +126,16 @@ def nivel_superior(check_superior_si, check_curso_si, carrera_superior, instituc
         elif len(institucion) < 5 or len(institucion) > 30:
             errores.append("El nombre de la institución debe tener entre 5 y 30 caracteres.")
         
-        if institucion == "" or institucion == "Seleccione una provincia":
-            errores.append("Debes seleccionar una provincia.")
-        
         if provincia_superior == "":
             errores.append("Debes seleccionar una provincia en el nivel superior.")
         
         if año_ingreso_superior == "": 
             errores.append("Debes seleccionar un año de ingreso superior")
-        if check_superior_si == 1:
+        if nivel_superior == 1:
             if año_egreso_superior == "": 
                 errores.append("Debes seleccionar un año de egreso superior")
         
-def situacion_laboral(check_trabaja_si, horas_lab, descripcion_laboral, errores):
+def validar_situacion_laboral(check_trabaja_si, horas_lab, descripcion_laboral, errores):
     if check_trabaja_si == 1:
         # Validación de las horas laborales
         try:

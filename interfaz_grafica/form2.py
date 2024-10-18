@@ -3,9 +3,10 @@ from PIL import Image, ImageTk
 from tkinter import ttk
 from interfaz_grafica.confirmacion import mostrar_confirmacion
 from interfaz_grafica.config import path_flecha
-from interfaz_grafica.validaciones import mostrar_errores
+from interfaz_grafica.validaciones import *
+from db.funciones_db import *
 
-def abrir_ventana_form2(form):
+def abrir_ventana_form2(form, datos_temporales):
     form2 = Toplevel()
     form2.title("Formulario de preinscripción")
     form2.geometry("1366x768")
@@ -18,15 +19,11 @@ def abrir_ventana_form2(form):
     radio_cargo_var = IntVar()
 
     def getEntradasUsuario():
-        check_medio_si = check_medio_si.get()
-        check_medio_no = check_medio_no.get()
-        check_superior_si = check_superior_si.get()
-        check_superior_no = check_superior_no.get()
-        check_trabaja_si = check_trabaja_si.get()
-        check_trabaja_no = check_trabaja_no.get()
-        check_cargo_si = check_cargo_si.get()
-        check_cargo_no = check_cargo_no.get()
-        check_superior_en_curso = check_superior_en_curso.get()
+        
+        nivel_medio = radio_medio_var.get()
+        nivel_superior = radio_superior_var.get()
+        trabaja = radio_trabaja_var.get()
+        a_cargo = radio_cargo_var.get()
         provincia_medio = entry_prov.get().strip()
         provincia_superior = entry_prov_ins.get().strip()
         año_ingreso_medio = spin_año_ingreso.get()
@@ -40,14 +37,10 @@ def abrir_ventana_form2(form):
         descripcion_laboral = texto_descrip.get("1.0", "end").strip()
         
         return (
-    check_medio_si, 
-    check_medio_no, 
-    check_superior_si, 
-    check_superior_no, 
-    check_trabaja_si, 
-    check_trabaja_no, 
-    check_cargo_si, 
-    check_cargo_no, 
+    nivel_medio,
+    nivel_superior,
+    trabaja,
+    a_cargo, 
     provincia_medio,
     provincia_superior, 
     año_ingreso_medio, 
@@ -60,7 +53,7 @@ def abrir_ventana_form2(form):
     horas_lab,
     descripcion_laboral
 )
-    
+
     # Funciones para habilitar/deshabilitar campos dinámicamente
     def toggle_entries(variable, *widgets):
         estado = NORMAL if variable.get() in [1, 2] else DISABLED
@@ -116,13 +109,13 @@ def abrir_ventana_form2(form):
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=180)
     
-    spin_año_ingreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16), state=DISABLED)
+    spin_año_ingreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16), textvariable=StringVar(value=""), state=DISABLED)
     spin_año_ingreso.place(x=20, y=210, width=150)
     
     label_año_egreso = Label(form2, text="Año egreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=180)
     
-    spin_año_egreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16), state=DISABLED)
+    spin_año_egreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16), textvariable=StringVar(value=""), state=DISABLED)
     spin_año_egreso.place(x=190, y=210, width=150)
     
     label_prov = Label(form2, text="Provincia:", bg="#1F6680", fg="White", font=("Arial", 14))
@@ -160,18 +153,18 @@ def abrir_ventana_form2(form):
     # siguiente fila
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=350)
-    spin_año_ingreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16),state=DISABLED)
+    spin_año_ingreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16), textvariable=StringVar(value=""), state=DISABLED)
     spin_año_ingreso_sup.place(x=20, y=380, width=150)
 
     label_año_egreso = Label(form2, text="Año egreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=350)
-    spin_año_egreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16),state=DISABLED)
+    spin_año_egreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16), textvariable=StringVar(value=""), state=DISABLED)
     spin_año_egreso_sup.place(x=190, y=380, width=150)
     
     # Asignar comando a los Radiobuttons después de crear los widgets
     radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
     radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
-    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
+    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup))
 
     # Situación laboral y responsabilidades - Headers
     label_sit_laboral = Label(form2, text="SITUACIÓN LABORAL:", fg="White", font=("Arial", 24))
@@ -204,8 +197,80 @@ def abrir_ventana_form2(form):
 
     #Boton Finalizar
     def finalizar():
-        form2.destroy()
-        mostrar_confirmacion()
+        
+        nivel_medio, nivel_superior, trabaja, a_cargo, provincia_medio, provincia_superior, año_ingreso_medio, año_egreso_medio, año_ingreso_superior, año_egreso_superior, titulo_medio, carrera_superior, institucion, horas_lab, descripcion_laboral = getEntradasUsuario()
+        
+        # Lista para almacenar errores
+        errores = []
+
+        # Validaciones del formulario 2
+        validar_nivel_medio(nivel_medio, provincia_medio, año_ingreso_medio, año_egreso_medio, titulo_medio, errores)
+        validar_nivel_superior(nivel_superior, carrera_superior, institucion, provincia_superior, año_ingreso_superior, año_egreso_superior, errores)
+        validar_situacion_laboral(trabaja, horas_lab, descripcion_laboral, errores)
+
+        entries = []
+        if radio_medio_var.get() == 1:
+            entries += [spin_año_ingreso, spin_año_egreso, entry_prov, entry_titulo]
+        if radio_superior_var.get() == 1:
+            entries += [entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup]
+        if radio_superior_var.get() == 2:
+            entries += [entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup]
+        if radio_trabaja_var.get() == 1:
+            entries += [entry_horas, texto_descrip]
+        if len(entries) > 1:
+            validar_campos_obligatorios(entries, errores)
+
+        if errores:
+            mostrar_errores(errores, form2)
+        else:
+            datos_temporales["Completo_Nivel_Medio"] = nivel_medio
+            datos_temporales["Completo_Nivel_Superior"] = nivel_superior
+            datos_temporales["Trabajo"] = trabaja
+            datos_temporales["Personas_Cargo"] = a_cargo
+
+            # Nivel Medio
+            if radio_medio_var.get() == 1:
+                datos_temporales["Año_Ingreso_Medio"] = año_ingreso_medio
+                datos_temporales["Año_Egreso_Medio"] = año_egreso_medio
+                datos_temporales["Provincia_Medio"] = provincia_medio
+                datos_temporales["Titulo_Medio"] = titulo_medio
+            else:
+                datos_temporales["Año_Ingreso_Medio"] = None
+                datos_temporales["Año_Egreso_Medio"] = None
+                datos_temporales["Provincia_Medio"] = None
+                datos_temporales["Titulo_Medio"] = None
+
+            # Nivel Superior
+            if radio_superior_var.get() in [1, 2]:
+                datos_temporales["Carrera_Superior"] = carrera_superior
+                datos_temporales["Institucion_Superior"] = institucion
+                datos_temporales["Provincia_Superior"] = provincia_superior
+                datos_temporales["Año_Ingreso_Superior"] = año_ingreso_superior
+                datos_temporales["Año_Egreso_Superior"] = None
+                if radio_superior_var.get() == 1:  # Solo si es "Sí"
+                    datos_temporales["Año_Egreso_Superior"] = año_egreso_superior
+            else:
+                datos_temporales["Carrera_Superior"] = None
+                datos_temporales["Institucion_Superior"] = None
+                datos_temporales["Provincia_Superior"] = None
+                datos_temporales["Año_Ingreso_Superior"] = None
+                datos_temporales["Año_Egreso_Superior"] = None
+
+            # Situación Laboral
+            if radio_trabaja_var.get() == 1:
+                datos_temporales["Horas_Trabajo"] = horas_lab
+                datos_temporales["Descripcion_Trabajo"] = descripcion_laboral
+            else:
+                datos_temporales["Horas_Trabajo"] = None
+                datos_temporales["Descripcion_Trabajo"] = None
+
+            print("Datos guardados:", datos_temporales)  # Para verificar en consola
+
+            datos_aspirante = preparar_datos_para_sql(datos_temporales)
+            crear_aspirante(datos_aspirante)
+
+            form2.destroy()
+            mostrar_confirmacion()
     
     boton_siguiente = Button(form2, text="Finalizar", bg="White", fg="Black", font=("Arial", 12), borderwidth=2,command=finalizar)
     boton_siguiente.place(x=1240, y=700, width=120, height=64)
