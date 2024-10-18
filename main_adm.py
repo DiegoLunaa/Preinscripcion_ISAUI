@@ -1,6 +1,8 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from interfaz_grafica.config import path_facu, path_isaui
+from interfaz_grafica.aspirantes import abrir_ventana_aspirantes
+from interfaz_grafica.cupos import abrir_ventana_cupos
 
 def abrir_ventana_main_adm(login):
     main_adm = Toplevel()
@@ -42,24 +44,24 @@ def abrir_ventana_main_adm(login):
     label_imagen_isaui40.image = imagen_logo  # Mantiene una referencia a la imagen
 
     #Botones
-    boton_aspirantes = Button(main_adm, text="ASPIRANTES", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2)
+    def avanzar_aspirantes():
+        main_adm.withdraw()
+        abrir_ventana_aspirantes(main_adm)
+
+    def avanzar_cupos():
+        main_adm.withdraw()
+        abrir_ventana_cupos(main_adm)
+    
+    boton_aspirantes = Button(main_adm, text="ASPIRANTES", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=avanzar_aspirantes)
     boton_aspirantes.place(x=64, y=184) 
     
-    boton_cupos = Button(main_adm, text="CUPOS", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2)
+    boton_cupos = Button(main_adm, text="CUPOS", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=avanzar_cupos)
     boton_cupos.place(x=64, y=249)  
 
-    boton_en_espera = Button(main_adm, text="EN ESPERA", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2)
-    boton_en_espera.place(x=64, y=314)  
-
-    boton_confirmados = Button(main_adm, text="CONFIRMADOS", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2)
-    boton_confirmados.place(x=64, y=379)  
-
     #Botones superiores
-    boton_inicio = Button(main_adm, text="INICIO", width=14, fg="White", font=("Arial", 12), bg="#1F6680",borderwidth=2)
-    boton_inicio.place(x=1068, y=10)
-
     def volver():
         main_adm.destroy()
         login.deiconify()
+        
     boton_cerrar_sesion = Button(main_adm, text="CERRAR SESIÓN", width=14, fg="White", font=("Arial", 12), bg="#1F6680",borderwidth=2,command=volver)
     boton_cerrar_sesion.place(x=1215, y=10)

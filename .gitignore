@@ -3,6 +3,5 @@ db/test_login.py
 db/test_integral.py
 db/test_form.py
 db/pw.py
-db/__pycache__
-interfaz_grafica/__pycache__
-/__pycache__
+__pycache__
+reportes.py
