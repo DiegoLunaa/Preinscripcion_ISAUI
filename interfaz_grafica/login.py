@@ -2,8 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from main_adm import abrir_ventana_main_adm
 from interfaz_grafica.config import path_usuario, path_flecha
-
-
+from db.funciones_db import *
 
 def abrir_ventana_login():
     login = Toplevel()
@@ -50,19 +49,25 @@ def abrir_ventana_login():
     entry_usuario = Entry(login, font=("Arial", 16))
     entry_usuario.place(relx=0.5, y=450, anchor='n')
 
-    label_contraseña = Label(login, text="CONTRASEÑA:", bg="#274357", fg="White", font=("Arial", 10))
-    label_contraseña.place(x=555, y=485)
-    entry_contraseña = Entry(login, font=("Arial", 16))
-    entry_contraseña.place(relx=0.5, y=510, anchor='n')
+    label_contrasena = Label(login, text="CONTRASEÑA:", bg="#274357", fg="White", font=("Arial", 10))
+    label_contrasena.place(x=555, y=485)
+    entry_contrasena = Entry(login, font=("Arial", 16))
+    entry_contrasena.place(relx=0.5, y=510, anchor='n')
 
     #Check recuérdame
-    check_recuerdame = Checkbutton(login, text="Recuérdame",bg="#274357",fg="White", font=("Arial", 12), selectcolor="#274357")
-    check_recuerdame.place(x=555, y=550)
+    # check_recuerdame = Checkbutton(login, text="Recuérdame",bg="#274357",fg="White", font=("Arial", 12), selectcolor="#274357")
+    # check_recuerdame.place(x=555, y=550)
 
     #Botón ingresar
     def ingresar():
-        login.withdraw()
-        abrir_ventana_main_adm(login)
+        usuario = entry_usuario.get().strip()
+        contrasena = entry_contrasena.get().strip()
+        login_valido, usuario_autenticado = verificar_login(usuario, contrasena)
+        if login_valido:
+            login.withdraw()
+            abrir_ventana_main_adm(login, usuario_autenticado)
+        else:
+            messagebox.showerror("Error de autenticación", "Usuario o contraseña incorrectos.", parent=login)
 
     boton_ingresar = Button(login, text="Ingresar", width=12, fg="Black", font=("Arial", 12), bg="White", command=ingresar)
     boton_ingresar.place(x=930, y=620)

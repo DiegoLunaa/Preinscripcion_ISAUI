@@ -3,8 +3,9 @@ from PIL import Image, ImageTk
 from interfaz_grafica.config import path_facu, path_isaui
 from interfaz_grafica.aspirantes import abrir_ventana_aspirantes
 from interfaz_grafica.cupos import abrir_ventana_cupos
+from db.funciones_db import cerrar_sesion
 
-def abrir_ventana_main_adm(login):
+def abrir_ventana_main_adm(login, usuario_autenticado):
     main_adm = Toplevel()
     main_adm.title("Main Administrador")
     main_adm.geometry("1366x768")
@@ -60,7 +61,10 @@ def abrir_ventana_main_adm(login):
 
     #Botones superiores
     def volver():
+        print(usuario_autenticado)
+        cerrar_sesion()
         main_adm.destroy()
+        print(usuario_autenticado)
         login.deiconify()
         
     boton_cerrar_sesion = Button(main_adm, text="CERRAR SESIÓN", width=14, fg="White", font=("Arial", 12), bg="#1F6680",borderwidth=2,command=volver)
