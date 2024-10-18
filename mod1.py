@@ -192,24 +192,52 @@ def abrir_mod1(aspirante_id):
     fecha_nacimiento_actual, pais_nacimiento_actual,
     provincia_nacimiento_actual, ciudad_nacimiento_actual, *otros_campos
 ) = aspirante_info
-    # Cargar datos en los Entry
-    entry_nombre.insert(0, nombre_actual)
-    entry_apellido.insert(0, apellido_actual)
-    entry_dni.insert(0, dni_actual)
-    combobox_sexo.set(sexo_actual)
-    entry_cuil.insert(0, cuil_actual)
-    entry_domicilio.insert(0, domicilio_actual)
-    entry_barrio.insert(0, barrio_actual)
-    combobox_provincia.set(provincia_personal_actual)
-    entry_cod_postal.insert(0, codigo_postal_actual)
-    entry_telefono.insert(0, telefono_actual)
-    entry_email.insert(0, email_actual)
-    entry_fecha.insert(0, fecha_nacimiento_actual)
-    entry_pais.insert(0, pais_nacimiento_actual)
-    entry_prov.insert(0, provincia_nacimiento_actual)
-    entry_ciudad.insert(0, ciudad_nacimiento_actual)
-    
+    # # Cargar datos en los Entry
+    # entry_nombre.insert(0, nombre_actual)
+    # entry_apellido.insert(0, apellido_actual)
+    # entry_dni.insert(0, dni_actual)
+    # combobox_sexo.set(sexo_actual)
+    # entry_cuil.insert(0, cuil_actual)
+    # entry_domicilio.insert(0, domicilio_actual)
+    # entry_barrio.insert(0, barrio_actual)
+    # combobox_provincia.set(provincia_personal_actual)
+    # entry_cod_postal.insert(0, codigo_postal_actual)
+    # entry_telefono.insert(0, telefono_actual)
+    # entry_email.insert(0, email_actual)
+    # entry_fecha.insert(0, fecha_nacimiento_actual)
+    # entry_pais.insert(0, pais_nacimiento_actual)
+    # entry_prov.insert(0, provincia_nacimiento_actual)
+    # entry_ciudad.insert(0, ciudad_nacimiento_actual)
 
+    # VER TEMA DE LA FECHA
+    cargar_datos = [
+        (entry_nombre, nombre_actual),
+        (entry_apellido, apellido_actual),
+        (entry_dni, dni_actual),
+        (combobox_sexo, sexo_actual),
+        (entry_cuil, cuil_actual),
+        (entry_domicilio, domicilio_actual),
+        (entry_barrio, barrio_actual),
+        (combobox_provincia, provincia_personal_actual),
+        (entry_cod_postal, codigo_postal_actual),
+        (entry_telefono, telefono_actual),
+        (entry_email, email_actual),
+        (entry_fecha, fecha_nacimiento_actual),
+        (entry_pais, pais_nacimiento_actual),
+        (entry_prov, provincia_nacimiento_actual),
+        (entry_ciudad, ciudad_nacimiento_actual)
+    ]
+
+    for clave, valor in cargar_datos:
+        if valor is not None:
+            if isinstance(clave, ttk.Combobox):
+                clave.set(valor)
+            elif isinstance(clave, DateEntry):
+                clave.set_date(valor)
+            else:
+                clave.insert(0, valor)
+    print(f"La fecha actual es: {fecha_nacimiento_actual}")
+    print(f"La fecha nueva es: {entry_fecha}")
     #Funcion para pasar al siguiente form
     def guardar_validar():
         cambios = {}
@@ -267,7 +295,7 @@ def abrir_mod1(aspirante_id):
         for campo, nuevo_valor, valor_actual in datos:
             if nuevo_valor != valor_actual:
                 cambios[campo] = nuevo_valor
-
+    
         # Si hay errores, mostrar y no avanzar
         if errores:
             mostrar_errores(errores)
@@ -278,46 +306,7 @@ def abrir_mod1(aspirante_id):
             messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.")
 
         form.destroy()  # Esto cerrará la ventana actual
-    # def boton_guardar():
-    #     cambios = {}
-    #     (
-    #         nombre_nuevo, apellido_nuevo, dni_nuevo, sexo_nuevo, 
-    #         cuil_nuevo, domicilio_nuevo, barrio_nuevo, provincia_personal_nuevo,
-    #         codigo_postal_nuevo, telefono_nuevo, email_nuevo, 
-    #         fecha_nacimiento_nuevo, pais_nacimiento_nuevo,
-    #         provincia_nacimiento_nuevo, ciudad_nacimiento_nuevo
-    #                    ) = getEntradasUsuario()
-    #     datos = [
-    #     ('nombre', nombre_nuevo, nombre_actual),
-    #     ('apellido', apellido_nuevo, apellido_actual),
-    #     ('dni', dni_nuevo, dni_actual),
-    #     ('genero', sexo_nuevo, sexo_actual),
-    #     ('cuil', cuil_nuevo, cuil_actual),
-    #     ('domicilio', domicilio_nuevo, domicilio_actual),
-    #     ('barrio', barrio_nuevo, barrio_actual),
-    #     ('localidad', provincia_personal_nuevo, provincia_personal_actual),
-    #     ('codigo_postal', codigo_postal_nuevo, codigo_postal_actual),
-    #     ('telefono', telefono_nuevo, telefono_actual),
-    #     ('mail', email_nuevo, email_actual),
-    #     ('fecha_nacimiento', fecha_nacimiento_nuevo, fecha_nacimiento_actual),
-    #     ('pais_nacimiento', pais_nacimiento_nuevo, pais_nacimiento_actual),
-    #     ('provincia_nacimiento', provincia_nacimiento_nuevo, provincia_nacimiento_actual),
-    #     ('ciudad_nacimiento', ciudad_nacimiento_nuevo, ciudad_nacimiento_actual)
-    # ]
-        
-    #     for campo, nuevo_valor, valor_actual in datos:
-    #         if nuevo_valor != valor_actual:
-    #             cambios[campo] = nuevo_valor
 
-    #     if cambios:
-    #         actualizar_aspirante(aspirante_id, cambios)
-    #         messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.")
-    #     else:
-        
-    #         messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.")
-
-    #     form.destroy()  # Esto cerrará la ventana actual
-    # Botón siguiente
     boton_siguiente = Button(form, text="Guardar", bg="White", fg="Black", font=("Arial", 12), borderwidth=2, command=guardar_validar)
     boton_siguiente.place(x=1240, y=700, width=120, height=64)
 

@@ -1,16 +1,23 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from tkinter import ttk
-# from interfaz_grafica.confirmacion import mostrar_confirmacion
-# from interfaz_grafica.config import path_flecha
-# from validaciones import mostrar_errores
+from db.funciones_db import *
+from interfaz_grafica.confirmacion import mostrar_confirmacion
+from interfaz_grafica.config import path_flecha
+from interfaz_grafica.validaciones import mostrar_errores
 
-def abrir_mod2(aspirante_info):
+def abrir_mod2(aspirante_id):
     form2 = Toplevel()
     form2.title("Formulario de preinscripción")
     form2.geometry("1366x768")
     form2.configure(bg="#1F6680")
 
+    aspirante_info = leer_aspirante(aspirante_id)
+    print(f"ID:  {aspirante_id}")
+
+    if aspirante_info is None:
+        print(f"No se encontraron datos para el alumno con ID: {aspirante_id}")
+        return  # Salir de la función si no se encuentran datos
+    
     def getEntradasUsuario():
         check_medio_si = check_medio_si.get()
         check_medio_no = check_medio_no.get()
@@ -174,6 +181,43 @@ def abrir_mod2(aspirante_info):
     label_descrip.place(x=20, y=590)
     texto_descrip = Text(form2, width=50, height=5, font=("Arial", 16))
     texto_descrip.place(x=20, y=620)
+
+    (
+    _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
+    completo_nivel_medio_actual, año_ingreso_medio_actual, año_egreso_nuevo_actual,
+    provincia_medio_actual, titulo_medio_actual, completo_nivel_superior_actual, 
+    carrera_superior_actual, institucion_superior_actual,
+    provincia_superior_actual, año_ingreso_superior_actual, año_egreso_superior_actual,
+    trabajo_actual, descripcion_trabajo_actual, personas_cargo_actual
+) = aspirante_info
+
+    # VER TEMA DE LA FECHA
+    cargar_datos = [
+        (entry_nombre, nombre_actual),
+        (entry_apellido, apellido_actual),
+        (entry_dni, dni_actual),
+        (combobox_sexo, sexo_actual),
+        (entry_cuil, cuil_actual),
+        (entry_domicilio, domicilio_actual),
+        (entry_barrio, barrio_actual),
+        (combobox_provincia, provincia_personal_actual),
+        (entry_cod_postal, codigo_postal_actual),
+        (entry_telefono, telefono_actual),
+        (entry_email, email_actual),
+        (entry_fecha, fecha_nacimiento_actual),
+        (entry_pais, pais_nacimiento_actual),
+        (entry_prov, provincia_nacimiento_actual),
+        (entry_ciudad, ciudad_nacimiento_actual)
+    ]
+
+    for clave, valor in cargar_datos:
+        if valor is not None:
+            if isinstance(clave, ttk.Combobox):
+                clave.set(valor)
+            elif isinstance(clave, DateEntry):
+                clave.set_date(valor)
+            else:
+                clave.insert(0, valor)
 
     #Boton Finalizar
     def finalizar():

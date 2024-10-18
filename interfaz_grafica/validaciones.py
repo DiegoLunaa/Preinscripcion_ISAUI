@@ -62,9 +62,9 @@ def verificar_correo(correo, errores):
 
 def validar_fecha(fecha_nacimiento, errores):
 
-    fecha_actual = datetime.now().date()
+    fecha_maxima = datetime(2006, 1, 1).date()
 
-    if fecha_nacimiento >= fecha_actual:
+    if fecha_nacimiento >= fecha_maxima:
         errores.append("La fecha de nacimiento no puede ser mayor o igual a la fecha actual.")
     if fecha_nacimiento == "":
         errores.append("La selección de una fecha es obligatoria.")
