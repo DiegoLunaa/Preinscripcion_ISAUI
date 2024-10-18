@@ -2,20 +2,36 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 from tkinter import ttk
+from interfaz_grafica.config import path_flecha
+from db.funciones_db import leer_aspirante
 # from validaciones import mostrar_errores
 
 # Variable global para almacenar el id_carrera y los datos temporalmente
 id_carrera_seleccionada = None
 datos_aspirante = {}
 
-def abrir_mod1():
-    global id_carrera_seleccionada
-    # id_carrera_seleccionada = id_carrera
+def abrir_mod1(aspirante_id):
 
     form = Toplevel()
-    form.title("Formulario de preinscripción")
+    form.title("Modificar datos personales")
     form.geometry("1366x768")
     form.configure(bg="#1F6680")
+
+    aspirante_info = leer_aspirante(aspirante_id)
+    print(f"ID:  {aspirante_id}")
+
+    if aspirante_info is None:
+        print(f"No se encontraron datos para el alumno con ID: {aspirante_id}")
+        return  # Salir de la función si no se encuentran datos
+
+     # Imprimir la información en la consola
+    print("Información del Alumno:")
+    print(f"ID: {aspirante_info[0]}")
+    print(f"Nombre: {aspirante_info[1]}")
+    print(f"Apellido: {aspirante_info[2]}")
+    print(f"DNI: {aspirante_info[3]}")
+    print(f"Carrera: {aspirante_info[4]}")
+    # Agrega más campos según sea necesario
 
     def getEntradasUsuario():
         apellido = entry_apellido.get().strip()
@@ -51,6 +67,8 @@ def abrir_mod1():
     provincia_nacimiento, 
     ciudad_nacimiento
 )
+    
+
 
     def activar_pantalla_completa(event=None):
         form.attributes("-fullscreen", True)
@@ -181,6 +199,23 @@ def abrir_mod1():
     boton_atras = Button(form, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=form.destroy)
     boton_atras.place(x=20, y=20)
     boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
+
+    # Cargar datos en los Entry
+    entry_nombre.insert(0, aspirante_info[1])
+    entry_apellido.insert(0, aspirante_info[2])
+    entry_dni.insert(0, aspirante_info[3])
+    combobox_sexo.insert(0, aspirante_info[4])
+    entry_cuil.insert(0, aspirante_info[5])
+    entry_domicilio.insert(0, aspirante_info[6])
+    entry_barrio.insert(0, aspirante_info[7])
+    # entry_localidad.insert(0, aspirante_info[3])
+    entry_cod_postal.insert(0, aspirante_info[9])
+    entry_telefono.insert(0, aspirante_info[10])
+    entry_email.insert(0, aspirante_info[11])
+    entry_fecha.insert(0, aspirante_info[12])
+    entry_pais.insert(0, aspirante_info[13])
+    entry_prov.insert(0, aspirante_info[14])
+    entry_ciudad.insert(0, aspirante_info[15])
 
     #Funcion para pasar al siguiente form
     def avanzar_form2():

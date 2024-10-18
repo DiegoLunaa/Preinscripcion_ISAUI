@@ -1,5 +1,6 @@
 import bcrypt
 from db.conexion_db import conectar
+from mysql.connector import Error
 
 # Funciones de inicio de sesión y gestión de usuarios
 
@@ -76,19 +77,56 @@ def crear_aspirante(datos): # ANDA
     cursor.close()
     conexion.close()
 
-def leer_aspirante(id_aspirante): # ANDA
+def leer_aspirante(id_aspirante):
+    # if not verificar_acceso():
+    #     print("Acceso denegado.")
+    #     return None  # O lanza una excepción según tu lógica
 
-    if not verificar_acceso():
-        return
-    
     conexion = conectar()
-    cursor = conexion.cursor()
-    query = "SELECT * FROM Aspirante WHERE ID_Aspirante = %s"
-    cursor.execute(query, (id_aspirante,))
-    resultado = cursor.fetchone()
-    cursor.close()
-    conexion.close()
+    if conexion is None:
+        print("No se pudo conectar a la base de datos.")
+        return None
+
+    try:
+        cursor = conexion.cursor()
+        query = "SELECT * FROM Aspirante WHERE ID_Aspirante = %s"
+        cursor.execute(query, (id_aspirante,))
+        resultado = cursor.fetchone()
+
+        if resultado is None:
+            print(f"No se encontró un aspirante con ID: {id_aspirante}")
+            return None  # O lanza una excepción según tu lógica
+
+        # # Convertir el resultado a un diccionario, si es necesario
+        # columnas = [column[0] for column in cursor.description]  # Obtener nombres de las columnas
+        # aspirante_info = dict(zip(columnas, resultado))  # Crear un diccionario con los datos
+
+    except Error as e:
+        print(f"Error al leer el aspirante: {e}")
+        resultado = None
+    finally:
+        cursor.close()
+        conexion.close()
+
     return resultado
+
+def leer_todos_los_aspirantes():
+    conexion = conectar()
+    if conexion is None:
+        print("No se pudo conectar a la base de datos.")
+        return []
+
+    try:
+        cursor = conexion.cursor()
+        cursor.execute("SELECT * FROM Aspirante")  # Ajusta la consulta según tu tabla
+        resultados = cursor.fetchall()  # Obtiene todos los registros
+        return resultados
+    except Error as e:
+        print(f"Error al leer los aspirantes: {e}")
+        return []
+    finally:
+        cursor.close()
+        conexion.close()
 
 def actualizar_aspirante(id_aspirante, datos_actualizados): # ANDA
 

@@ -5,7 +5,7 @@ from tkinter import ttk
 # from interfaz_grafica.config import path_flecha
 # from validaciones import mostrar_errores
 
-def abrir_mod2():
+def abrir_mod2(aspirante_info):
     form2 = Toplevel()
     form2.title("Formulario de preinscripción")
     form2.geometry("1366x768")

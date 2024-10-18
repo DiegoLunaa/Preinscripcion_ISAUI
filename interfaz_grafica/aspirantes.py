@@ -5,6 +5,8 @@ from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,p
 from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
+from db.funciones_db import leer_todos_los_aspirantes
+from main_modif import abrir_ventana_modificar
 
 
 def abrir_ventana_aspirantes(main_adm):
@@ -37,6 +39,20 @@ def abrir_ventana_aspirantes(main_adm):
     boton_lupa.place(x=630, y=141)
     boton_lupa.image = imagen_lupa  # Mantiene una referencia a la imagen
 
+
+    def obtener_info_alumno_seleccionado():
+        seleccion = arbol.selection()
+        if not seleccion:
+            messagebox.showerror("Error", "Por favor, selecciona un alumno.")
+            return
+    
+        item = seleccion[0]
+        aspirante_info = arbol.item(item, 'values')  # Obtener los valores de la fila seleccionada
+        aspirante_id = aspirante_info[0]  # Obtener la ID del alumno seleccionado
+        print(f"Aspirante seleccionado: {aspirante_info}, y su id es {aspirante_id}")  # Imprimir en consola
+        # Llamar a la función para abrir la ventana de modificación
+        abrir_ventana_modificar(aspirante_id)
+    
     #Botones acciones
         #Boton y label ojo
 
@@ -44,6 +60,9 @@ def abrir_ventana_aspirantes(main_adm):
         aspirantes.withdraw()
         abrir_ventana_info_aspirante(aspirantes)
     
+    def modificar():
+        aspirantes.withdraw()
+        
 
     imagen = Image.open(path_ojo)
     imagen_redimensionada = imagen.resize((34,34)) 
@@ -57,7 +76,7 @@ def abrir_ventana_aspirantes(main_adm):
     imagen = Image.open(path_lapiz)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_lapiz = ImageTk.PhotoImage(imagen_redimensionada)
-    boton_lapiz = Button(aspirantes, image=imagen_lapiz, bg="#E7EB1E", width=50, height=50, borderwidth=2)
+    boton_lapiz = Button(aspirantes, image=imagen_lapiz, bg="#E7EB1E", width=50, height=50, borderwidth=2,command=obtener_info_alumno_seleccionado)
     boton_lapiz.place(x=989, y=393)
     boton_lapiz.image = imagen_lapiz
     label_lapiz = Label(aspirantes,text="EDITAR INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
@@ -100,7 +119,7 @@ def abrir_ventana_aspirantes(main_adm):
 
 
     #Arbol
-
+    aspirante_data = leer_todos_los_aspirantes()
     frame_arbol = Frame(aspirantes, width=571, height=458)
     frame_arbol.place(x=380, y=181)
     frame_arbol.pack_propagate(False) #No cambia de tamaño / tamaño fijo
@@ -119,6 +138,11 @@ def abrir_ventana_aspirantes(main_adm):
     arbol.column("nombre", width=110)
     arbol.column("dni", width=100)
     arbol.column("carrera", width=200)
+
+    if aspirante_data:
+        for aspirante in aspirante_data:
+            
+            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3]))  
 
     #Botones superiores
     def volver():
