@@ -130,8 +130,8 @@ def leer_todos_los_aspirantes():
 
 def actualizar_aspirante(id_aspirante, datos_actualizados): # ANDA
 
-    if not verificar_acceso():
-        return
+    # if not verificar_acceso():
+    #     return
     
     conexion = conectar()
     cursor = conexion.cursor()
@@ -146,6 +146,10 @@ def actualizar_aspirante(id_aspirante, datos_actualizados): # ANDA
     print("Aspirante actualizado.")
     cursor.close()
     conexion.close()
+
+def preparar_datos_para_sql(diccionario):
+    # Extraemos los valores en el mismo orden que en la consulta SQL
+    return tuple(diccionario.values())
 
 def eliminar_aspirante(id_aspirante): # ANDA
 

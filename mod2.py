@@ -3,13 +3,21 @@ from PIL import Image, ImageTk
 from db.funciones_db import *
 from interfaz_grafica.confirmacion import mostrar_confirmacion
 from interfaz_grafica.config import path_flecha
-from interfaz_grafica.validaciones import mostrar_errores
+from interfaz_grafica.validaciones import *
+
 
 def abrir_mod2(aspirante_id):
     form2 = Toplevel()
     form2.title("Formulario de preinscripción")
     form2.geometry("1366x768")
     form2.configure(bg="#1F6680")
+
+     # VARIABLES
+    radio_medio_var = IntVar()
+    radio_superior_var = IntVar()
+    radio_trabaja_var = IntVar()
+    radio_cargo_var = IntVar()
+
 
     aspirante_info = leer_aspirante(aspirante_id)
     print(f"ID:  {aspirante_id}")
@@ -19,15 +27,11 @@ def abrir_mod2(aspirante_id):
         return  # Salir de la función si no se encuentran datos
     
     def getEntradasUsuario():
-        check_medio_si = check_medio_si.get()
-        check_medio_no = check_medio_no.get()
-        check_superior_si = check_superior_si.get()
-        check_superior__no = check_superior__no.get()
-        check_trabaja_si = check_trabaja_si.get()
-        check_trabaja_no = check_trabaja_no.get()
-        check_cargo_si = check_cargo_si.get()
-        check_cargo_no = check_cargo_no.get()
-        # check_curso = check_curso.get() / No hay check de en curso
+        
+        nivel_medio = radio_medio_var.get()
+        nivel_superior = radio_superior_var.get()
+        trabaja = radio_trabaja_var.get()
+        a_cargo = radio_cargo_var.get()
         provincia_medio = entry_prov.get().strip()
         provincia_superior = entry_prov_ins.get().strip()
         año_ingreso_medio = spin_año_ingreso.get()
@@ -38,16 +42,13 @@ def abrir_mod2(aspirante_id):
         carrera_superior = entry_carrera.get().strip()
         institucion = entry_institucion.get().strip()
         horas_lab = entry_horas.get().strip()
-        descripcion_laboral = texto_descrip.get().strip()
+        descripcion_laboral = texto_descrip.get("1.0", "end").strip()
+        
         return (
-    check_medio_si, 
-    check_medio_no, 
-    check_superior_si, 
-    check_superior_no, 
-    check_trabaja_si, 
-    check_trabaja_no, 
-    check_cargo_si, 
-    check_cargo_no, 
+    nivel_medio,
+    nivel_superior,
+    trabaja,
+    a_cargo, 
     provincia_medio,
     provincia_superior, 
     año_ingreso_medio, 
@@ -60,6 +61,13 @@ def abrir_mod2(aspirante_id):
     horas_lab,
     descripcion_laboral
 )
+    
+    # Funciones para habilitar/deshabilitar campos dinámicamente
+    def toggle_entries(variable, *widgets):
+        estado = NORMAL if variable.get() in [1, 2] else DISABLED
+        for widget in widgets:
+            widget.config(state=estado)
+
     def activar_pantalla_completa(event=None):
         form2.attributes("-fullscreen", True)
 
@@ -81,17 +89,28 @@ def abrir_mod2(aspirante_id):
     label_nivel = Label(form2, text="NIVEL SUPERIOR:", fg="White", font=("Arial", 14))
     label_nivel.configure(bg="#1F6680")
     label_nivel.place(x=20, y=250)
-    #CheckButtons
-    check_medio_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_medio_si.place(x=170, y=140)
-    check_medio_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_medio_no.place(x=220, y=140)
-    check_superior_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_superior_si.place(x=200, y=250)
-    check_superior_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_superior_no.place(x=250, y=250)
-    check_superior_en_curso = Checkbutton(form2, text="En curso",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_superior_en_curso.place(x=300, y=250)
+     # Radiobuttons
+    radio_medio_si = Radiobutton(form2, text="Sí", bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_medio_var, value=1)
+    radio_medio_si.place(x=170, y=140)
+    radio_medio_no = Radiobutton(form2, text="No", bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_medio_var, value=0)
+    radio_medio_no.place(x=220, y=140)
+
+    radio_superior_si = Radiobutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_superior_var, value=1)
+    radio_superior_si.place(x=200, y=250)
+    radio_superior_no = Radiobutton(form2, text="No",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_superior_var, value=0)
+    radio_superior_no.place(x=250, y=250)
+    radio_superior_en_curso = Radiobutton(form2, text="En curso",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_superior_var, value=2)
+    radio_superior_en_curso.place(x=300, y=250)
+
+    radio_trabaja_si = Radiobutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_trabaja_var, value=1)
+    radio_trabaja_si.place(x=170, y=490)
+    radio_trabaja_no = Radiobutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_trabaja_var, value=0)
+    radio_trabaja_no.place(x=220, y=490)
+
+    radio_cargo_si = Radiobutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_cargo_var, value=1)
+    radio_cargo_si.place(x=950, y=490)
+    radio_cargo_no = Radiobutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_cargo_var, value=0)
+    radio_cargo_no.place(x=1000, y=490)
     
     #Primera fila
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
@@ -117,6 +136,10 @@ def abrir_mod2(aspirante_id):
     
     entry_titulo = Entry(form2, font=("Arial", 16))
     entry_titulo.place(x=800, y=210, width=400)
+
+     # Asignar comando a los Radiobuttons después de crear los widgets
+    radio_medio_si.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
+    radio_medio_no.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
 
     #Siguiente fila de nivel superior
     label_carrera = Label(form2, text="Carrera:", bg="#1F6680", fg="White", font=("Arial", 14))
@@ -144,6 +167,11 @@ def abrir_mod2(aspirante_id):
     label_año_egreso.place(x=190, y=350)
     spin_año_egreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16),state='readonly')
     spin_año_egreso_sup.place(x=190, y=380, width=150)
+
+    # Asignar comando a los Radiobuttons después de crear los widgets
+    radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
+    radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
+    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup))
     
 
     #LABEL SITUACION LABORAL Y RESPONSABILIDADES
@@ -161,17 +189,6 @@ def abrir_mod2(aspirante_id):
     label_cargo.configure(bg="#1F6680")
     label_cargo.place(x=650, y=490)
 
-    check_trabaja_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_trabaja_si.place(x=170, y=490)
-    check_trabaja_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_trabaja_no.place(x=220, y=490)
-
-    #check responsabilidades
-    check_cargo_si = Checkbutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_cargo_si.place(x=950, y=490)
-    check_cargo_no = Checkbutton(form2, text="No",bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357")
-    check_cargo_no.place(x=1000, y=490)
-
     #entrys situacion laboral
     label_horas = Label(form2, text="Horas diarias:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_horas.place(x=20, y=530)
@@ -182,56 +199,127 @@ def abrir_mod2(aspirante_id):
     texto_descrip = Text(form2, width=50, height=5, font=("Arial", 16))
     texto_descrip.place(x=20, y=620)
 
+    # Asignar comando a los Radiobuttons después de crear los widgets
+    radio_trabaja_si.config(command=lambda: toggle_entries(radio_trabaja_var, entry_horas, texto_descrip))
+    radio_trabaja_no.config(command=lambda: toggle_entries(radio_trabaja_var, entry_horas, texto_descrip))
+
     (
     _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
-    completo_nivel_medio_actual, año_ingreso_medio_actual, año_egreso_nuevo_actual,
-    provincia_medio_actual, titulo_medio_actual, completo_nivel_superior_actual, 
-    carrera_superior_actual, institucion_superior_actual,
+    nivel_medio_actual, año_ingreso_medio_actual, año_egreso_medio_actual,
+    provincia_medio_actual, titulo_medio_actual, nivel_superior_actual, 
+    carrera_superior_actual, institucion_actual,
     provincia_superior_actual, año_ingreso_superior_actual, año_egreso_superior_actual,
-    trabajo_actual, descripcion_trabajo_actual, personas_cargo_actual
+    trabaja_actual, horas_lab_actual, descripcion_laboral_actual, a_cargo_actual
 ) = aspirante_info
 
     # VER TEMA DE LA FECHA
     cargar_datos = [
-        (entry_nombre, nombre_actual),
-        (entry_apellido, apellido_actual),
-        (entry_dni, dni_actual),
-        (combobox_sexo, sexo_actual),
-        (entry_cuil, cuil_actual),
-        (entry_domicilio, domicilio_actual),
-        (entry_barrio, barrio_actual),
-        (combobox_provincia, provincia_personal_actual),
-        (entry_cod_postal, codigo_postal_actual),
-        (entry_telefono, telefono_actual),
-        (entry_email, email_actual),
-        (entry_fecha, fecha_nacimiento_actual),
-        (entry_pais, pais_nacimiento_actual),
-        (entry_prov, provincia_nacimiento_actual),
-        (entry_ciudad, ciudad_nacimiento_actual)
+        (radio_medio_var, nivel_medio_actual),
+        (spin_año_ingreso, año_ingreso_medio_actual),
+        (spin_año_egreso, año_egreso_medio_actual),
+        (entry_prov, provincia_medio_actual),
+        (entry_titulo, titulo_medio_actual),
+        (radio_superior_var, nivel_superior_actual),
+        (entry_carrera, carrera_superior_actual),
+        (entry_institucion, institucion_actual),
+        (entry_prov_ins, provincia_superior_actual),
+        (spin_año_ingreso_sup, año_ingreso_superior_actual),
+        (spin_año_egreso_sup, año_egreso_superior_actual),
+        (radio_trabaja_var, trabaja_actual),
+        (entry_horas, horas_lab_actual),
+        (texto_descrip, descripcion_laboral_actual),
+        (radio_cargo_var, a_cargo_actual),
     ]
 
     for clave, valor in cargar_datos:
         if valor is not None:
-            if isinstance(clave, ttk.Combobox):
+            if isinstance(clave, IntVar):
                 clave.set(valor)
-            elif isinstance(clave, DateEntry):
-                clave.set_date(valor)
-            else:
+            elif isinstance(clave, Spinbox):
+                clave.config(state="normal")
+                clave.delete(0, END)
+                clave.insert(0, str(valor))
+                clave.config(state="readonly")
+            elif isinstance(clave, Entry):
                 clave.insert(0, valor)
+            elif isinstance(clave, Text):
+                clave.insert("1.0", valor)
+        else:
+            if isinstance(clave, Spinbox):
+                clave.config(state="normal")
+                clave.delete(0, END)
+                clave.insert(0, '')
+                clave.config(state="readonly")
 
-    #Boton Finalizar
-    def finalizar():
-        form2.destroy()
-        mostrar_confirmacion()
+    def guardar_validar():
+        cambios = {}
+        (
+            nivel_medio_nuevo,nivel_superior_nuevo,trabaja_nuevo,a_cargo_nuevo, provincia_medio_nuevo,provincia_superior_nuevo, 
+            año_ingreso_medio_nuevo, año_egreso_medio_nuevo, año_ingreso_superior_nuevo,año_egreso_superior_nuevo,
+            titulo_medio_nuevo,carrera_superior_nuevo,institucion_nuevo,horas_lab_nuevo,descripcion_laboral_nuevo
+                       ) = getEntradasUsuario()
+
+        # Lista para almacenar errores
+        errores = []
+
+        # Validaciones
+        validar_nivel_medio(nivel_medio_nuevo, provincia_medio_nuevo, año_ingreso_medio_nuevo, año_egreso_medio_nuevo, titulo_medio_nuevo, errores)
+        validar_nivel_superior(nivel_superior_nuevo, carrera_superior_nuevo, institucion_nuevo, provincia_superior_nuevo, año_ingreso_superior_nuevo, año_egreso_superior_nuevo, errores)
+        validar_situacion_laboral(trabaja_nuevo, horas_lab_nuevo, descripcion_laboral_nuevo, errores)
+
+        # Validaciones de campos obligatorios # Falta validar si tiene personas a cargo
+        entries = []
+        if radio_medio_var.get() == 1:
+            entries += [spin_año_ingreso, spin_año_egreso, entry_prov, entry_titulo]
+        if radio_superior_var.get() == 1:
+            entries += [entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup]
+        if radio_superior_var.get() == 2:
+            entries += [entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup]
+        if radio_trabaja_var.get() == 1:
+            entries += [entry_horas, texto_descrip]
+        if len(entries) > 1:
+            validar_campos_obligatorios(entries, errores)
+
+        datos = [
+        ('completo_nivel_medio', nivel_medio_nuevo, nivel_medio_actual),
+        ('año_ingreso_medio', año_ingreso_medio_nuevo, año_ingreso_medio_actual),
+        ('año_egreso_medio', año_egreso_medio_nuevo, año_egreso_medio_actual),
+        ('provincia_medio', provincia_medio_nuevo, provincia_medio_actual),
+        ('titulo_medio', titulo_medio_nuevo, titulo_medio_actual),
+        ('completo_nivel_superior', nivel_superior_nuevo, nivel_superior_actual),
+        ('carrera_superior', carrera_superior_nuevo, carrera_superior_actual),
+        ('institucion_superior', institucion_nuevo, institucion_actual),
+        ('provincia_superior', provincia_superior_nuevo, provincia_superior_actual),
+        ('año_ingreso_superior', año_ingreso_superior_nuevo, año_ingreso_superior_actual),
+        ('año_egreso_superior', año_egreso_superior_nuevo, año_egreso_superior_actual),
+        ('trabajo', trabaja_nuevo, trabaja_actual),
+        ('horas_trabajo', horas_lab_nuevo, horas_lab_actual),
+        ('descripcion_trabajo', descripcion_laboral_nuevo, descripcion_laboral_actual),
+        ('personas_cargo', a_cargo_nuevo, a_cargo_actual)
+    ]
+        
+        for campo, nuevo_valor, valor_actual in datos:
+            if nuevo_valor != valor_actual:
+                cambios[campo] = nuevo_valor
     
-    boton_siguiente = Button(form2, text="Finalizar", bg="White", fg="Black", font=("Arial", 12), borderwidth=2,command=finalizar)
+        # Si hay errores, mostrar y no avanzar
+        if errores:
+            mostrar_errores(errores)
+        elif cambios:
+            actualizar_aspirante(aspirante_id, cambios)
+            messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.")
+        else:
+            messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.")
+
+        form2.destroy()  # Esto cerrará la ventana actual
+
+    boton_siguiente = Button(form2, text="Guardar", bg="White", fg="Black", font=("Arial", 12), borderwidth=2,command=guardar_validar)
     boton_siguiente.place(x=1240, y=700, width=120, height=64)
 
-    # Botón para volver atrás
 
     def volver():
         form2.destroy()
-        form.deiconify()
+
 
     
     imagen_flecha = Image.open(path_flecha)
@@ -241,27 +329,4 @@ def abrir_mod2(aspirante_id):
     boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
 
     form2.mainloop()
-
-
-    """ #Para almacenar variables
-    check_medio_si = IntVar()
-    check_medio_no = IntVar()
-    check_superior_si = IntVar()
-    check_superior_no = IntVar()
-    check_trabaja_si = IntVar()
-    check_trabaja_no = IntVar()
-
-    def toggle_entries():
-    if check_medio_si.get() == 1:
-        # Activar las entradas
-        provincia_medio.config(state=tk.NORMAL)
-        año_ingreso.config(state=tk.NORMAL)
-        año_egreso.config(state=tk.NORMAL)
-        titulo_medio_entry.config(state=tk.NORMAL)
-    else:
-        # Desactivar las entradas
-        provincia_medio.config(state=tk.DISABLED)
-        año_ingreso.config(state=tk.DISABLED)
-        año_egreso.config(state=tk.DISABLED)
-        titulo_medio_entry.config(state=tk.DISABLED)"""
     

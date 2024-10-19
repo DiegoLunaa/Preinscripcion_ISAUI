@@ -6,6 +6,7 @@ from tkinter import ttk
 from interfaz_grafica.config import path_flecha
 from interfaz_grafica.validaciones import *
 from db.funciones_db import *
+import datetime
 
 
 # from validaciones import mostrar_errores
@@ -139,11 +140,14 @@ def abrir_mod1(aspirante_id):
     label_email.place(x=880, y=320)
     entry_email = Entry(form, font=("Arial", 16))
     entry_email.place(x=880, y=350, width=400)
-
+    current_year = datetime.datetime.now().year
     # Cuarta fila
     label_fecha = Label(form, text="Fecha de nacimiento:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_fecha.place(x=20, y=450)
-    entry_fecha = DateEntry(form, font=("Arial", 16), borderwidth=2, state='readonly')
+    entry_fecha = DateEntry(form, font=("Arial", 16), borderwidth=2, 
+                        year=current_year, date_pattern='dd/mm/yyyy',
+                        mindate=datetime.date(1900, 1, 1),
+                        maxdate=datetime.date(current_year, 12, 31))
     entry_fecha.place(x=20, y=480, width=400)
 
     sexo = {
@@ -192,24 +196,7 @@ def abrir_mod1(aspirante_id):
     fecha_nacimiento_actual, pais_nacimiento_actual,
     provincia_nacimiento_actual, ciudad_nacimiento_actual, *otros_campos
 ) = aspirante_info
-    # # Cargar datos en los Entry
-    # entry_nombre.insert(0, nombre_actual)
-    # entry_apellido.insert(0, apellido_actual)
-    # entry_dni.insert(0, dni_actual)
-    # combobox_sexo.set(sexo_actual)
-    # entry_cuil.insert(0, cuil_actual)
-    # entry_domicilio.insert(0, domicilio_actual)
-    # entry_barrio.insert(0, barrio_actual)
-    # combobox_provincia.set(provincia_personal_actual)
-    # entry_cod_postal.insert(0, codigo_postal_actual)
-    # entry_telefono.insert(0, telefono_actual)
-    # entry_email.insert(0, email_actual)
-    # entry_fecha.insert(0, fecha_nacimiento_actual)
-    # entry_pais.insert(0, pais_nacimiento_actual)
-    # entry_prov.insert(0, provincia_nacimiento_actual)
-    # entry_ciudad.insert(0, ciudad_nacimiento_actual)
-
-    # VER TEMA DE LA FECHA
+    
     cargar_datos = [
         (entry_nombre, nombre_actual),
         (entry_apellido, apellido_actual),
@@ -236,9 +223,7 @@ def abrir_mod1(aspirante_id):
                 clave.set_date(valor)
             else:
                 clave.insert(0, valor)
-    print(f"La fecha actual es: {fecha_nacimiento_actual}")
-    print(f"La fecha nueva es: {entry_fecha}")
-    #Funcion para pasar al siguiente form
+
     def guardar_validar():
         cambios = {}
         (
