@@ -1,6 +1,7 @@
 import bcrypt
 from db.conexion_db import conectar
 from mysql.connector import Error
+from tkinter import messagebox
 
 # Funciones de inicio de sesión y gestión de usuarios
 
@@ -27,17 +28,18 @@ def verificar_login(usuario, contrasena_plana):
             usuario_autenticado = usuario
             cursor.close()
             conexion.close()  
-            return True
+            return True, usuario_autenticado
         else:
             print("Contraseña incorrecta.")
+            #messagebox.showerror("Error de autenticación", "Usuario o contraseña incorrectos.")
             cursor.close()
             conexion.close()
-            return False
+            return False, usuario_autenticado
     else:
         print("Usuario no encontrado.")
         cursor.close()
         conexion.close()  # Mueve esto aquí
-        return False
+        return False, usuario_autenticado
 
 def verificar_acceso():
     global usuario_autenticado
@@ -49,13 +51,19 @@ def verificar_acceso():
 def cerrar_sesion():
     global usuario_autenticado
     # Confirmación de cierre de sesión
-    confirmar = input("¿Está seguro de que desea cerrar sesión? (s/n): ")
-    if confirmar.lower() == 's':
+    confirmar = messagebox.askyesno("Confirmar", "¿Estás seguro de que deseas cerrar sesión?")
+    if confirmar:
         usuario_autenticado = None
         print("Sesión cerrada exitosamente.")
-        # Aquí podrías agregar código para manejar el estado de la interfaz, si es necesario.
+        return usuario_autenticado
     else:
         print("Cierre de sesión cancelado.")
+
+# Funciones auxiliares
+
+def preparar_datos_para_sql(diccionario):
+    # Extraemos los valores en el mismo orden que en la consulta SQL
+    return tuple(diccionario.values())
 
 # Funciones CRUD
 
@@ -64,13 +72,13 @@ def crear_aspirante(datos): # ANDA
     conexion = conectar()
     cursor = conexion.cursor()
     query = """INSERT INTO Aspirante (Nombre, Apellido, DNI, Genero, CUIL, Domicilio, Barrio, 
-               Localidad, Codigo_Postal, Telefono, Mail, Fecha_Nacimiento, Lugar_Nacimiento, 
-               Completo_Nivel_Medio, Año_Ingreso_Medio, Año_Egreso_Medio, Provincia_Medio, 
-               Titulo_Medio, Completo_Nivel_Superior, Carrera_Superior, Institucion_Superior, 
-               Provincia_Superior, Año_Ingreso_Superior, Año_Egreso_Superior, Trabajo, 
-               Descripcion_Trabajo, Personas_Cargo) 
+               Localidad, Codigo_Postal, Telefono, Mail, Fecha_Nacimiento, Pais_Nacimiento,
+               Provincia_Nacimiento, Localidad_Nacimiento, Completo_Nivel_Medio, Completo_Nivel_Superior, 
+               Trabajo, Personas_Cargo, Año_Ingreso_Medio, Año_Egreso_Medio, Provincia_Medio, 
+               Titulo_Medio, Carrera_Superior, Institucion_Superior, Provincia_Superior, 
+               Año_Ingreso_Superior, Año_Egreso_Superior, Horas_Trabajo, Descripcion_Trabajo) 
                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-               %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+               %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     cursor.execute(query, datos)
     conexion.commit()
     print("Aspirante creado exitosamente.")
@@ -306,7 +314,7 @@ def eliminar_reporte(id_reporte):
 def obtener_carreras_disponibles():
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "SELECT ID_Carrera, Nombre_Carrera, Cupos_Disponibles FROM Carrera WHERE Cupos_Disponibles > 0"
+    query = "SELECT ID_Carrera, Nombre_Carrera, Cupos_Disponibles, Cupos_Maximos FROM Carrera"
     cursor.execute(query)
     carreras = cursor.fetchall()
     cursor.close()
@@ -339,19 +347,47 @@ def descontar_cupo(id_carrera):
     cursor.close()
     conexion.close()
 
+def cupos_max(id_carrera):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT Cupos_Maximos FROM Carrera WHERE ID_Carrera = %s"
+    cursor.execute(query, (id_carrera,))
+    cupos_max = cursor.fetchone()[0]
+    cursor.close()
+    conexion.close
+    return cupos_max
+
 def modificar_cantidad_cupos(id_carrera, cupos_max_nuevo):
+
+    if not verificar_acceso():
+        return
+    
+    cupos_max_nuevo = int(cupos_max_nuevo)
     conexion = conectar()
     cursor = conexion.cursor()
     query_max_cupos = "SELECT Cupos_Maximos FROM Carrera WHERE ID_Carrera = %s"
     cursor.execute(query_max_cupos, (id_carrera,))
     cupos_max = cursor.fetchone()[0]
-    diferencia_cupos = cupos_max_nuevo - cupos_max
-    query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles + %s WHERE ID_Carrera = %s"
-    cursor.execute(query_actualizar_cupos_disponibles, (diferencia_cupos, id_carrera))
+
+    if cupos_max_nuevo > cupos_max:
+        diferencia_cupos = int(cupos_max_nuevo) - cupos_max
+        query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles + %s WHERE ID_Carrera = %s"
+        cursor.execute(query_actualizar_cupos_disponibles, (diferencia_cupos, id_carrera))
+    else:
+        query_cupos_disponibles = "SELECT Cupos_Disponibles FROM Carrera WHERE ID_Carrera = %s"
+        cursor.execute(query_cupos_disponibles, (id_carrera,))
+        cupos_disponibles = cursor.fetchone()[0]
+        
+        if cupos_max - cupos_max_nuevo > cupos_disponibles:
+            query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = 0 WHERE ID_Carrera = %s"
+            cursor.execute(query_actualizar_cupos_disponibles, (id_carrera,))
+        else:
+            diferencia_cupos = cupos_max - cupos_max_nuevo
+            query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles - %s WHERE ID_Carrera = %s"
+            cursor.execute(query_actualizar_cupos_disponibles, (diferencia_cupos, id_carrera))
+
     query_actualizar_cupos_max = "UPDATE Carrera SET Cupos_Maximos = %s WHERE ID_Carrera = %s"
     cursor.execute(query_actualizar_cupos_max, (cupos_max_nuevo, id_carrera))
     conexion.commit()
-    cupos_disponibles_actuales = cupos_disponibles(id_carrera)
-    print(f"Cupos actualizados, los cupos disponibles actuales son: {cupos_disponibles_actuales}")
     cursor.close()
     conexion.close()

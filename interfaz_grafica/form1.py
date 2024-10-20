@@ -5,11 +5,10 @@ from tkinter import ttk
 from interfaz_grafica.form2 import abrir_ventana_form2
 from interfaz_grafica.config import path_flecha
 from interfaz_grafica.validaciones import *
-# from validaciones import mostrar_errores
 
 # Variable global para almacenar el id_carrera y los datos temporalmente
 id_carrera_seleccionada = None
-datos_aspirante = {}
+datos_temporales = {}
 
 def abrir_ventana_form1(id_carrera):
     global id_carrera_seleccionada
@@ -28,7 +27,7 @@ def abrir_ventana_form1(id_carrera):
         correo = entry_email.get().strip()
         domicilio = entry_domicilio.get().strip()
         cuil = entry_cuil.get().strip()
-        provincia_personal = combobox_provincia.get()
+        localidad = entry_localidad.get().strip()
         barrio = entry_barrio.get().strip()
         codigo_postal = entry_cod_postal.get().strip()
         fecha_nacimiento = entry_fecha.get_date()
@@ -45,7 +44,7 @@ def abrir_ventana_form1(id_carrera):
     correo, 
     domicilio, 
     cuil, 
-    provincia_personal, 
+    localidad, 
     barrio, 
     codigo_postal, 
     fecha_nacimiento, 
@@ -61,7 +60,7 @@ def abrir_ventana_form1(id_carrera):
     def desactivar_pantalla_completa(event=None):
         form.attributes("-fullscreen", False)
 
-    form.attributes("-fullscreen", True)  # Iniciar en pantalla completa
+    # form.attributes("-fullscreen", True)  # Iniciar en pantalla completa
     form.bind("<Escape>", desactivar_pantalla_completa)
     form.bind("<F11>", activar_pantalla_completa)
 
@@ -103,21 +102,22 @@ def abrir_ventana_form1(id_carrera):
     entry_domicilio = Entry(form, font=("Arial", 16))
     entry_domicilio.place(x=450, y=250, width=400)
 
-    lista_provincias = [
-    "Buenos Aires", "CABA", "Catamarca", "Chaco", "Chubut", "Córdoba", 
-    "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa", 
-    "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", 
-    "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe", 
-    "Santiago del Estero", "Tierra del Fuego", "Tucumán"
-    ]
+    # lista_provincias = [
+    # "Buenos Aires", "CABA", "Catamarca", "Chaco", "Chubut", "Córdoba", 
+    # "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa", 
+    # "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", 
+    # "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe", 
+    # "Santiago del Estero", "Tierra del Fuego", "Tucumán"
+    # ]
 
-    label_provincia = Label(form, text="Provincia:", bg="#1F6680", fg="White", font=("Arial", 14))
-    label_provincia.place(x=880, y=220)
-    combobox_provincia = ttk.Combobox(form, values=lista_provincias, font=("Arial", 16), state='readonly')
-    combobox_provincia.set("...")
-    combobox_provincia.place(x=880, y=250, width=400)
+    label_localidad = Label(form, text="Localidad:", bg="#1F6680", fg="White", font=("Arial", 14))
+    label_localidad.place(x=880, y=220)
+    entry_localidad = Entry(form, font=("Arial", 16))
+    entry_localidad.place(x=880, y=250, width=400)
+    # combobox_provincia = ttk.Combobox(form, values=lista_provincias, font=("Arial", 16), state='readonly')
+    # combobox_provincia.set("...")
+    # combobox_provincia.place(x=880, y=250, width=400)
   
-
     # Tercera fila
     label_barrio = Label(form, text="Barrio:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_barrio.place(x=20, y=320)
@@ -188,7 +188,7 @@ def abrir_ventana_form1(id_carrera):
     #Funcion para pasar al siguiente form
     def avanzar_form2():
 
-        apellido, nombre, dni, telefono, correo, domicilio, cuil, provincia_personal, barrio, codigo_postal, fecha_nacimiento, sexo, pais_nacimiento, provincia_nacimiento, ciudad_nacimiento = getEntradasUsuario()
+        apellido, nombre, dni, telefono, correo, domicilio, cuil, localidad, barrio, codigo_postal, fecha_nacimiento, sexo, pais_nacimiento, provincia_nacimiento, ciudad_nacimiento = getEntradasUsuario()
 
         # Lista para almacenar errores
         errores = []
@@ -198,7 +198,7 @@ def abrir_ventana_form1(id_carrera):
         validar_dni(dni, errores)
         validar_cuil(cuil, errores)
         validar_domicilio(domicilio, errores)
-        validar_provincia(provincia_personal, errores)
+        validar_localidad(localidad, errores)
         validar_barrio(barrio, errores)
         validar_codigo_postal(codigo_postal, errores)
         validar_telefono(telefono, errores)
@@ -211,17 +211,36 @@ def abrir_ventana_form1(id_carrera):
 
         # Validaciones de campos obligatorios
         entries = [entry_nombre, entry_apellido, entry_dni, entry_cuil, entry_domicilio, 
-                   combobox_provincia, entry_barrio, entry_cod_postal, entry_telefono, entry_email, 
+                   entry_localidad, entry_barrio, entry_cod_postal, entry_telefono, entry_email, 
                    combobox_sexo, entry_pais, entry_prov, entry_ciudad, entry_fecha]
         validar_campos_obligatorios(entries, errores)
 
         # Si hay errores, mostrar y no avanzar
         if errores:
-            mostrar_errores(errores)
+            mostrar_errores(errores, form)
         else:
+            # Guardar los datos temporalmente en el diccionario
+            datos_temporales["Nombre"] = nombre
+            datos_temporales["Apellido"] = apellido
+            datos_temporales["DNI"] = dni
+            datos_temporales["Genero"] = sexo
+            datos_temporales["CUIL"] = cuil
+            datos_temporales["Domicilio"] = domicilio
+            datos_temporales["Barrio"] = barrio
+            datos_temporales["Localidad"] = localidad
+            datos_temporales["Codigo_Postal"] = codigo_postal
+            datos_temporales["Telefono"] = telefono
+            datos_temporales["Mail"] = correo
+            datos_temporales["Fecha_Nacimiento"] = fecha_nacimiento
+            datos_temporales["Pais_Nacimiento"] = pais_nacimiento
+            datos_temporales["Provincia_Nacimiento"] = provincia_nacimiento
+            datos_temporales["Localidad_Nacimiento"] = ciudad_nacimiento
+
+            print("Datos guardados:", datos_temporales)  # Para verificar en consola
+
             # Código para avanzar a la siguiente parte del formulario
             form.withdraw()
-            abrir_ventana_form2(form)
+            abrir_ventana_form2(form, datos_temporales)
 
     # Botón siguiente
     boton_siguiente = Button(form, text="Siguiente", bg="White", fg="Black", font=("Arial", 12), borderwidth=2, command=avanzar_form2)

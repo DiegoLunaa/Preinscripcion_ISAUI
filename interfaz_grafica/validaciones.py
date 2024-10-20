@@ -53,8 +53,8 @@ def validar_domicilio(domicilio, errores):
     if len(domicilio) < 5 or len(domicilio) > 50:
         errores.append("El domicilio debe tener entre 5 y 50 caracteres.")
 
-def validar_provincia(provincia_personal, errores):
-    if provincia_personal == "...": 
+def validar_localidad(localidad, errores):
+    if localidad == "": 
         errores.append("Debes seleccionar una provincia.")
 
 def validar_localidad(localidad, errores):
