@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from db.funciones_db import obtener_carreras_disponibles, actualizar_cupo
+from db.funciones_db import obtener_carreras_disponibles, modificar_cantidad_cupos
 from tkinter import messagebox
 
 def abrir_ventana_max_cupos():
@@ -44,8 +44,8 @@ def abrir_ventana_max_cupos():
     # Definición de la función para cargar las carreras
     def cargar_carreras():
         carreras_db = obtener_carreras_disponibles()
-        for id_carrera, nombre, cupos in carreras_db: 
-            arbol.insert("", END, values=(id_carrera, nombre, cupos))
+        for id_carrera, nombre, _ , cupos_maximos in carreras_db: 
+            arbol.insert("", END, values=(id_carrera, nombre, cupos_maximos))
     
     # Cargar las carreras desde la base de datos
     cargar_carreras()
@@ -82,9 +82,9 @@ def abrir_ventana_max_cupos():
 
     def guardar_cambios(arbol):
         for item in arbol.get_children():
-            id_carrera, nombre, nuevo_cupo = arbol.item(item, 'values')
-            print(f"Actualizando carrera {nombre} con nuevo cupo: {nuevo_cupo}")
-            actualizar_cupo(id_carrera, nuevo_cupo)
+            id_carrera, nombre, cupos_max_nuevo = arbol.item(item, 'values')
+            print(f"Actualizando carrera {nombre} con nuevo cupo maximo: {cupos_max_nuevo}")
+            modificar_cantidad_cupos(id_carrera, cupos_max_nuevo)
     
         arbol.unbind("<Double-1>")  # Deshabilitar la edición después de guardar
         messagebox.showinfo("Guardado", "Cambios guardados exitosamente.")

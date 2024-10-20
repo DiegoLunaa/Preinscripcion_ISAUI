@@ -5,3 +5,4 @@ db/test_form.py
 db/pw.py
 __pycache__
 reportes.py
+cupos_copia.py

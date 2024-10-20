@@ -21,8 +21,8 @@ carreras_id_mapeo = {}
 def cargar_carreras():
     carreras_db = obtener_carreras_disponibles()
     lista_carreras = []
-    for id_carrera, nombre, cupos in carreras_db:
-        lista_carreras.append(f"{nombre} (Cupos: {cupos})")
+    for id_carrera, nombre, cupos_disponibles, cupos_maximos in carreras_db:
+        lista_carreras.append(f"{nombre}")
         carreras_id_mapeo[nombre] = id_carrera  # Guarda el ID de cada carrera
 
     combobox_carreras['values'] = lista_carreras
