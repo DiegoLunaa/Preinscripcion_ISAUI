@@ -84,10 +84,11 @@ def abrir_mod2(aspirante_id):
                     widget.config(state="readonly")
             elif estado == NORMAL:
                 if isinstance(widget, Spinbox):
-                    widget.config(state="normal") 
-                    widget.delete(0, END) 
-                    widget.insert(0, '1960')  
-                    widget.config(state="readonly")
+                    if widget.get() == '' or widget.get() == '0':
+                        widget.config(state="normal") 
+                        widget.delete(0, END) 
+                        widget.insert(0, '1960')  
+                        widget.config(state="readonly")
 
     def activar_pantalla_completa(event=None):
         form2.attributes("-fullscreen", True)
