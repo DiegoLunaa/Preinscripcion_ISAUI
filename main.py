@@ -74,7 +74,7 @@ frame_cuadrado = tk.Frame(ventana, bg="#274357", width=700, height=350)  # Tama�
 frame_cuadrado.place(relx=0.5, rely=0.5, anchor='center')  # Centrado en la ventana
 
 # Texto de bienvenida
-label_texto = tk.Label(frame_cuadrado, text="Bienvenido a la preinscripción 2025\nElija la carrera a la cual ingresar",
+label_texto = tk.Label(frame_cuadrado, text=" Bienvenido a la preinscripción 2025 ",
                        fg="White", font=("Arial", 28))  # Tamaño de fuente ajustado
 label_texto.configure(bg="#274357")
 label_texto.pack(pady=20)

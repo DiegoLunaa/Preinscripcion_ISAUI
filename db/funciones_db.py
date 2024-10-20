@@ -64,6 +64,22 @@ def preparar_datos_para_sql(diccionario):
     # Extraemos los valores en el mismo orden que en la consulta SQL
     return tuple(diccionario.values())
 
+def dni_existe_en_db(dni):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT COUNT(*) FROM Aspirante WHERE dni = %s"
+    cursor.execute(query, (dni,))
+    result = cursor.fetchone()[0]
+    return result > 0
+
+def correo_existe_en_db(correo):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT COUNT(*) FROM Aspirante WHERE mail = %s"
+    cursor.execute(query, (correo,))
+    result = cursor.fetchone()[0]
+    return result > 0
+
 # Funciones CRUD
 
 def crear_aspirante(datos): # ANDA
