@@ -116,3 +116,11 @@ ALTER TABLE Aspirante
 ADD COLUMN Provincia_Nacimiento VARCHAR(100) AFTER Pais_Nacimiento,
 ADD COLUMN Localidad_Nacimiento VARCHAR(100) AFTER Ciudad_Nacimiento,
 ADD COLUMN Horas_Trabajo INT DEFAULT NULL AFTER Trabajo;
+
+ALTER TABLE Carrera ADD COLUMN Cupos_Maximos INT;
+UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 1;
+UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 2;
+UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 3;
+UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 4;
+UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 5;
+UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 6;

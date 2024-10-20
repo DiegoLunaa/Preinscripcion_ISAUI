@@ -160,23 +160,6 @@ def actualizar_carrera(id_carrera, datos_actualizados):
     conexion.close()
     print("Carrera actualizada exitosamente.")
 
-def actualizar_cupo(id_carrera, nuevo_cupo):
-
-    if not verificar_acceso():
-        return
-    
-    conexion = conectar()
-    cursor = conexion.cursor()
-    
-    query = "UPDATE Carrera SET Cupos_Disponibles = %s WHERE ID_Carrera = %s"
-    cursor.execute(query, (nuevo_cupo, id_carrera))
-    
-    conexion.commit()
-    cursor.close()
-    conexion.close()
-    
-    print(f"Cupo de la carrera con ID {id_carrera} actualizado a {nuevo_cupo}.")
-
 def crear_formulario(datos):
     
     conexion = conectar()
@@ -289,7 +272,7 @@ def eliminar_reporte(id_reporte):
 def obtener_carreras_disponibles():
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "SELECT ID_Carrera, Nombre_Carrera, Cupos_Disponibles FROM Carrera WHERE Cupos_Disponibles > 0"
+    query = "SELECT ID_Carrera, Nombre_Carrera, Cupos_Disponibles, Cupos_Maximos FROM Carrera"
     cursor.execute(query)
     carreras = cursor.fetchall()
     cursor.close()
@@ -322,19 +305,47 @@ def descontar_cupo(id_carrera):
     cursor.close()
     conexion.close()
 
+def cupos_max(id_carrera):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT Cupos_Maximos FROM Carrera WHERE ID_Carrera = %s"
+    cursor.execute(query, (id_carrera,))
+    cupos_max = cursor.fetchone()[0]
+    cursor.close()
+    conexion.close
+    return cupos_max
+
 def modificar_cantidad_cupos(id_carrera, cupos_max_nuevo):
+
+    if not verificar_acceso():
+        return
+    
+    cupos_max_nuevo = int(cupos_max_nuevo)
     conexion = conectar()
     cursor = conexion.cursor()
     query_max_cupos = "SELECT Cupos_Maximos FROM Carrera WHERE ID_Carrera = %s"
     cursor.execute(query_max_cupos, (id_carrera,))
     cupos_max = cursor.fetchone()[0]
-    diferencia_cupos = cupos_max_nuevo - cupos_max
-    query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles + %s WHERE ID_Carrera = %s"
-    cursor.execute(query_actualizar_cupos_disponibles, (diferencia_cupos, id_carrera))
+
+    if cupos_max_nuevo > cupos_max:
+        diferencia_cupos = int(cupos_max_nuevo) - cupos_max
+        query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles + %s WHERE ID_Carrera = %s"
+        cursor.execute(query_actualizar_cupos_disponibles, (diferencia_cupos, id_carrera))
+    else:
+        query_cupos_disponibles = "SELECT Cupos_Disponibles FROM Carrera WHERE ID_Carrera = %s"
+        cursor.execute(query_cupos_disponibles, (id_carrera,))
+        cupos_disponibles = cursor.fetchone()[0]
+        
+        if cupos_max - cupos_max_nuevo > cupos_disponibles:
+            query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = 0 WHERE ID_Carrera = %s"
+            cursor.execute(query_actualizar_cupos_disponibles, (id_carrera,))
+        else:
+            diferencia_cupos = cupos_max - cupos_max_nuevo
+            query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles - %s WHERE ID_Carrera = %s"
+            cursor.execute(query_actualizar_cupos_disponibles, (diferencia_cupos, id_carrera))
+
     query_actualizar_cupos_max = "UPDATE Carrera SET Cupos_Maximos = %s WHERE ID_Carrera = %s"
     cursor.execute(query_actualizar_cupos_max, (cupos_max_nuevo, id_carrera))
     conexion.commit()
-    cupos_disponibles_actuales = cupos_disponibles(id_carrera)
-    print(f"Cupos actualizados, los cupos disponibles actuales son: {cupos_disponibles_actuales}")
     cursor.close()
     conexion.close()
