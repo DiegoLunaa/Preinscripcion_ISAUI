@@ -20,7 +20,6 @@ def abrir_mod2(aspirante_id):
 
 
     aspirante_info = leer_aspirante(aspirante_id)
-    print(f"ID:  {aspirante_id}")
 
     if aspirante_info is None:
         print(f"No se encontraron datos para el alumno con ID: {aspirante_id}")
@@ -66,7 +65,29 @@ def abrir_mod2(aspirante_id):
     def toggle_entries(variable, *widgets):
         estado = NORMAL if variable.get() in [1, 2] else DISABLED
         for widget in widgets:
-            widget.config(state=estado)
+            widget.config(state=estado)  # Cambia el estado del widget
+            if estado == DISABLED:  # Si se deshabilita, limpia el contenido
+                if isinstance(widget, Entry):
+                    widget.config(state="normal")  
+                    widget.delete(0, END)  
+                    widget.insert(0, '')       
+                    widget.config(state="readonly")            
+                elif isinstance(widget, Text):
+                    widget.config(state="normal") 
+                    widget.delete("1.0", END) 
+                    widget.insert("1.0", '')
+                    widget.config(state='disabled')
+                elif isinstance(widget, Spinbox):
+                    widget.config(state="normal") 
+                    widget.delete(0, END)  
+                    widget.insert(0, '')  
+                    widget.config(state="readonly")
+            elif estado == NORMAL:
+                if isinstance(widget, Spinbox):
+                    widget.config(state="normal") 
+                    widget.delete(0, END) 
+                    widget.insert(0, '1960')  
+                    widget.config(state="readonly")
 
     def activar_pantalla_completa(event=None):
         form2.attributes("-fullscreen", True)
@@ -95,12 +116,19 @@ def abrir_mod2(aspirante_id):
     radio_medio_no = Radiobutton(form2, text="No", bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_medio_var, value=0)
     radio_medio_no.place(x=220, y=140)
 
+    radio_medio_si.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
+    radio_medio_no.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
+
     radio_superior_si = Radiobutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_superior_var, value=1)
     radio_superior_si.place(x=200, y=250)
     radio_superior_no = Radiobutton(form2, text="No",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_superior_var, value=0)
     radio_superior_no.place(x=250, y=250)
     radio_superior_en_curso = Radiobutton(form2, text="En curso",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_superior_var, value=2)
     radio_superior_en_curso.place(x=300, y=250)
+
+    radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
+    radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
+    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup))
 
     radio_trabaja_si = Radiobutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_trabaja_var, value=1)
     radio_trabaja_si.place(x=170, y=490)
@@ -160,12 +188,12 @@ def abrir_mod2(aspirante_id):
     #siguiente fila
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=350)
-    spin_año_ingreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16),state='readonly')
+    spin_año_ingreso_sup = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16),state='readonly')
     spin_año_ingreso_sup.place(x=20, y=380, width=150)
 
     label_año_egreso = Label(form2, text="Año egreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=350)
-    spin_año_egreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16),state='readonly')
+    spin_año_egreso_sup = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16),state='readonly')
     spin_año_egreso_sup.place(x=190, y=380, width=150)
 
     # Asignar comando a los Radiobuttons después de crear los widgets
@@ -250,6 +278,11 @@ def abrir_mod2(aspirante_id):
                 clave.delete(0, END)
                 clave.insert(0, '')
                 clave.config(state="readonly")
+    
+    toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo)
+    toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup)
+    toggle_entries(radio_trabaja_var, entry_horas, texto_descrip)
+
 
     def guardar_validar():
         cambios = {}
@@ -301,7 +334,39 @@ def abrir_mod2(aspirante_id):
         for campo, nuevo_valor, valor_actual in datos:
             if nuevo_valor != valor_actual:
                 cambios[campo] = nuevo_valor
-    
+
+        # if nivel_medio_nuevo == 0:
+        #     spin_año_ingreso.config(state="normal")
+        #     spin_año_ingreso.delete(0, END)
+        #     spin_año_ingreso.insert(0, '1999')
+        #     spin_año_ingreso.config(state="readonly")
+
+        #     spin_año_egreso.config(state="normal")
+        #     spin_año_egreso.delete(0, END)
+        #     spin_año_egreso.insert(0, '')
+        #     spin_año_egreso.config(state="readonly")
+
+        #     entry_prov.delete(0, END)
+        #     entry_prov.insert(0, '')
+
+        #     entry_titulo.delete(0, END)
+        #     entry_titulo.insert(0, '')
+        # elif nivel_superior_nuevo == 0:
+        #     entry_carrera.insert(0, '')
+        #     entry_institucion.insert(0, '')
+        #     entry_prov_ins.insert(0, '')
+        #     spin_año_ingreso_sup.config(state="normal")
+        #     spin_año_ingreso_sup.delete(0, END)
+        #     spin_año_ingreso_sup.insert(0, '')
+        #     spin_año_ingreso_sup.config(state="readonly")
+        #     spin_año_egreso_sup.config(state="normal")
+        #     spin_año_egreso_sup.delete(0, END)
+        #     spin_año_egreso_sup.insert(0, '')
+        #     spin_año_egreso_sup.config(state="readonly")
+        # elif trabaja_nuevo == 0:
+        #     entry_horas.insert(0, '')
+        #     texto_descrip.insert("1.0", '')
+        
         # Si hay errores, mostrar y no avanzar
         if errores:
             mostrar_errores(errores)
