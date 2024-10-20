@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from interfaz_grafica.config import path_facu, path_isaui
 from PIL import Image, ImageTk
+from db.funciones_db import leer_todos_los_aspirantes
 
 def abrir_ventana_info_aspirante(aspirantes):
     info = Toplevel()
@@ -32,49 +33,55 @@ def abrir_ventana_info_aspirante(aspirantes):
     label_texto.place(relx=0.5, rely=0.5, anchor='center')
 
     #arbol
-
+    
     arbol = ttk.Treeview(frame2, columns=("Campo", "info"), show="headings", height=20)
     arbol.heading("Campo", text="Campo")
     arbol.heading("info", text="Información")
     arbol.column("Campo", width=300, anchor="w") 
     arbol.column("info", width=400, anchor="w")  
 
-    campos = [
-        "DATOS PERSONALES:",
-        "NOMBRE",
-        "APELLIDO",
-        "SEXO",
-        "DNI",
-        "CUIL/CUIT",
-        "DOMICILIO",
-        "LOCALIDAD",
-        "BARRIO",
-        "CODIGO POSTAL",
-        "TELÉFONO",
-        "EMAIL",
-        "FECHA DE NACIMIENTO",
-        "PAIS",
-        "PROVINCIA",
-        "ESTUDIOS:",
-        "ESTUDIOS NIVEL MEDIO",
-        "AÑO DE INGRESO",
-        "AÑO DE EGRESO",
-        "PROVINCIA",
-        "TÍTULO",
-        "NIVEL SUPERIOR",
-        "CARRERA",
-        "INSTITUCIÓN",
-        "PROVINCIA",
-        "AÑO DE INGRESO",
-        "AÑO DE EGRESO",
-        "SIT LABORAL Y RESP:",
-        "TRABAJA",
-        "HORAS DE TRABAJO",
-        "TIENE PERSONAS A CARGO?"
-    ]
+    aspirante_data = leer_todos_los_aspirantes()
+    if aspirante_data:
+        campos = [
+            "DATOS PERSONALES:",
+            "NOMBRE",
+            "APELLIDO",
+            "SEXO",
+            "DNI",
+            "CUIL/CUIT",
+            "DOMICILIO",
+            "LOCALIDAD",
+            "BARRIO",
+            "CODIGO POSTAL",
+            "TELÉFONO",
+            "EMAIL",
+            "FECHA DE NACIMIENTO",
+            "PAIS",
+            "PROVINCIA",
+            "ESTUDIOS:",
+            "ESTUDIOS NIVEL MEDIO",
+            "AÑO DE INGRESO",
+            "AÑO DE EGRESO",
+            "PROVINCIA",
+            "TÍTULO",
+            "NIVEL SUPERIOR",
+            "CARRERA",
+            "INSTITUCIÓN",
+            "PROVINCIA",
+            "AÑO DE INGRESO",
+            "AÑO DE EGRESO",
+            "SIT LABORAL Y RESP:",
+            "TRABAJA",
+            "HORAS DE TRABAJO",
+            "TIENE PERSONAS A CARGO?"
+        ]
 
-    for campo in campos:
-        arbol.insert("", "end", values=(campo, "")) 
+    if aspirante_data:
+        for aspirante in aspirante_data:
+            
+            arbol.insert("", "end", values=(aspirante[1], aspirante[2]))
+
+    
 
     arbol.place(relx=0.5, y=410, anchor='center')
 

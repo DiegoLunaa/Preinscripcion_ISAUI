@@ -57,6 +57,10 @@ def validar_localidad(localidad, errores):
     if localidad == "": 
         errores.append("Debes seleccionar una provincia.")
 
+def validar_localidad(localidad, errores):
+    if localidad == "": 
+        errores.append("Debes seleccionar una provincia.")
+
 def validar_barrio(barrio, errores):
     if not validar_entrada(barrio):
         errores.append("El barrio debe ser escrito solo con letras.")
