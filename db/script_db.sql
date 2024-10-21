@@ -90,7 +90,7 @@ INSERT INTO Carrera (Nombre_Carrera, Duracion, Facultad, Cupos_Disponibles) VALU
 
 -- Insertar administrador
 INSERT INTO Administrador (Nombre, Apellido, Cargo, Usuario, Password) VALUES
-('Jorge', 'Aperlo', 'Administrador', 'admin', '$2b$12$UzRFtiVFgRqynR9PLlOw9ONxli4T0YW/s.hq7RwuXg6BLGZjt06lm');
+('Jorge', 'Aperlo', 'Administrador', 'admin', '$2b$12$UzRFtiVFgRqynR9PLlOw9ONxli4T0YW/s.hq7RwuXg6BLGZjt06lm')
 VALUES ('admin', 'admin', 'Administrador', 'adm', '$2b$12$g65hJdyYvneSALBS.3bQNeAwaZkxkeyLp9Hj2rxV3v1f2SP36zply');
 
 ALTER TABLE Aspirante
@@ -114,7 +114,7 @@ CHANGE COLUMN Lugar_Nacimiento Pais_Nacimiento VARCHAR(100);
 
 ALTER TABLE Aspirante 
 ADD COLUMN Provincia_Nacimiento VARCHAR(100) AFTER Pais_Nacimiento,
-ADD COLUMN Localidad_Nacimiento VARCHAR(100) AFTER Ciudad_Nacimiento,
+ADD COLUMN Localidad_Nacimiento VARCHAR(100) AFTER Provincia_Nacimiento,
 ADD COLUMN Horas_Trabajo INT DEFAULT NULL AFTER Trabajo;
 
 ALTER TABLE Carrera ADD COLUMN Cupos_Maximos INT;
