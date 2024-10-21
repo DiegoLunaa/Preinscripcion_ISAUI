@@ -38,7 +38,7 @@ def abrir_mod1(aspirante_id):
         email_nuevo = entry_email.get().strip()
         domicilio_nuevo = entry_domicilio.get().strip()
         cuil_nuevo = entry_cuil.get().strip()
-        provincia_personal_nuevo = entry_prov.get().strip()
+        localidad_nuevo = entry_localidad.get().strip()
         barrio_nuevo = entry_barrio.get().strip()
         codigo_postal_nuevo = entry_cod_postal.get().strip()
         fecha_nacimiento_nuevo = entry_fecha.get_date()
@@ -49,7 +49,7 @@ def abrir_mod1(aspirante_id):
         
         return (
     nombre_nuevo, apellido_nuevo, dni_nuevo, sexo_nuevo, 
-    cuil_nuevo, domicilio_nuevo, barrio_nuevo, provincia_personal_nuevo,
+    cuil_nuevo, domicilio_nuevo, barrio_nuevo, localidad_nuevo,
     codigo_postal_nuevo, telefono_nuevo, email_nuevo, 
     fecha_nacimiento_nuevo, pais_nacimiento_nuevo,
     provincia_nacimiento_nuevo, ciudad_nacimiento_nuevo
@@ -105,19 +105,10 @@ def abrir_mod1(aspirante_id):
     entry_domicilio = Entry(form, font=("Arial", 16))
     entry_domicilio.place(x=450, y=250, width=400)
 
-    lista_provincias = [
-    "Buenos Aires", "CABA", "Catamarca", "Chaco", "Chubut", "Córdoba", 
-    "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa", 
-    "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", 
-    "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe", 
-    "Santiago del Estero", "Tierra del Fuego", "Tucumán"
-    ]
-
-    label_provincia = Label(form, text="Provincia:", bg="#1F6680", fg="White", font=("Arial", 14))
-    label_provincia.place(x=880, y=220)
-    combobox_provincia = ttk.Combobox(form, values=lista_provincias, font=("Arial", 16), state='readonly')
-    combobox_provincia.set("...")
-    combobox_provincia.place(x=880, y=250, width=400)
+    label_localidad = Label(form, text="Localidad:", bg="#1F6680", fg="White", font=("Arial", 14))
+    label_localidad.place(x=880, y=220)
+    entry_localidad = Entry(form, font=("Arial", 16))
+    entry_localidad.place(x=880, y=250, width=400)
   
 
     # Tercera fila
@@ -191,7 +182,7 @@ def abrir_mod1(aspirante_id):
     boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
     (
     id, nombre_actual, apellido_actual, dni_actual, sexo_actual, 
-    cuil_actual, domicilio_actual, barrio_actual, provincia_personal_actual,
+    cuil_actual, domicilio_actual, barrio_actual, localidad_personal_actual,
     codigo_postal_actual, telefono_actual, email_actual,  
     fecha_nacimiento_actual, pais_nacimiento_actual,
     provincia_nacimiento_actual, ciudad_nacimiento_actual, *otros_campos
@@ -205,7 +196,7 @@ def abrir_mod1(aspirante_id):
         (entry_cuil, cuil_actual),
         (entry_domicilio, domicilio_actual),
         (entry_barrio, barrio_actual),
-        (combobox_provincia, provincia_personal_actual),
+        (entry_localidad, localidad_personal_actual),
         (entry_cod_postal, codigo_postal_actual),
         (entry_telefono, telefono_actual),
         (entry_email, email_actual),
@@ -228,7 +219,7 @@ def abrir_mod1(aspirante_id):
         cambios = {}
         (
             nombre_nuevo, apellido_nuevo, dni_nuevo, sexo_nuevo, 
-            cuil_nuevo, domicilio_nuevo, barrio_nuevo, provincia_personal_nuevo,
+            cuil_nuevo, domicilio_nuevo, barrio_nuevo, localidad_personal_nuevo,
             codigo_postal_nuevo, telefono_nuevo, email_nuevo, 
             fecha_nacimiento_nuevo, pais_nacimiento_nuevo,
             provincia_nacimiento_nuevo, ciudad_nacimiento_nuevo
@@ -239,14 +230,14 @@ def abrir_mod1(aspirante_id):
 
         # Validaciones del formulario 1
         validar_nombre_apellido(nombre_nuevo, apellido_nuevo, errores)
-        validar_dni(dni_nuevo, errores)
+        validar_dni(dni_nuevo, errores, dni_actual)
         validar_cuil(cuil_nuevo, errores)
         validar_domicilio(domicilio_nuevo, errores)
-        validar_provincia(provincia_personal_nuevo, errores)
+        validar_localidad(localidad_personal_nuevo, errores) #localidad
         validar_barrio(barrio_nuevo, errores)
         validar_codigo_postal(codigo_postal_nuevo, errores)
         validar_telefono(telefono_nuevo, errores)
-        verificar_correo(email_nuevo, errores)
+        verificar_correo(email_nuevo, errores, email_actual)
         validar_fecha(fecha_nacimiento_nuevo, errores)
         validar_sexo(sexo_nuevo, errores)
         validar_pais_nacimiento(pais_nacimiento_nuevo, errores)
@@ -255,7 +246,7 @@ def abrir_mod1(aspirante_id):
 
         # Validaciones de campos obligatorios
         entries = [entry_nombre, entry_apellido, entry_dni, entry_cuil, entry_domicilio, 
-                   combobox_provincia, entry_barrio, entry_cod_postal, entry_telefono, entry_email, 
+                   entry_localidad, entry_barrio, entry_cod_postal, entry_telefono, entry_email, 
                    combobox_sexo, entry_pais, entry_prov, entry_ciudad, entry_fecha]
         validar_campos_obligatorios(entries, errores)
 
@@ -267,7 +258,7 @@ def abrir_mod1(aspirante_id):
         ('cuil', cuil_nuevo, cuil_actual),
         ('domicilio', domicilio_nuevo, domicilio_actual),
         ('barrio', barrio_nuevo, barrio_actual),
-        ('localidad', provincia_personal_nuevo, provincia_personal_actual),
+        ('localidad', localidad_personal_nuevo, localidad_personal_actual),
         ('codigo_postal', codigo_postal_nuevo, codigo_postal_actual),
         ('telefono', telefono_nuevo, telefono_actual),
         ('mail', email_nuevo, email_actual),
@@ -283,7 +274,7 @@ def abrir_mod1(aspirante_id):
     
         # Si hay errores, mostrar y no avanzar
         if errores:
-            mostrar_errores(errores)
+            mostrar_errores(errores, form)
         elif cambios:
             actualizar_aspirante(aspirante_id, cambios)
             messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.")

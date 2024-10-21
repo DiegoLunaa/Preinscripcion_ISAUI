@@ -1,115 +1,102 @@
 from tkinter import *
 from tkinter import ttk
-from interfaz_grafica.config import path_facu, path_isaui
+from interfaz_grafica.config import path_isaui
 from PIL import Image, ImageTk
 from db.funciones_db import leer_todos_los_aspirantes
 
 def abrir_ventana_info_aspirante(aspirantes):
-    info = Toplevel()
-    info.title("PANTALLA DE INFORMACIÓN")
-    info.geometry("1366x768") 
-    info.configure(bg="#274357")
+    info_aspirante = Toplevel()
+    info_aspirante.title("PANTALLA DE INFORMACIÓN")
+    info_aspirante.geometry("1366x768") 
+    info_aspirante.configure(bg="#274357")
 
-    #FRAMES
-    frame1 = Frame(info, bg="#1F6680", width=249, height=768)
+    # FRAME 1
+    frame1 = Frame(info_aspirante, bg="#1F6680", width=249, height=768)
     frame1.place(x=0, y=0)  
-    frame2 = Frame(info, bg="#1F6680", width=1052, height=713)
+    # FRAME 2
+    frame2 = Frame(info_aspirante, bg="#1F6680", width=1052, height=713)
     frame2.place(x=314, y=55)  
-    
 
+    # Logo
     imagen = Image.open(path_isaui)
     imagen_redimensionada = imagen.resize((230, 200)) 
     imagen_logo = ImageTk.PhotoImage(imagen_redimensionada)
     label_imagen_isaui = Label(frame1, image=imagen_logo, bg="#1F6680")
-    label_imagen_isaui.place(relx= 0.5, y=80, anchor='center')
+    label_imagen_isaui.place(relx=0.5, y=80, anchor='center')
     label_imagen_isaui.image = imagen_logo  # Mantiene una referencia a la imagen
 
-    frame_info = Frame(info,bg="#274357",width=788, height=101)
+    # Título
+    frame_info = Frame(info_aspirante, bg="#274357", width=788, height=101)
     frame_info.place(x=446, y=83)
 
-    #Label cupo
-    label_texto = Label(frame_info, text="INFORMACIÓN DEL ASPIRANTE", fg="White", font=("Arial", 38))  # Tamaño ajustado
+    label_texto = Label(frame_info, text="INFORMACIÓN DEL ASPIRANTE", fg="White", font=("Arial", 38))  
     label_texto.configure(bg="#274357")
     label_texto.place(relx=0.5, rely=0.5, anchor='center')
 
-    #arbol
-    
+    # Árbol
     arbol = ttk.Treeview(frame2, columns=("Campo", "info"), show="headings", height=20)
     arbol.heading("Campo", text="Campo")
     arbol.heading("info", text="Información")
     arbol.column("Campo", width=300, anchor="w") 
     arbol.column("info", width=400, anchor="w")  
+    arbol.place(relx=0.5, y=410, anchor='center')  # Ajusta la posición vertical aquí
 
-    aspirante_data = leer_todos_los_aspirantes()
-    if aspirante_data:
+    # Obtener la información de los aspirantes
+    aspirante_info = leer_todos_los_aspirantes()
+    if aspirante_info:
+        aspirante = aspirante_info[0]  # Solo se mostrará el primer aspirante
+
         campos = [
-            "DATOS PERSONALES:",
-            "NOMBRE",
-            "APELLIDO",
-            "SEXO",
-            "DNI",
-            "CUIL/CUIT",
-            "DOMICILIO",
-            "LOCALIDAD",
-            "BARRIO",
-            "CODIGO POSTAL",
-            "TELÉFONO",
-            "EMAIL",
-            "FECHA DE NACIMIENTO",
-            "PAIS",
-            "PROVINCIA",
-            "ESTUDIOS:",
-            "ESTUDIOS NIVEL MEDIO",
-            "AÑO DE INGRESO",
-            "AÑO DE EGRESO",
-            "PROVINCIA",
-            "TÍTULO",
-            "NIVEL SUPERIOR",
-            "CARRERA",
-            "INSTITUCIÓN",
-            "PROVINCIA",
-            "AÑO DE INGRESO",
-            "AÑO DE EGRESO",
-            "SIT LABORAL Y RESP:",
-            "TRABAJA",
-            "HORAS DE TRABAJO",
-            "TIENE PERSONAS A CARGO?"
+            ('Nombre', aspirante[1]),
+            ('Apellido', aspirante[2]),
+            ('DNI', aspirante[3]),
+            ('Género', aspirante[4]),
+            ('CUIL', aspirante[5]),
+            ('Domicilio', aspirante[6]),
+            ('Barrio', aspirante[7]),
+            ('Localidad', aspirante[8]),
+            ('Código Postal', aspirante[9]),
+            ('Teléfono', aspirante[10]),
+            ('Mail', aspirante[11]),
+            ('Fecha de Nacimiento', aspirante[12]),
+            ('País de Nacimiento', aspirante[13]),
+            ('Provincia de Nacimiento', aspirante[14]),
+            ('Ciudad de Nacimiento', aspirante[15]),
+            ('Localidad de Nacimiento', aspirante[16]),
+            ('Completo Nivel Medio', aspirante[17]),
+            ('Año Ingreso Medio', aspirante[18]),
+            ('Año Egreso Medio', aspirante[19]),
+            ('Provincia Medio', aspirante[20]),
+            ('Título Medio', aspirante[21]),
+            ('Completo Nivel Superior', aspirante[22]),
+            ('Carrera Superior', aspirante[23]),
+            ('Institución Superior', aspirante[24]),
+            ('Provincia Superior', aspirante[25]),
+            ('Año Ingreso Superior', aspirante[26]),
+            ('Año Egreso Superior', aspirante[27]),
+            ('Trabajo', aspirante[28]),
+            ('Horas Trabajo', aspirante[29]),
+            ('Descripción Trabajo', aspirante[30]),
+            ('Personas Cargo', aspirante[31]),
         ]
 
-    if aspirante_data:
-        for aspirante in aspirante_data:
-            
-            arbol.insert("", "end", values=(aspirante[1], aspirante[2]))
+        # Insertar los campos y su información en el árbol
+        for campo, info in campos:
+            arbol.insert("", "end", values=(campo, info))
 
-    
-
-    arbol.place(relx=0.5, y=410, anchor='center')
-
-    #Scrollbar
+    # Scrollbar
     scrollbar = ttk.Scrollbar(frame2, orient=VERTICAL, command=arbol.yview)
-    scrollbar.place(x=876 ,y=198, height=424)
+    scrollbar.place(x=876, y=198, height=424) 
     arbol.configure(yscrollcommand=scrollbar.set)
 
-    label_aspirantes = Label(frame1,text="ASPIRANTES", bg="#274357", fg="White", font=("Arial", 16))
+    label_aspirantes = Label(frame1, text="ASPIRANTES", bg="#274357", fg="White", font=("Arial", 16))
     label_aspirantes.place(relx=0.5, y=200, anchor='center')
 
-    #boton_cerrar_sesion = Button(info, text="CERRAR SESIÓN", width=14, fg="White", font=("Arial", 12), bg="#1F6680",borderwidth=2)
-    #boton_cerrar_sesion.place(x=1215, y=10)
-
-    #Botones
-    #boton_aspirantes = Button(info, text="ASPIRANTES", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2)
-    #boton_aspirantes.place(x=64, y=184) 
-        
-    #boton_cupos = Button(info, text="CUPOS", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2)
-    #boton_cupos.place(x=64, y=249)  
-
     def volver():
-        info.destroy()
+        info_aspirante.destroy()
         aspirantes.deiconify()
 
-    boton_volver = Button(info, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=volver)
+    boton_volver = Button(info_aspirante, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=volver)
     boton_volver.place(x=1200, y=715)
-    
 
-
-    info.mainloop()
+    info_aspirante.mainloop()
