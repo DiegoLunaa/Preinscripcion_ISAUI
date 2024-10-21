@@ -265,7 +265,7 @@ def abrir_mod1(aspirante_id):
         ('fecha_nacimiento', fecha_nacimiento_nuevo, fecha_nacimiento_actual),
         ('pais_nacimiento', pais_nacimiento_nuevo, pais_nacimiento_actual),
         ('provincia_nacimiento', provincia_nacimiento_nuevo, provincia_nacimiento_actual),
-        ('ciudad_nacimiento', ciudad_nacimiento_nuevo, ciudad_nacimiento_actual)
+        ('localidad_nacimiento', ciudad_nacimiento_nuevo, ciudad_nacimiento_actual)
     ]
         
         for campo, nuevo_valor, valor_actual in datos:
