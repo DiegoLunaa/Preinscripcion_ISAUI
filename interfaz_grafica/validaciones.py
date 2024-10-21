@@ -36,15 +36,16 @@ def validar_nombre_apellido(nombre, apellido, errores):
     elif len(apellido) < 2 or len(apellido) > 20:
         errores.append("El apellido debe tener entre 2 y 20 caracteres.")
 
-def validar_dni(dni, errores):
+def validar_dni(dni, errores, dni_actual=None):
     if not dni.isdigit():
         errores.append("El DNI solo debe contener dígitos.")
     elif len(dni) < 7 or len(dni) > 8:
         errores.append("El número de DNI debe tener 7 u 8 dígitos.")
     else:
-        # Validar si el DNI ya existe en la base de datos
-        if dni_existe_en_db(dni):
-            errores.append("El DNI ya está registrado en el sistema.")    
+        # Validar si el DNI ya existe en la base de datos solo si ha cambiado
+        if dni_actual is None or dni != dni_actual:  # Solo validar si ha cambiado
+            if dni_existe_en_db(dni):
+                errores.append("El DNI ya está registrado en el sistema.")  
 
 def validar_cuil(cuil, errores):
     if not cuil.isdigit():
@@ -84,14 +85,15 @@ def validar_telefono(telefono, errores):
     elif len(telefono) < 6 or len(telefono) > 10:
         errores.append("El número de teléfono debe tener entre 6 y 10 dígitos.")
 
-def verificar_correo(correo, errores):
+def verificar_correo(correo, errores, correo_actual=None):
     patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not re.match(patron, correo):
         errores.append("El correo ingresado no tiene un formato válido.")
     else:
-        # Validar si el correo ya existe en la base de datos
-        if correo_existe_en_db(correo):
-            errores.append("El correo ya está registrado en el sistema.")
+        # Validar si el correo ya existe en la base de datos solo si ha cambiado
+        if correo_actual is None or correo != correo_actual:  # Solo validar si ha cambiado
+            if correo_existe_en_db(correo):
+                errores.append("El correo ya está registrado en el sistema.")
 
 def validar_fecha(fecha_nacimiento, errores):
 

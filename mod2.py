@@ -232,6 +232,7 @@ def abrir_mod2(aspirante_id):
     radio_trabaja_si.config(command=lambda: toggle_entries(radio_trabaja_var, entry_horas, texto_descrip))
     radio_trabaja_no.config(command=lambda: toggle_entries(radio_trabaja_var, entry_horas, texto_descrip))
 
+    print(aspirante_info)
     (
     _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _,
     nivel_medio_actual, año_ingreso_medio_actual, año_egreso_medio_actual,
@@ -382,17 +383,6 @@ def abrir_mod2(aspirante_id):
     boton_siguiente = Button(form2, text="Guardar", bg="White", fg="Black", font=("Arial", 12), borderwidth=2,command=guardar_validar)
     boton_siguiente.place(x=1240, y=700, width=120, height=64)
 
-
-    def volver():
-        form2.destroy()
-
-
-    
-    imagen_flecha = Image.open(path_flecha)
-    flecha_atras = ImageTk.PhotoImage(imagen_flecha)
-    boton_atras = Button(form2, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=volver)
-    boton_atras.place(x=20, y=20)
-    boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
 
     form2.mainloop()
     

@@ -5,7 +5,7 @@ from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,p
 from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
-from db.funciones_db import leer_todos_los_aspirantes
+from db.funciones_db import leer_todos_los_aspirantes,eliminar_aspirante
 from main_modif import abrir_ventana_modificar
 
 
@@ -53,6 +53,37 @@ def abrir_ventana_aspirantes(main_adm):
         # Llamar a la función para abrir la ventana de modificación
         abrir_ventana_modificar(aspirante_id)
     
+    def obtener_info_y_verla():
+        seleccion = arbol.selection()
+        if not seleccion:
+            messagebox.showerror("Error", "Por favor, selecciona un alumno.")
+            return
+    
+        item = seleccion[0]
+        aspirante_info = arbol.item(item, 'values')  # Obtener los valores de la fila seleccionada
+        aspirante_id = aspirante_info[0]  # Obtener la ID del alumno seleccionado
+        print(f"Aspirante seleccionado: {aspirante_info}, y su id es {aspirante_id}")  # Imprimir en consola
+        # Llamar a la función para abrir la ventana de modificación
+        abrir_ventana_info_aspirante(aspirante_id)
+    
+    def eliminar_aspirante_seleccionado():
+        seleccion = arbol.selection()
+        if not seleccion:
+            messagebox.showerror("Error", "Por favor, selecciona un aspirante.")
+            return
+
+        item = seleccion[0]
+        aspirante_info = arbol.item(item, 'values')
+        aspirante_id = aspirante_info[0]
+
+        respuesta = messagebox.askyesno("Confirmar eliminación", f"¿Está seguro que desea eliminar al aspirante con ID {aspirante_id}?")
+        if respuesta:
+            eliminar_aspirante(aspirante_id)  # Llamar a la función que elimina de la base de datos
+            arbol.delete(item)  # Eliminar del Treeview
+            messagebox.showinfo("Eliminado", "Aspirante eliminado correctamente.")
+        else:
+            messagebox.showinfo("Cancelado", "Eliminación cancelada.")
+
     #Botones acciones
         #Boton y label ojo
 
@@ -67,7 +98,7 @@ def abrir_ventana_aspirantes(main_adm):
     imagen = Image.open(path_ojo)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
-    boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#007AFF", width=50, height=50, borderwidth=2,command=ver_info)
+    boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#007AFF", width=50, height=50, borderwidth=2,command=obtener_info_y_verla)
     boton_ojo.place(x=989, y=326)
     boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
     label_ojo = Label(aspirantes,text="VER INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
@@ -94,7 +125,7 @@ def abrir_ventana_aspirantes(main_adm):
     imagen = Image.open(path_basura)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_basura = ImageTk.PhotoImage(imagen_redimensionada)
-    boton_basura = Button(aspirantes, image=imagen_basura, bg="#FF0000", width=50, height=50, borderwidth=2,command=mensaje_eliminar)
+    boton_basura = Button(aspirantes, image=imagen_basura, bg="#FF0000", width=50, height=50, borderwidth=2,command=eliminar_aspirante_seleccionado)
     boton_basura.place(x=989, y=460)
     boton_basura.image = imagen_lapiz
     label_basura = Label(aspirantes,text="ELIMINAR INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
