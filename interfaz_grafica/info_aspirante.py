@@ -44,7 +44,8 @@ def abrir_ventana_info_aspirante(aspirantes):
     # Obtener la información de los aspirantes
     aspirante_info = leer_todos_los_aspirantes()
     if aspirante_info:
-        aspirante = aspirante_info[0]  # Solo se mostrará el primer aspirante
+        aspirante = aspirante_info[2]  # Solo se mostrará el primer aspirante
+        print(aspirante)
 
         campos = [
             ('Nombre', aspirante[1]),
@@ -61,23 +62,22 @@ def abrir_ventana_info_aspirante(aspirantes):
             ('Fecha de Nacimiento', aspirante[12]),
             ('País de Nacimiento', aspirante[13]),
             ('Provincia de Nacimiento', aspirante[14]),
-            ('Ciudad de Nacimiento', aspirante[15]),
-            ('Localidad de Nacimiento', aspirante[16]),
-            ('Completo Nivel Medio', aspirante[17]),
-            ('Año Ingreso Medio', aspirante[18]),
-            ('Año Egreso Medio', aspirante[19]),
-            ('Provincia Medio', aspirante[20]),
-            ('Título Medio', aspirante[21]),
-            ('Completo Nivel Superior', aspirante[22]),
-            ('Carrera Superior', aspirante[23]),
-            ('Institución Superior', aspirante[24]),
-            ('Provincia Superior', aspirante[25]),
-            ('Año Ingreso Superior', aspirante[26]),
-            ('Año Egreso Superior', aspirante[27]),
-            ('Trabajo', aspirante[28]),
-            ('Horas Trabajo', aspirante[29]),
-            ('Descripción Trabajo', aspirante[30]),
-            ('Personas Cargo', aspirante[31]),
+            ('Localidad de Nacimiento', aspirante[15]),
+            ('Completo Nivel Medio', aspirante[16]),
+            ('Año Ingreso Medio', aspirante[17]),
+            ('Año Egreso Medio', aspirante[18]),
+            ('Provincia Medio', aspirante[19]),
+            ('Título Medio', aspirante[20]),
+            ('Completo Nivel Superior', aspirante[21]),
+            ('Carrera Superior', aspirante[22]),
+            ('Institución Superior', aspirante[23]),
+            ('Provincia Superior', aspirante[24]),
+            ('Año Ingreso Superior', aspirante[25]),
+            ('Año Egreso Superior', aspirante[26]),
+            ('Trabajo', aspirante[27]),
+            ('Horas Trabajo', aspirante[28]),
+            ('Descripción Trabajo', aspirante[29]),
+            ('Personas Cargo', aspirante[30]),
         ]
 
         # Insertar los campos y su información en el árbol

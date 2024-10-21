@@ -7,7 +7,7 @@ def conectar():
             host='localhost',
             database='isaui_prematricula',
             user='root',
-            password= 'PreIns2024!@'
+            password= ''
         )
         if conexion.is_connected():
             # print("Conexión exitosa a la base de datos")
