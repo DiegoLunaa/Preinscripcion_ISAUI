@@ -270,7 +270,7 @@ def abrir_ventana_form2(form, datos_temporales):
             datos_aspirante = preparar_datos_para_sql(datos_temporales)
             aspirante_id = crear_aspirante(datos_aspirante)
 
-            confirmar_preinscripcion(aspirante_id)
+            # confirmar_preinscripcion(aspirante_id)
 
             form2.destroy()
             mostrar_confirmacion()

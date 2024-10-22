@@ -4,19 +4,19 @@ from datetime import datetime
 import tkinter as tk
 from db.funciones_db import dni_existe_en_db, correo_existe_en_db
 
-def validar_entrada(texto):
+def validar_alfanumerico(texto):
     # Expresión regular que permite letras (incluyendo tildes) y espacios.
-    patron = r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$'
+    patron = r'^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+$'
     return bool(re.match(patron, texto))
 
-def validar_alfanumerico_espacios(texto):
+def validar_alfanumerico_numeros(texto):
 # Expresión regular que permite letras, números y espacios.
-    patron = r'^[a-zA-Z0-9\s]+$'
+    patron = r'^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ\s]+$'
     return bool(re.match(patron, texto))
 
 def validar_alfanumerico_pyc(texto):
 # Se le añade punto y coma.
-    patron = r'^[a-zA-Z0-9\s.,]+$'
+    patron = r'^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ\s.,]+$'
     return bool(re.match(patron, texto))
 
 # VALIDACIONES FORMULARIO 1
@@ -26,12 +26,12 @@ def mostrar_errores(errores, padre):
         messagebox.showerror("ATENCIÓN", "\n".join(errores), parent=padre)
 
 def validar_nombre_apellido(nombre, apellido, errores):
-    if not validar_entrada(nombre):
+    if not validar_alfanumerico(nombre):
         errores.append("El nombre debe ser escrito solo con letras.")
     elif len(nombre) < 2 or len(nombre) > 20:
         errores.append("El nombre debe tener entre 2 y 20 caracteres.")
     
-    if not validar_entrada(apellido):
+    if not validar_alfanumerico(apellido):
         errores.append("El apellido debe ser escrito solo con letras.")
     elif len(apellido) < 2 or len(apellido) > 20:
         errores.append("El apellido debe tener entre 2 y 20 caracteres.")
@@ -54,7 +54,7 @@ def validar_cuil(cuil, errores):
         errores.append("El número de CUIL debe tener 11 dígitos.")
 
 def validar_domicilio(domicilio, errores):
-    if not validar_alfanumerico_espacios(domicilio):
+    if not validar_alfanumerico_numeros(domicilio):
         errores.append("No se aceptan signos y/o caracteres no alfanuméricos en el domicilio.")
     if len(domicilio) < 5 or len(domicilio) > 50:
         errores.append("El domicilio debe tener entre 5 y 50 caracteres.")
@@ -68,7 +68,7 @@ def validar_localidad(localidad, errores):
         errores.append("Debes seleccionar una provincia.")
 
 def validar_barrio(barrio, errores):
-    if not validar_entrada(barrio):
+    if not validar_alfanumerico(barrio):
         errores.append("El barrio debe ser escrito solo con letras.")
     elif len(barrio) < 2 or len(barrio) > 30:
         errores.append("El barrio debe tener entre 2 y 30 caracteres.")
@@ -110,19 +110,19 @@ def validar_sexo(sexo, errores):
         errores.append("Debes seleccionar un sexo.")
 
 def validar_pais_nacimiento(pais_nacimiento, errores):
-    if not validar_entrada(pais_nacimiento):
+    if not validar_alfanumerico(pais_nacimiento):
         errores.append("El país de nacimiento debe ser escrito con letras")
     if pais_nacimiento == "": 
         errores.append("Debes seleccionar un país de nacimiento.")
 
 def validar_provincia_nacimiento(provincia_nacimiento, errores):
-    if not validar_entrada(provincia_nacimiento):
+    if not validar_alfanumerico(provincia_nacimiento):
         errores.append("La provincia de nacimiento debe ser escrita con letras")
     elif provincia_nacimiento == "": 
         errores.append("Debes seleccionar una provincia de nacimiento.")
 
 def validar_ciudad_nacimiento(ciudad_nacimiento, errores):
-    if not validar_entrada(ciudad_nacimiento):
+    if not validar_alfanumerico(ciudad_nacimiento):
         errores.append("La ciudad de nacimiento debe ser escrita con letras")
     elif ciudad_nacimiento == "": 
         errores.append("Debes seleccionar una ciudad de nacimiento.")
@@ -147,7 +147,7 @@ def validar_nivel_medio(nivel_medio, provincia_medio, año_ingreso_medio, año_e
         if año_egreso_medio == "": 
             errores.append("Debes seleccionar un año de egreso medio")
 
-        if not validar_entrada(titulo_medio):
+        if not validar_alfanumerico(titulo_medio):
             errores.append("El título debe ser escrito solo con letras.")
         elif len(titulo_medio) < 1 or len(titulo_medio) > 100:
             errores.append("El título debe tener entre 1 y 1000 caracteres.")
@@ -156,12 +156,12 @@ def validar_nivel_medio(nivel_medio, provincia_medio, año_ingreso_medio, año_e
 def validar_nivel_superior(nivel_superior, carrera_superior, institucion, provincia_superior, año_ingreso_superior, año_egreso_superior, errores):
     if nivel_superior in [1,2]:
 
-        if not validar_entrada(carrera_superior):
+        if not validar_alfanumerico(carrera_superior):
             errores.append("La carrera debe ser escrita solo con letras.")
         elif len(carrera_superior) < 1 or len(carrera_superior) > 100:
             errores.append("El nombre de la carrera debe tener entre 1 y 100 caracteres.")
 
-        if not validar_entrada(institucion):
+        if not validar_alfanumerico(institucion):
             errores.append("La institución debe ser escrita solo con letras.")
         elif len(institucion) < 1 or len(institucion) > 100:
             errores.append("El nombre de la institución debe tener entre 1 y 100 caracteres.")
