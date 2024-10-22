@@ -93,6 +93,8 @@ def abrir_ventana_info_aspirante(aspirante_id):
                     info = 'No tiene'
                 elif info is 0:
                      info = 'No'
+                elif info is 1:
+                     info = 'Si'
                 arbol.insert("", "end", values=(campo, info))
 
     # Scrollbar
