@@ -5,6 +5,7 @@ from interfaz_grafica.confirmacion import mostrar_confirmacion
 from interfaz_grafica.config import path_flecha
 from interfaz_grafica.validaciones import *
 from db.funciones_db import *
+from interfaz_grafica.notificacion_mail import confirmar_preinscripcion
 
 def abrir_ventana_form2(form, datos_temporales):
     form2 = Toplevel()
@@ -267,7 +268,9 @@ def abrir_ventana_form2(form, datos_temporales):
             print("Datos guardados:", datos_temporales)  # Para verificar en consola
 
             datos_aspirante = preparar_datos_para_sql(datos_temporales)
-            crear_aspirante(datos_aspirante)
+            aspirante_id = crear_aspirante(datos_aspirante)
+
+            confirmar_preinscripcion(aspirante_id)
 
             form2.destroy()
             mostrar_confirmacion()

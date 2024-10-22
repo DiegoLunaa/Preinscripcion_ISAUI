@@ -6,3 +6,4 @@ db/pw.py
 __pycache__
 reportes.py
 cupos_copia.py
+interfaz_grafica/config.json

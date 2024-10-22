@@ -97,9 +97,11 @@ def crear_aspirante(datos): # ANDA
                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     cursor.execute(query, datos)
     conexion.commit()
-    print("Aspirante creado exitosamente.")
+    aspirante_id = cursor.lastrowid  # Obtiene el ID del último registro insertado
+    print("Aspirante creado exitosamente con ID:", aspirante_id)
     cursor.close()
     conexion.close()
+    return aspirante_id
 
 def leer_aspirante(id_aspirante):
     # if not verificar_acceso():
