@@ -333,41 +333,19 @@ def abrir_mod2(aspirante_id):
         ('personas_cargo', a_cargo_nuevo, a_cargo_actual)
     ]
         
+        excluir = ['completo_nivel_medio',  'completo_nivel_superior', 'trabajo', 'personas_cargo']
+
+
         for campo, nuevo_valor, valor_actual in datos:
-            if nuevo_valor != valor_actual:
-                cambios[campo] = nuevo_valor
+            if campo in excluir:
+                if nuevo_valor != valor_actual:
+                    cambios[campo] = nuevo_valor         
+            else:
+                if nuevo_valor == 0 or nuevo_valor == '':
+                    cambios[campo] = None
+                elif nuevo_valor != valor_actual:
+                    cambios[campo] = nuevo_valor
 
-        # if nivel_medio_nuevo == 0:
-        #     spin_año_ingreso.config(state="normal")
-        #     spin_año_ingreso.delete(0, END)
-        #     spin_año_ingreso.insert(0, '1999')
-        #     spin_año_ingreso.config(state="readonly")
-
-        #     spin_año_egreso.config(state="normal")
-        #     spin_año_egreso.delete(0, END)
-        #     spin_año_egreso.insert(0, '')
-        #     spin_año_egreso.config(state="readonly")
-
-        #     entry_prov.delete(0, END)
-        #     entry_prov.insert(0, '')
-
-        #     entry_titulo.delete(0, END)
-        #     entry_titulo.insert(0, '')
-        # elif nivel_superior_nuevo == 0:
-        #     entry_carrera.insert(0, '')
-        #     entry_institucion.insert(0, '')
-        #     entry_prov_ins.insert(0, '')
-        #     spin_año_ingreso_sup.config(state="normal")
-        #     spin_año_ingreso_sup.delete(0, END)
-        #     spin_año_ingreso_sup.insert(0, '')
-        #     spin_año_ingreso_sup.config(state="readonly")
-        #     spin_año_egreso_sup.config(state="normal")
-        #     spin_año_egreso_sup.delete(0, END)
-        #     spin_año_egreso_sup.insert(0, '')
-        #     spin_año_egreso_sup.config(state="readonly")
-        # elif trabaja_nuevo == 0:
-        #     entry_horas.insert(0, '')
-        #     texto_descrip.insert("1.0", '')
         
         # Si hay errores, mostrar y no avanzar
         if errores:
