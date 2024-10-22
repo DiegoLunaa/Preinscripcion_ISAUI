@@ -10,12 +10,6 @@ def abrir_ventana_modificar(aspirante_id):
     def modificar_estudios():
         abrir_mod2(aspirante_id)
 
-    def seleccionar_opcion(opcion):
-        if opcion == "datos_personales":
-            modificar_datos_personales()
-        elif opcion == "estudios":
-            modificar_estudios()
-
     # Crear la ventana principal
     ventana = Toplevel()
     ventana.title("Modificar Información")
