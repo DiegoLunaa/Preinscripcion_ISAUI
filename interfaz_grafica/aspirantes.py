@@ -5,7 +5,7 @@ from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,p
 from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
-from db.funciones_db import leer_todos_los_aspirantes,eliminar_aspirante
+from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, obtener_nombre_carrera
 from main_modif import abrir_ventana_modificar
 
 
@@ -172,8 +172,8 @@ def abrir_ventana_aspirantes(main_adm):
 
     if aspirante_data:
         for aspirante in aspirante_data:
-            
-            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3]))  
+            carrera = obtener_nombre_carrera(aspirante[33])
+            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3], carrera))  
 
     #Botones superiores
     def volver():

@@ -52,10 +52,13 @@ def abrir_ventana_info_aspirante(aspirante_id):
         provincia_nacimiento, ciudad_nacimiento, nivel_medio, año_ingreso_medio,
         año_egreso_medio, provincia_medio, titulo_medio, nivel_superior, 
         carrera_superior, institucion, provincia_superior, año_ingreso_superior,
-        año_egreso_superior, trabaja, horas_lab, descripcion_laboral, a_cargo
+        año_egreso_superior, trabaja, horas_lab, descripcion_laboral, a_cargo,
+        estado, fecha_envio, carrera
         ) = aspirante_info
         
             datos = [
+            ('ID Aspirante', id),
+            ('Carrera', carrera),     
             ('Nombre', nombre),
             ('Apellido', apellido),
             ('DNI', dni),
@@ -71,32 +74,40 @@ def abrir_ventana_info_aspirante(aspirante_id):
             ('País de nacimiento', pais_nacimiento),
             ('Provincia de nacimiento', provincia_nacimiento),
             ('Localidad de nacimiento', ciudad_nacimiento),
-            ('Nivel medio completo?', nivel_medio),
+            ('¿Nivel medio completo?', nivel_medio),
             ('Año de ingreso medio', año_ingreso_medio),
             ('Año de egreso medio', año_egreso_medio),
             ('Provincia estudios medios', provincia_medio),
             ('Título estudios medios', titulo_medio),
-            ('Nivel superior completo?', nivel_superior),
-            ('Carrera superior?', carrera_superior),
-            ('Institución superior?', institucion),
+            ('¿Nivel superior completo?', nivel_superior),
+            ('Carrera superior', carrera_superior),
+            ('Institución superior', institucion),
             ('Provincia superior', provincia_superior),
             ('Año de ingreso superior', año_ingreso_superior),
             ('Año de egreso superior', año_egreso_superior),
-            ('Trabaja?', trabaja),
+            ('¿Trabaja?', trabaja),
             ('Horas de trabajo', horas_lab),
             ('Descripción laboral', descripcion_laboral),
-            ('Tiene personas a cargo?', a_cargo)
+            ('¿Tiene personas a cargo?', a_cargo),
+            ('Estado del registro', estado),
+            ('Fecha de envío', fecha_envio)
         ]
         # Insertar los campos y su información en el árbol
             for campo, info in datos:
-                if info is None:
-                    info = 'No tiene'
-                elif info is 0:
-                     info = 'No'
-                elif info is 1:
-                     info = 'Si'
-                arbol.insert("", "end", values=(campo, info))
-
+                if campo == 'Carrera':
+                    # Obtener el nombre de la carrera según su ID
+                    nombre_carrera = obtener_nombre_carrera(info)
+                    arbol.insert("", "end", values=(campo, nombre_carrera))
+                elif campo != 'ID_Aspirante':
+                    if info is None:
+                        info = 'No tiene'
+                    elif info == 0:
+                        info = 'No'
+                    elif info == 1:
+                        info = 'Si'
+                    arbol.insert("", "end", values=(campo, info))
+                else:
+                    arbol.insert("", "end", values=(campo, info))
     # Scrollbar
     scrollbar = ttk.Scrollbar(frame2, orient=VERTICAL, command=arbol.yview)
     scrollbar.place(x=876, y=198, height=424) 

@@ -92,9 +92,10 @@ def crear_aspirante(datos): # ANDA
                Provincia_Nacimiento, Localidad_Nacimiento, Completo_Nivel_Medio, Completo_Nivel_Superior, 
                Trabajo, Personas_Cargo, Año_Ingreso_Medio, Año_Egreso_Medio, Provincia_Medio, 
                Titulo_Medio, Carrera_Superior, Institucion_Superior, Provincia_Superior, 
-               Año_Ingreso_Superior, Año_Egreso_Superior, Horas_Trabajo, Descripcion_Trabajo) 
+               Año_Ingreso_Superior, Año_Egreso_Superior, Horas_Trabajo, Descripcion_Trabajo, Estado,
+               Fecha_Envio, ID_Carrera) 
                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-               %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+               %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), %s)"""
     cursor.execute(query, datos)
     conexion.commit()
     aspirante_id = cursor.lastrowid  # Obtiene el ID del último registro insertado
@@ -338,6 +339,16 @@ def obtener_carreras_disponibles():
     cursor.close()
     conexion.close()
     return carreras
+
+def obtener_nombre_carrera(id_carrera):
+    conexion = conectar()  # Asegúrate de que la función 'conectar' esté definida
+    cursor = conexion.cursor()
+    query = "SELECT Nombre_Carrera FROM Carrera WHERE ID_Carrera = %s"
+    cursor.execute(query, (id_carrera,))
+    carrera = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    return carrera[0] if carrera else "Carrera no encontrada"
 
 def cupos_disponibles(id_carrera):
     conexion = conectar()
