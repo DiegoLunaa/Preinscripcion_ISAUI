@@ -2,9 +2,9 @@ from tkinter import *
 from tkinter import ttk
 from interfaz_grafica.config import path_isaui
 from PIL import Image, ImageTk
-from db.funciones_db import leer_todos_los_aspirantes
+from db.funciones_db import *
 
-def abrir_ventana_info_aspirante(aspirantes):
+def abrir_ventana_info_aspirante(aspirante_id):
     info_aspirante = Toplevel()
     info_aspirante.title("PANTALLA DE INFORMACIÓN")
     info_aspirante.geometry("1366x768") 
@@ -41,48 +41,59 @@ def abrir_ventana_info_aspirante(aspirantes):
     arbol.column("info", width=400, anchor="w")  
     arbol.place(relx=0.5, y=410, anchor='center')  # Ajusta la posición vertical aquí
 
-    # Obtener la información de los aspirantes
-    aspirante_info = leer_todos_los_aspirantes()
+    aspirante_info = leer_aspirante(aspirante_id)
+
     if aspirante_info:
-        aspirante = aspirante_info[2]  # Solo se mostrará el primer aspirante
-        print(aspirante)
-
-        campos = [
-            ('Nombre', aspirante[1]),
-            ('Apellido', aspirante[2]),
-            ('DNI', aspirante[3]),
-            ('Género', aspirante[4]),
-            ('CUIL', aspirante[5]),
-            ('Domicilio', aspirante[6]),
-            ('Barrio', aspirante[7]),
-            ('Localidad', aspirante[8]),
-            ('Código Postal', aspirante[9]),
-            ('Teléfono', aspirante[10]),
-            ('Mail', aspirante[11]),
-            ('Fecha de Nacimiento', aspirante[12]),
-            ('País de Nacimiento', aspirante[13]),
-            ('Provincia de Nacimiento', aspirante[14]),
-            ('Localidad de Nacimiento', aspirante[15]),
-            ('Completo Nivel Medio', aspirante[16]),
-            ('Año Ingreso Medio', aspirante[17]),
-            ('Año Egreso Medio', aspirante[18]),
-            ('Provincia Medio', aspirante[19]),
-            ('Título Medio', aspirante[20]),
-            ('Completo Nivel Superior', aspirante[21]),
-            ('Carrera Superior', aspirante[22]),
-            ('Institución Superior', aspirante[23]),
-            ('Provincia Superior', aspirante[24]),
-            ('Año Ingreso Superior', aspirante[25]),
-            ('Año Egreso Superior', aspirante[26]),
-            ('Trabajo', aspirante[27]),
-            ('Horas Trabajo', aspirante[28]),
-            ('Descripción Trabajo', aspirante[29]),
-            ('Personas Cargo', aspirante[30]),
+            (
+        id, nombre, apellido, dni, sexo, 
+        cuil, domicilio, barrio, localidad_personal,
+        codigo_postal, telefono, email,  
+        fecha_nacimiento, pais_nacimiento,
+        provincia_nacimiento, ciudad_nacimiento, nivel_medio, año_ingreso_medio,
+        año_egreso_medio, provincia_medio, titulo_medio, nivel_superior, 
+        carrera_superior, institucion, provincia_superior, año_ingreso_superior,
+        año_egreso_superior, trabaja, horas_lab, descripcion_laboral, a_cargo
+        ) = aspirante_info
+        
+            datos = [
+            ('Nombre', nombre),
+            ('Apellido', apellido),
+            ('DNI', dni),
+            ('Género', sexo),
+            ('CUIL', cuil),
+            ('Domicilio', domicilio),
+            ('Barrio', barrio),
+            ('Localidad', localidad_personal),
+            ('Código Postal', codigo_postal),
+            ('Teléfono', telefono),
+            ('Email', email),
+            ('Fecha de nacimiento', fecha_nacimiento),
+            ('País de nacimiento', pais_nacimiento),
+            ('Provincia de nacimiento', provincia_nacimiento),
+            ('Localidad de nacimiento', ciudad_nacimiento),
+            ('Nivel medio completo?', nivel_medio),
+            ('Año de ingreso medio', año_ingreso_medio),
+            ('Año de egreso medio', año_egreso_medio),
+            ('Provincia estudios medios', provincia_medio),
+            ('Título estudios medios', titulo_medio),
+            ('Nivel superior completo?', nivel_superior),
+            ('Carrera superior?', carrera_superior),
+            ('Institución superior?', institucion),
+            ('Provincia superior', provincia_superior),
+            ('Año de ingreso superior', año_ingreso_superior),
+            ('Año de egreso superior', año_egreso_superior),
+            ('Trabaja?', trabaja),
+            ('Horas de trabajo', horas_lab),
+            ('Descripción laboral', descripcion_laboral),
+            ('Tiene personas a cargo?', a_cargo)
         ]
-
         # Insertar los campos y su información en el árbol
-        for campo, info in campos:
-            arbol.insert("", "end", values=(campo, info))
+            for campo, info in datos:
+                if info is None:
+                    info = 'No tiene'
+                elif info is 0:
+                     info = 'No'
+                arbol.insert("", "end", values=(campo, info))
 
     # Scrollbar
     scrollbar = ttk.Scrollbar(frame2, orient=VERTICAL, command=arbol.yview)
@@ -94,7 +105,6 @@ def abrir_ventana_info_aspirante(aspirantes):
 
     def volver():
         info_aspirante.destroy()
-        aspirantes.deiconify()
 
     boton_volver = Button(info_aspirante, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=volver)
     boton_volver.place(x=1200, y=715)
