@@ -10,6 +10,16 @@ def abrir_ventana_info_aspirante(aspirante_id):
     info_aspirante.geometry("1366x768") 
     info_aspirante.configure(bg="#274357")
 
+    def activar_pantalla_completa(event=None):
+        info_aspirante.attributes("-fullscreen", True)
+
+    def desactivar_pantalla_completa(event=None):
+        info_aspirante.attributes("-fullscreen", False)
+
+    info_aspirante.attributes("-fullscreen", True)  # Iniciar en pantalla completa
+    info_aspirante.bind("<Escape>", desactivar_pantalla_completa)
+    info_aspirante.bind("<F11>", activar_pantalla_completa)
+
     # FRAME 1
     frame1 = Frame(info_aspirante, bg="#1F6680", width=249, height=768)
     frame1.place(x=0, y=0)  

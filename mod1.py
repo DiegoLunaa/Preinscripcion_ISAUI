@@ -67,11 +67,6 @@ def abrir_mod1(aspirante_id):
     form.bind("<Escape>", desactivar_pantalla_completa)
     form.bind("<F11>", activar_pantalla_completa)
 
-    # Título
-    label_texto = Label(form, text="FORMULARIO\nPreinscripción", fg="White", font=("Arial", 36))  # Tamaño ajustado
-    label_texto.configure(bg="#274357")
-    label_texto.place(relx=0.5, y=10, anchor='n')  # Centrar horizontalmente
-
     # Datos personales
     label_datos = Label(form, text="DATOS PERSONALES:", fg="White", font=("Arial", 24))
     label_datos.configure(bg="#274357")
