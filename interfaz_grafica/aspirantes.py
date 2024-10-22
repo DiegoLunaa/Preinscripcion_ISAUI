@@ -5,7 +5,7 @@ from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,p
 from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
-from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, obtener_nombre_carrera
+from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera
 from main_modif import abrir_ventana_modificar
 
 
@@ -94,7 +94,26 @@ def abrir_ventana_aspirantes(main_adm):
         else:
             messagebox.showinfo("Cancelado", "Eliminación cancelada.")
 
-    #Botones acciones
+    def confirmar_aspirante_seleccionado():
+        seleccion = arbol.selection()
+        if not seleccion:
+            messagebox.showerror("Error", "Por favor, selecciona un aspirante.")
+            return
+        
+        item = seleccion[0]
+        aspirante_info = arbol.item(item, 'values')
+        aspirante_id = aspirante_info[0]
+
+        respuesta = messagebox.askyesno("Confirmación del aspirante", f"¿Está seguro que desea confirmar al aspirante con ID {aspirante_id}?")
+        if respuesta:
+            confirmar_aspirante(aspirante_id) 
+            arbol.delete(item)
+            messagebox.showinfo("Confirmado", "Aspirante confirmado correctamente.")
+        else:
+            messagebox.showinfo("Cancelado", "Confirmación cancelada.")
+
+    #Botones, acciones
+
         #Boton y label ojo
     imagen = Image.open(path_ojo)
     imagen_redimensionada = imagen.resize((34,34)) 
@@ -104,6 +123,7 @@ def abrir_ventana_aspirantes(main_adm):
     boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
     label_ojo = Label(aspirantes,text="VER INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
     label_ojo.place(x=1050, y=337)
+
         #Boton y label Lapiz
     imagen = Image.open(path_lapiz)
     imagen_redimensionada = imagen.resize((34,34)) 
@@ -113,8 +133,8 @@ def abrir_ventana_aspirantes(main_adm):
     boton_lapiz.image = imagen_lapiz
     label_lapiz = Label(aspirantes,text="EDITAR INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
     label_lapiz.place(x=1050, y=403)
-        #Boton y label Trash
 
+        #Boton y label Trash
     def mensaje_eliminar():
         respuesta = messagebox.askyesno("Confirmar eliminación", "Usted está a punto de eliminar al aspirante.\n¿Está seguro?")    
         if respuesta:  
@@ -136,7 +156,8 @@ def abrir_ventana_aspirantes(main_adm):
     imagen = Image.open(path_check)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_check = ImageTk.PhotoImage(imagen_redimensionada)
-    boton_check = Button(aspirantes, image=imagen_check, bg="#1F8930", width=50, height=50, borderwidth=2)
+    boton_check = Button(aspirantes, image=imagen_check, bg="#1F8930", width=50, height=50, borderwidth=2, command=confirmar_aspirante_seleccionado)
+
     boton_check.place(x=989, y=527)
     boton_check.image = imagen_check
     label_basura = Label(aspirantes,text="CONFIRMAR ASPIRANTE", bg="#1F6680", fg="White", font=("Arial", 18))
