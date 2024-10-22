@@ -9,6 +9,16 @@ def abrir_ventana_confirmados(aspirantes):
     confirmados.geometry("1366x768") 
     confirmados.configure(bg="#274357")
 
+    def activar_pantalla_completa(event=None):
+        confirmados.attributes("-fullscreen", True)
+
+    def desactivar_pantalla_completa(event=None):
+        confirmados.attributes("-fullscreen", False)
+
+    confirmados.attributes("-fullscreen", True)  # Iniciar en pantalla completa
+    confirmados.bind("<Escape>", desactivar_pantalla_completa)
+    confirmados.bind("<F11>", activar_pantalla_completa)
+
     #FRAMES
     frame1 = Frame(confirmados, bg="#1F6680", width=249, height=768)
     frame1.place(x=0, y=0)  

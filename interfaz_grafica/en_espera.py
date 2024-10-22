@@ -9,6 +9,16 @@ def abrir_ventana_en_espera(aspirantes):
     esperando.geometry("1366x768") 
     esperando.configure(bg="#274357")
 
+    def activar_pantalla_completa(event=None):
+        esperando.attributes("-fullscreen", True)
+
+    def desactivar_pantalla_completa(event=None):
+        esperando.attributes("-fullscreen", False)
+
+    esperando.attributes("-fullscreen", True)  # Iniciar en pantalla completa
+    esperando.bind("<Escape>", desactivar_pantalla_completa)
+    esperando.bind("<F11>", activar_pantalla_completa)
+
     #FRAMES
     frame1 = Frame(esperando, bg="#1F6680", width=249, height=768)
     frame1.place(x=0, y=0)  

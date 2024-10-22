@@ -11,6 +11,16 @@ def abrir_ventana_cupos(main_adm):
     cupos.geometry("1366x768") 
     cupos.configure(bg="#274357")
 
+    def activar_pantalla_completa(event=None):
+        cupos.attributes("-fullscreen", True)
+
+    def desactivar_pantalla_completa(event=None):
+        cupos.attributes("-fullscreen", False)
+
+    cupos.attributes("-fullscreen", True)  # Iniciar en pantalla completa
+    cupos.bind("<Escape>", desactivar_pantalla_completa)
+    cupos.bind("<F11>", activar_pantalla_completa)
+
 
     def actualizar_progreso():
         carreras = [
@@ -62,11 +72,11 @@ def abrir_ventana_cupos(main_adm):
             cupos.destroy()
             main_adm.deiconify()
 
-    boton_volver = Button(cupos, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#1F6680",borderwidth=2,command= volver)
-    boton_volver.place(x=1215, y=10)
+    boton_volver = Button(cupos, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command= volver)
+    boton_volver.place(x=1184, y=679)
 
-    boton_confirmados = Button(cupos, text="MÁXIMO DE CUPOS", width=16, fg="White", font=("Arial", 10), bg="#274357",borderwidth=2,command=abrir_ventana_max_cupos)
-    boton_confirmados.place(x=1184, y=679)  
+    boton_confirmados = Button(cupos, text="MÁXIMO DE CUPOS", width=16, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=abrir_ventana_max_cupos)
+    boton_confirmados.place(x=1000, y=679)  
 
         #Botones superiores
 
