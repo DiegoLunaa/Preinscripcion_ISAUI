@@ -269,9 +269,17 @@ def abrir_ventana_form2(form, datos_temporales):
                 datos_temporales["Horas_Trabajo"] = None
                 datos_temporales["Descripcion_Trabajo"] = None
 
+            # Agregar campos que faltan y mover el id_carrera
+            datos_temporales["Estado"] = "Pendiente"
+            # datos_temporales["Fecha_Envio"] = None
+
+            valor = datos_temporales.pop("ID_Carrera")
+            datos_temporales["ID_Carrera"] = valor
+
             print("Datos guardados:", datos_temporales)  # Para verificar en consola
 
             datos_aspirante = preparar_datos_para_sql(datos_temporales)
+            print(datos_aspirante)
             aspirante_id = crear_aspirante(datos_aspirante)
 
             # confirmar_preinscripcion(aspirante_id)

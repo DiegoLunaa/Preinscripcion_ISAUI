@@ -6,13 +6,10 @@ from interfaz_grafica.form2 import abrir_ventana_form2
 from interfaz_grafica.config import path_flecha
 from interfaz_grafica.validaciones import *
 
-# Variable global para almacenar el id_carrera y los datos temporalmente
-id_carrera_seleccionada = None
+# Diccionario para guardar los datos temporalmente
 datos_temporales = {}
 
 def abrir_ventana_form1(id_carrera):
-    global id_carrera_seleccionada
-    id_carrera_seleccionada = id_carrera
 
     form = Toplevel()
     form.title("Formulario de preinscripción")
@@ -226,6 +223,7 @@ def abrir_ventana_form1(id_carrera):
             mostrar_errores(errores, form)
         else:
             # Guardar los datos temporalmente en el diccionario
+            datos_temporales["ID_Carrera"] = id_carrera 
             datos_temporales["Nombre"] = nombre
             datos_temporales["Apellido"] = apellido
             datos_temporales["DNI"] = dni
