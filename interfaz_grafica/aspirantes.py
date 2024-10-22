@@ -11,9 +11,19 @@ from main_modif import abrir_ventana_modificar
 
 def abrir_ventana_aspirantes(main_adm):
     aspirantes = Toplevel()
-    aspirantes.title("PANTALLA DE CUPOS")
+    aspirantes.title("PANTALLA DE ASPIRANTES")
     aspirantes.geometry("1366x768") 
     aspirantes.configure(bg="#274357")
+
+    def activar_pantalla_completa(event=None):
+        aspirantes.attributes("-fullscreen", True)
+
+    def desactivar_pantalla_completa(event=None):
+        aspirantes.attributes("-fullscreen", False)
+
+    aspirantes.attributes("-fullscreen", True)  # Iniciar en pantalla completa
+    aspirantes.bind("<Escape>", desactivar_pantalla_completa)
+    aspirantes.bind("<F11>", activar_pantalla_completa)
 
     #frames
     frame1 = Frame(aspirantes, bg="#1F6680", width=249, height=768)
@@ -86,15 +96,6 @@ def abrir_ventana_aspirantes(main_adm):
 
     #Botones acciones
         #Boton y label ojo
-
-    def ver_info():
-        aspirantes.withdraw()
-        abrir_ventana_info_aspirante(aspirantes)
-    
-    def modificar():
-        aspirantes.withdraw()
-        
-
     imagen = Image.open(path_ojo)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
@@ -197,24 +198,16 @@ def abrir_ventana_aspirantes(main_adm):
     label_aspirantes = Label(frame1,text="ASPIRANTES", bg="#274357", fg="White", font=("Arial", 16))
     label_aspirantes.place(relx=0.5, y=200, anchor='center')
     
-    """boton_aspirantes = Button(aspirantes, text="ASPIRANTES", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2)
-    boton_aspirantes.place(x=64, y=184) 
-        
-    boton_cupos = Button(aspirantes, text="CUPOS", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2)
-    boton_cupos.place(x=64, y=249)  """
-    
     boton_en_espera = Button(aspirantes, text="EN ESPERA", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=ingresar_en_espera)
-    boton_en_espera.place(x=1039, y=679)  
+    boton_en_espera.place(x=894, y=679)  
 
     boton_confirmados = Button(aspirantes, text="CONFIRMADOS", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=ingresar_confirmados)
-    boton_confirmados.place(x=1184, y=679)  
+    boton_confirmados.place(x=1039, y=679)  
 
-    boton_inicio = Button(aspirantes, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#1F6680",borderwidth=2,command= volver)
-    boton_inicio.place(x=1215, y=10)
+    boton_inicio = Button(aspirantes, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command= volver)
+    boton_inicio.place(x=1184, y=679) 
 
-    """boton_cerrar_sesion = Button(aspirantes, text="CERRAR SESIÓN", width=14, fg="White", font=("Arial", 12), bg="#1F6680",borderwidth=2,command=cerrar_sesion)
-    boton_cerrar_sesion.place(x=1215, y=10)
-"""
+
     #combobox
     combobox_carreras = ttk.Combobox(aspirantes, font=("Arial", 14), state='readonly')
     combobox_carreras.set("Filtrado de carrera")
