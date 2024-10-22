@@ -23,10 +23,7 @@ def abrir_mail():
     ventana.configure(bg="#1F6680")
     ventana.geometry("800x600") 
 
-
-
     padding = 10
-
 
     label_destinatario = Label(ventana, text="Destinatario:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_destinatario.pack(pady=padding)
@@ -160,6 +157,7 @@ def confirmar_preinscripcion(aspirante_id):
 
     Su preinscripción para la carrera ha sido recibida. 
     Su solicitud será revisada y se le notificará sobre el estado de su inscripción.
+    Para más información, visita isaui.edu.ar
 
     Saludos,
     Secretaria ISAUI

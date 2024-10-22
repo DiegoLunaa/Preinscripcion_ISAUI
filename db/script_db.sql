@@ -124,3 +124,13 @@ UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 3;
 UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 4;
 UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 5;
 UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 6;
+
+ALTER TABLE constancia DROP FOREIGN KEY constancia_ibfk_1;
+ALTER TABLE constancia DROP COLUMN ID_Formulario;
+DROP TABLE Formulario;
+
+ALTER TABLE Aspirante 
+ADD COLUMN Estado VARCHAR(20) DEFAULT 'Pendiente',
+ADD COLUMN Fecha_Envio DATETIME DEFAULT NULL,
+ADD COLUMN ID_Carrera INT,
+ADD CONSTRAINT FK_Aspirante_Carrera FOREIGN KEY (ID_Carrera) REFERENCES Carrera(ID_Carrera);
