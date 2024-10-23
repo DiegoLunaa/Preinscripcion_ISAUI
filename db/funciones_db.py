@@ -163,7 +163,7 @@ def leer_todos_los_aspirantes_basico():
 
     try:
         cursor = conexion.cursor()
-        cursor.execute("SELECT nombre, apellido, dni, carrera_superior, estado FROM Aspirante")  # Ajusta la consulta según tu tabla
+        cursor.execute("SELECT nombre, apellido, dni, id_carrera, estado FROM Aspirante")  # Ajusta la consulta según tu tabla
         resultados = cursor.fetchall()  # Obtiene todos los registros
         return resultados
     except Error as e:

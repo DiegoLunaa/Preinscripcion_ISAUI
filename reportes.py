@@ -7,23 +7,60 @@ from db.funciones_db import *
 
 # def abrir_ventana_reportes():
     
-    # def modificar_datos_personales():
-    #     abrir_mod1(aspirante_id)
-
-    # def modificar_estudios():
-    #     abrir_mod2(aspirante_id)
 def buscar_aspirantes_por_carrera(carrera):
     aspirantes  = leer_todos_los_aspirantes_basico()
-    texto = f"Lista de Aspirantes confirmados para {carrera}:\n"
-    for nombre, apellido, dni, carrera_superior, estado in aspirantes:
-        if estado == 'Confirmado' and carrera_superior == carrera:
-            texto += f"Nombre: {nombre}, Apellido: {apellido}, DNI: {dni}, Carrera: {carrera_superior}\n"
+
+    aspirantes_confirmados = [
+        (nombre, apellido, dni, id_carrera, estado) for nombre, apellido, dni, id_carrera, estado in aspirantes if estado == 'Confirmado'
+    ]
+
+    if carrera != 0:
+        texto = f"Lista de Aspirantes confirmados para {carrera}:\n"
+        aspirantes_confirmados = sorted(aspirantes_confirmados, key=lambda x: (x[0], x[1]))
+        for nombre, apellido, dni, id_carrera, estado in aspirantes_confirmados:
+            if estado == 'Confirmado' and id_carrera == carrera:
+                texto += f"Nombre: {nombre}, Apellido: {apellido}, DNI: {dni}, Carrera: {id_carrera}\n"
+    else:
+        texto = f"Lista de Aspirantes confirmados de todas las carreras:\n"
+        aspirantes_confirmados = sorted(aspirantes_confirmados, key=lambda x: (x[3], x[0], x[1]))  
+        for nombre, apellido, dni, id_carrera, estado in aspirantes_confirmados:
+            if estado == 'Confirmado':
+                texto += f"Nombre: {nombre}, Apellido: {apellido}, DNI: {dni}, Carrera: {id_carrera}\n"
+
+    def generar_reporte_pdf(nombre_archivo, titulo, contenido):
+        # Crear el PDF con tamaño de hoja Carta
+        pdf = canvas.Canvas(nombre_archivo, pagesize=letter)
+        ancho, alto = letter
+
+        # Establecer título
+        pdf.setFont("Helvetica-Bold", 16)
+        pdf.drawString(100, alto - 50, titulo)
+
+        # Establecer contenido
+        pdf.setFont("Helvetica", 12)
+        textobject = pdf.beginText(100, alto - 100)
+        textobject.textLines(contenido)
+
+        # Agregar el contenido al PDF
+        pdf.drawText(textobject)
+
+        # Guardar el archivo PDF
+        pdf.save()
+
+    # Usar la función para crear un reporte
+    titulo = "Reporte de Ejemplo"
+    contenido = f"""
+    {texto}
+    """
+    nombre_archivo = "reporte_ejemplo.pdf"
+    generar_reporte_pdf(nombre_archivo, titulo, contenido)
+
     print(texto)
     return texto
 # Crear la ventana principal
 ventana = Tk()
 ventana.title("Generar reportes")
-ventana.geometry("500x525")
+ventana.geometry("500x580")
 ventana.configure(bg="#1F6680")
 
 # Frame
@@ -53,42 +90,14 @@ boton_datos_turismo.place(relx=0.5, y=365, anchor='center')
 boton_trekking = Button(ventana, text="Guía de Trekking", command=lambda: buscar_aspirantes_por_carrera(6), bg="#274357", width=25, fg="White", font=("Arial", 10))
 boton_trekking.place(relx=0.5, y=425, anchor='center')
 
-boton_todas = Button(ventana, text="Todas las carreras", command=lambda: buscar_aspirantes_por_carrera(7), bg="#274357", width=25, fg="White", font=("Arial", 10))
+boton_todas = Button(ventana, text="Todas las carreras", command=lambda: buscar_aspirantes_por_carrera(0), bg="#274357", width=25, fg="White", font=("Arial", 10))
 boton_todas.place(relx=0.5, y=485, anchor='center')
 
-# boton_salir = Button(ventana,text="Salir",command=ventana.destroy,bg="#274357", width=25,fg="White", font=("Arial", 10))
-# boton_salir.place(relx=0.5, y = 40, anchor='center')
-
-# def generar_reporte_pdf(nombre_archivo, titulo, contenido):
-#     # Crear el PDF con tamaño de hoja Carta
-#     pdf = canvas.Canvas(nombre_archivo, pagesize=letter)
-#     ancho, alto = letter
-
-#     # Establecer título
-#     pdf.setFont("Helvetica-Bold", 16)
-#     pdf.drawString(100, alto - 50, titulo)
-
-#     # Establecer contenido
-#     pdf.setFont("Helvetica", 12)
-#     textobject = pdf.beginText(100, alto - 100)
-#     textobject.textLines(contenido)
-
-#     # Agregar el contenido al PDF
-#     pdf.drawText(textobject)
-
-#     # Guardar el archivo PDF
-#     pdf.save()
-
-# # Usar la función para crear un reporte
-# titulo = "Reporte de Ejemplo"
-# contenido = f"""
-# {texto}
-# """
-# nombre_archivo = "reporte_ejemplo.pdf"
-# generar_reporte_pdf(nombre_archivo, titulo, contenido)
+boton_salir = Button(ventana,text="Salir",command=ventana.destroy,bg="#274357", width=25,fg="White", font=("Arial", 10))
+boton_salir.place(relx=0.5, y = 545, anchor='center')
 
 
-# Iniciar la interfaz
+
 ventana.mainloop()
 
 def generar_reporte_pdf(nombre_archivo, titulo, contenido):
