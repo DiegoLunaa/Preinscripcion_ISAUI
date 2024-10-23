@@ -159,7 +159,7 @@ def actualizar_aspirante(id_aspirante, datos_actualizados): # ANDA
 
     # if not verificar_acceso():
     #     return
-    
+        
     conexion = conectar()
     cursor = conexion.cursor()
 
@@ -190,25 +190,34 @@ def eliminar_aspirante(id_aspirante): # ANDA
     conexion.commit()
     print("Aspirante eliminado.")
     cursor.close()
+    conexion.close()
     
 def confirmar_aspirante(id_aspirante):
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "SELECT ID_Carrera FROM Aspirante WHERE ID_Aspirante = %s"
+    query = "SELECT Estado, ID_Carrera FROM Aspirante WHERE ID_Aspirante = %s"
     cursor.execute(query, (id_aspirante,))
-    id_carrera = cursor.fetchone()[0]
-        
+    resultado = cursor.fetchone()
+    
+    estado = resultado[0]
+    id_carrera = resultado[1]
+
+    if estado == 'Confirmado':
+        cursor.close()
+        conexion.close()
+        return False, "El aspirante ya se encuentra confirmado."
+    
     cupos = cupos_disponibles(id_carrera)
     if cupos == 0:
-        return False, "No hay cupos disponibles para esta carrera."
-    else:   
-        query = "UPDATE Aspirante SET Estado = 'Confirmado' WHERE ID_Aspirante = %s"
-        cursor.execute(query, (id_aspirante,))
-        descontar_cupo(id_carrera)
-        conexion.commit()
-        print("Aspirante confirmado exitosamente")
+        return False, "No hay cupos disponibles para esta carrera."   
+    
+    query = "UPDATE Aspirante SET Estado = 'Confirmado' WHERE ID_Aspirante = %s"
+    cursor.execute(query, (id_aspirante,))
+    descontar_cupo(id_carrera)
+    conexion.commit()
     cursor.close()
     conexion.close()
+    return True, "Aspirante confirmado exitosamente."
 
 def obtener_aspirantes_confirmados():
     conexion = conectar()

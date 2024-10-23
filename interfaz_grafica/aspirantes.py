@@ -103,12 +103,14 @@ def abrir_ventana_aspirantes(main_adm):
         item = seleccion[0]
         aspirante_info = arbol.item(item, 'values')
         aspirante_id = aspirante_info[0]
-
+        
         respuesta = messagebox.askyesno("Confirmación del aspirante", f"¿Está seguro que desea confirmar al aspirante con ID {aspirante_id}?")
         if respuesta:
-            confirmar_aspirante(aspirante_id) 
-            arbol.delete(item)
-            messagebox.showinfo("Confirmado", "Aspirante confirmado correctamente.")
+            resultado, mensaje = confirmar_aspirante(aspirante_id)
+            if not resultado:
+                messagebox.showwarning("Error", mensaje) 
+            else:
+                messagebox.showinfo("Confirmado", mensaje)  
         else:
             messagebox.showinfo("Cancelado", "Confirmación cancelada.")
 
