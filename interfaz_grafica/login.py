@@ -5,6 +5,7 @@ from interfaz_grafica.config import path_usuario, path_flecha
 from db.funciones_db import *
 
 def abrir_ventana_login():
+
     login = Toplevel()
     login.title("Login Administrador")
     login.geometry("1366x768")
@@ -51,12 +52,8 @@ def abrir_ventana_login():
 
     label_contrasena = Label(login, text="CONTRASEÑA:", bg="#274357", fg="White", font=("Arial", 10))
     label_contrasena.place(x=555, y=485)
-    entry_contrasena = Entry(login, font=("Arial", 16))
+    entry_contrasena = Entry(login, font=("Arial", 16),show="*")
     entry_contrasena.place(relx=0.5, y=510, anchor='n')
-
-    #Check recuérdame
-    # check_recuerdame = Checkbutton(login, text="Recuérdame",bg="#274357",fg="White", font=("Arial", 12), selectcolor="#274357")
-    # check_recuerdame.place(x=555, y=550)
 
     #Botón ingresar
     def ingresar():
@@ -66,6 +63,8 @@ def abrir_ventana_login():
         if login_valido:
             login.withdraw()
             abrir_ventana_main_adm(login, usuario_autenticado)
+            entry_usuario.delete(0, END)
+            entry_contrasena.delete(0, END)
         else:
             messagebox.showerror("Error de autenticación", "Usuario o contraseña incorrectos.", parent=login)
 
@@ -78,3 +77,6 @@ def abrir_ventana_login():
     boton_atras = Button(login, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=login.destroy)
     boton_atras.place(x=140, y=20)
     boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen  
+
+
+    

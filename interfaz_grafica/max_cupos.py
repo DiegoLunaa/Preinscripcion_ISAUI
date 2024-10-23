@@ -22,10 +22,10 @@ def abrir_ventana_max_cupos():
     boton_volver = Button(max, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#1F6680", borderwidth=2, command=max.destroy)
     boton_volver.place(x=650, y=544)
 
-    boton_guardar = Button(max, text="GUARDAR", width=14, fg="Black", font=("Arial", 12), bg="#1F8930", borderwidth=2, command=lambda: guardar_cambios(arbol), state="disabled")
+    boton_guardar = Button(max, text="GUARDAR", width=14, fg="White", font=("Arial", 12), bg="#1F6680", borderwidth=2, command=lambda: guardar_cambios(arbol), state="disabled")
     boton_guardar.place(x=500, y=544)
 
-    boton_editar = Button(max, text="EDITAR", width=14, fg="Black", font=("Arial", 12), bg="#E7EB1E", borderwidth=2, command=lambda: habilitar_edicion(arbol, boton_guardar))
+    boton_editar = Button(max, text="EDITAR", width=14, fg="White", font=("Arial", 12), bg="#1F6680", borderwidth=2, command=lambda: habilitar_edicion(arbol, boton_guardar))
     boton_editar.place(x=350, y=544)
     
     #ARBOL

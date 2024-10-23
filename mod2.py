@@ -361,6 +361,13 @@ def abrir_mod2(aspirante_id):
     boton_siguiente = Button(form2, text="Guardar", bg="White", fg="Black", font=("Arial", 12), borderwidth=2,command=guardar_validar)
     boton_siguiente.place(x=1240, y=700, width=120, height=64)
 
+    # Botón para volver atrás
+    imagen_flecha = Image.open(path_flecha)
+    flecha_atras = ImageTk.PhotoImage(imagen_flecha)
+    boton_atras = Button(form2, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=form2.destroy)
+    boton_atras.place(x=20, y=20)
+    boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
+
 
     form2.mainloop()
     
