@@ -1,58 +1,80 @@
 from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph
 from tkinter import *
-from mod1 import abrir_mod1
-from mod2 import abrir_mod2
 from db.funciones_db import *
 
 # def abrir_ventana_reportes():
     
 def buscar_aspirantes_por_carrera(carrera):
     aspirantes  = leer_todos_los_aspirantes_basico()
-
+    carreras = obtener_carreras_disponibles()
     aspirantes_confirmados = [
         (nombre, apellido, dni, id_carrera, estado) for nombre, apellido, dni, id_carrera, estado in aspirantes if estado == 'Confirmado'
     ]
 
     if carrera != 0:
-        texto = f"Lista de Aspirantes confirmados para {carrera}:\n"
+        texto = f"Lista de Aspirantes confirmados para {carrera}:"
         aspirantes_confirmados = sorted(aspirantes_confirmados, key=lambda x: (x[0], x[1]))
         for nombre, apellido, dni, id_carrera, estado in aspirantes_confirmados:
             if estado == 'Confirmado' and id_carrera == carrera:
-                texto += f"Nombre: {nombre}, Apellido: {apellido}, DNI: {dni}, Carrera: {id_carrera}\n"
+                carrera = obtener_nombre_carrera(id_carrera)
+                texto += f"\n{apellido} {nombre}, {dni}, {carrera}"
+        cupos = cupos_disponibles(id_carrera)
+        texto += f"\n\n<b><font color='red' face='Helvetica'>Cupos disponibles:</font></b> <font color='red' face='Helvetica-Bold'>{cupos}</font>"
     else:
         texto = f"Lista de Aspirantes confirmados de todas las carreras:\n"
         aspirantes_confirmados = sorted(aspirantes_confirmados, key=lambda x: (x[3], x[0], x[1]))  
         for nombre, apellido, dni, id_carrera, estado in aspirantes_confirmados:
             if estado == 'Confirmado':
-                texto += f"Nombre: {nombre}, Apellido: {apellido}, DNI: {dni}, Carrera: {id_carrera}\n"
+                carrera = obtener_nombre_carrera(id_carrera)
+                texto += f"\n{apellido} {nombre}, {dni}, {carrera}"
+        texto += f"\n\n <font color='red' face='Helvetica-Bold'>Cupos disponibles:</font>"
+        for carrera in carreras:
+            id_carrera, nombre_carrera, cupos_disponibles, cupos_maximos = carrera
+            texto += f"\n<b><font color='red' face='Helvetica'>{nombre_carrera}:</font></b> <font color='red' face='Helvetica-Bold'>{cupos_disponibles}</font>"
 
     def generar_reporte_pdf(nombre_archivo, titulo, contenido):
-        # Crear el PDF con tamaño de hoja Carta
-        pdf = canvas.Canvas(nombre_archivo, pagesize=letter)
-        ancho, alto = letter
+        doc = SimpleDocTemplate(nombre_archivo, pagesize=letter)
+        styles = getSampleStyleSheet()
+        story = []
 
-        # Establecer título
-        pdf.setFont("Helvetica-Bold", 16)
-        pdf.drawString(100, alto - 50, titulo)
+        # Agregar título
+        title_style = ParagraphStyle(
+            'TitleStyle',
+            parent=styles['Heading1'],
+            fontName="Helvetica-Bold",
+            fontSize=16,
+            textColor=colors.black
+        )
 
-        # Establecer contenido
-        pdf.setFont("Helvetica", 12)
-        textobject = pdf.beginText(100, alto - 100)
-        textobject.textLines(contenido)
+        content_style = ParagraphStyle(
+            'ContentStyle',
+            parent=styles['BodyText'],
+            fontName="Helvetica",
+            fontSize=10,
+            leading=24  # Espaciado entre líneas para mayor legibilidad
+        )
 
-        # Agregar el contenido al PDF
-        pdf.drawText(textobject)
+        story = []
+        title = Paragraph(titulo, title_style)
+        story.append(title)
 
-        # Guardar el archivo PDF
-        pdf.save()
+        content_paragraph = Paragraph(contenido.replace("\n", "<br/>"), content_style)
+        story.append(content_paragraph)
 
+
+        # Crear el documento PDF
+        doc.build(story)
+
+
+
+    
     # Usar la función para crear un reporte
-    titulo = "Reporte de Ejemplo"
-    contenido = f"""
-    {texto}
-    """
-    nombre_archivo = "reporte_ejemplo.pdf"
+    titulo = "Reporte aspirantes confirmados"
+    contenido = texto.replace("\n", "<br/>")  # Convertir saltos de línea para HTML
+    nombre_archivo = "reporte_confirmados.pdf"
     generar_reporte_pdf(nombre_archivo, titulo, contenido)
 
     print(texto)
@@ -100,30 +122,3 @@ boton_salir.place(relx=0.5, y = 545, anchor='center')
 
 ventana.mainloop()
 
-def generar_reporte_pdf(nombre_archivo, titulo, contenido):
-    # Crear el PDF con tamaño de hoja Carta
-    pdf = canvas.Canvas(nombre_archivo, pagesize=letter)
-    ancho, alto = letter
-
-    # Establecer título
-    pdf.setFont("Helvetica-Bold", 16)
-    pdf.drawString(100, alto - 50, titulo)
-
-    # Establecer contenido
-    pdf.setFont("Helvetica", 12)
-    textobject = pdf.beginText(100, alto - 100)
-    textobject.textLines(contenido)
-
-    # Agregar el contenido al PDF
-    pdf.drawText(textobject)
-
-    # Guardar el archivo PDF
-    pdf.save()
-
-# Usar la función para crear un reporte
-titulo = "Reporte de Ejemplo"
-contenido = """
-{texto}
-"""
-nombre_archivo = "reporte_ejemplo.pdf"
-generar_reporte_pdf(nombre_archivo, titulo, contenido)
