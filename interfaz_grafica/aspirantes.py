@@ -168,25 +168,27 @@ def abrir_ventana_aspirantes(main_adm):
     frame_arbol.place(x=380, y=181)
     frame_arbol.pack_propagate(False) #No cambia de tamaño / tamaño fijo
 
-    arbol = ttk.Treeview(frame_arbol, columns=("n° Orden","apellido", "nombre", "dni", "carrera","acciones"), show="headings")
+    arbol = ttk.Treeview(frame_arbol, columns=("n° Orden","apellido", "nombre", "dni","estado", "carrera","acciones"), show="headings")
     arbol.pack(fill="both", expand=True) #Esto es para que ocupe todo el frame que cree recién. El frame_arbol
 
     arbol.heading("n° Orden", text="N° Orden")
     arbol.heading("apellido", text="Apellido")
     arbol.heading("nombre", text="Nombre")
     arbol.heading("dni", text="DNI")
+    arbol.heading("estado", text="Estado")
     arbol.heading("carrera", text="Carrera")
 
     arbol.column("n° Orden", width=50) 
-    arbol.column("apellido", width=110)
-    arbol.column("nombre", width=110)
-    arbol.column("dni", width=100)
+    arbol.column("apellido", width=80)
+    arbol.column("nombre", width=80)
+    arbol.column("dni", width=75)
+    arbol.column("estado", width=85)
     arbol.column("carrera", width=200)
 
-    if aspirante_data:
+    """if aspirante_data:
         for aspirante in aspirante_data:
             carrera = obtener_nombre_carrera(aspirante[33])
-            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3], carrera))  
+            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3], carrera))  """
 
     #Botones superiores
     def volver():
@@ -222,12 +224,6 @@ def abrir_ventana_aspirantes(main_adm):
 
     #combobox de filtro
     #Boton lupa
-    imagen = Image.open(path_lupa)
-    imagen_redimensionada = imagen.resize((16,16)) 
-    imagen_lupa = ImageTk.PhotoImage(imagen_redimensionada)
-    boton_lupa = Button(aspirantes, image=imagen_lupa, bg="#274357", width=20, height=20, borderwidth=2)
-    boton_lupa.place(x=630, y=141)
-    boton_lupa.image = imagen_lupa  # Mantiene una referencia a la imagen
 
     frame_filtro = Frame(aspirantes, width=24 * 10, height=27, bg="#1F6680")
     frame_filtro.place(x=380, y=140)
@@ -239,9 +235,15 @@ def abrir_ventana_aspirantes(main_adm):
             widget.destroy()
 
         if filtro == "Todos":
-            pass
+            arbol.delete(*arbol.get_children())
+            if aspirante_data:
+                for aspirante in aspirante_data:
+                    carrera = obtener_nombre_carrera(aspirante[33])
+                    arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],aspirante[31], carrera ))  
+
         
         elif filtro == "Carreras":
+            arbol.delete(*arbol.get_children())
             # Combobox para seleccionar carrera
             combobox_carrera = ttk.Combobox(frame_filtro,font=("Arial", 14), state="readonly")
             combobox_carrera.pack(fill="both", expand=True)
@@ -258,10 +260,22 @@ def abrir_ventana_aspirantes(main_adm):
             def obtener_id_carrera_seleccionada():
                 nombre_seleccionado = combobox_carrera.get().split(" (")[0]  # Extrae el nombre sin los cupos
                 return carreras_id_mapeo.get(nombre_seleccionado)
+            
+            def actualizar_arbol(*args):
+                arbol.delete(*arbol.get_children())
+                id_carrera_seleccionada = obtener_id_carrera_seleccionada()
+                for aspirante in aspirante_data:
+                    if aspirante[33] == id_carrera_seleccionada:
+                        carrera = obtener_nombre_carrera(aspirante[33])
+                        arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],aspirante[31], carrera))
+        
             cargar_carreras()
+            combobox_carrera.bind("<<ComboboxSelected>>", actualizar_arbol)
+
         elif filtro == "Estado":
+            arbol.delete(*arbol.get_children())
             # Combobox para seleccionar estado
-            combobox_estado = ttk.Combobox(frame_filtro,font=("Arial", 14), values=["En espera", "Confirmado", "Rechazado"], state="readonly")
+            combobox_estado = ttk.Combobox(frame_filtro,font=("Arial", 14), values=[], state="readonly")
             combobox_estado.pack(fill="both", expand=True)
             
             def cargar_estado():
@@ -271,10 +285,49 @@ def abrir_ventana_aspirantes(main_adm):
                     lista_estados.append(estado)
                 combobox_estado['values'] = lista_estados
             cargar_estado()
+
+            def obtener_estado_seleccionado():
+                estado_seleccionado = combobox_estado.get()
+                return estado_seleccionado
             
+            def actualizar_arbol(*args):
+                arbol.delete(*arbol.get_children())
+                estado_seleccionado = obtener_estado_seleccionado()
+                for aspirante in aspirante_data:
+                    if aspirante[31] == estado_seleccionado:
+                        carrera = obtener_nombre_carrera(aspirante[33])
+                        arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],estado_seleccionado,carrera))
+            
+            combobox_estado.bind("<<ComboboxSelected>>", actualizar_arbol)
         elif filtro == "Apellido" or filtro == "DNI":
+            arbol.delete(*arbol.get_children())
             entry_buscador = Entry(frame_filtro, width = 22, font=("Arial",14))
             entry_buscador.pack(fill="both", expand=True)
+
+            imagen = Image.open(path_lupa)
+            imagen_redimensionada = imagen.resize((16,16)) 
+            imagen_lupa = ImageTk.PhotoImage(imagen_redimensionada)
+            boton_lupa = Button(aspirantes, image=imagen_lupa, bg="#274357", width=20, height=20, borderwidth=2)
+            boton_lupa.place(x=630, y=141)
+            boton_lupa.image = imagen_lupa  # Mantiene una referencia a la imagen
+
+            def actualizar_arbol_entry(*args):
+                texto = entry_buscador.get().lower()
+                arbol.delete(*arbol.get_children())
+                for aspirante in aspirante_data:
+                    if filtro == "Apellido":
+                        if texto in aspirante[2].lower():
+                            carrera = obtener_nombre_carrera(aspirante[33])
+                            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],aspirante[31], carrera))
+                    elif filtro == "DNI":
+                        if texto in aspirante[3].lower():
+                            carrera = obtener_nombre_carrera(aspirante[33])
+                            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],aspirante[31], carrera))
+
+            boton_lupa.config(command=actualizar_arbol_entry)
+
+           
+
 
     combobox_filtro = ttk.Combobox(aspirantes, font=("Arial", 14), state='readonly')
     combobox_filtro.set("Filtrar por:")
