@@ -1,0 +1,8 @@
+db/test_crud.py
+db/test_login.py
+db/test_integral.py
+db/test_form.py
+db/pw.py
+__pycache__
+cupos_copia.py
+interfaz_grafica/config.json

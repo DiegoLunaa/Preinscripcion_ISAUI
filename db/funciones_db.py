@@ -247,6 +247,27 @@ def obtener_aspirantes_confirmados():
     conexion.close()
     return resultados
 
+def obtener_aspirantes_espera():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT * FROM Aspirante WHERE Estado = 'En espera'"
+    cursor.execute(query)
+    resultados = cursor.fetchall()
+    cursor.close()
+    conexion.close()
+    return resultados
+
+def contar_aspirantes_espera():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT COUNT(*) FROM Aspirante WHERE Estado = 'En espera'"
+    cursor.execute(query)
+    cantidad = cursor.fetchone()[0]
+    cursor.close()
+    conexion.close()
+    return cantidad
+
+
 def leer_carrera(id_carrera):
 
     if not verificar_acceso():

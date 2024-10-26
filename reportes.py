@@ -65,6 +65,8 @@ boton_salir.place(relx=0.5, y = 245, anchor='center')
 
 def buscar_aspirantes_por_carrera(carrera):
     aspirantes  = leer_todos_los_aspirantes_basico()
+    cantidad_espera = contar_aspirantes_espera()
+
     aspirantes_confirmados = [
         (nombre, apellido, dni, id_carrera, estado) for nombre, apellido, dni, id_carrera, estado in aspirantes if estado == 'Confirmado'
     ]
@@ -77,7 +79,13 @@ def buscar_aspirantes_por_carrera(carrera):
                 nombre_carrera = obtener_nombre_carrera(id_carrera)
                 texto += f"\n{apellido} {nombre}, {dni}, {nombre_carrera}"
         cupos = cupos_disponibles(id_carrera)
-        texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>"
+        cupos_maximos = cupos_maximos(id_carrera)
+        texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cupos - cupos_maximos }</font></b>"
+        if cupos == 0:
+            texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_espera}</font></b>"
+        else:
+            texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>"
+
     else:
         texto = ''
         for i in range(1, 7):
@@ -88,7 +96,12 @@ def buscar_aspirantes_por_carrera(carrera):
                 if estado == 'Confirmado' and id_carrera == i:
                     texto += f"\n{apellido} {nombre}, {dni}"
             cupos = cupos_disponibles(i)
-            texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b> \n\n"
+            cupos_maximos = cupos_maximos(id_carrera)
+            texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cupos - cupos_maximos }</font></b>"
+            if cupos == 0:
+                texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_espera}</font></b>"
+            else:
+                texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>"
 
     def generar_reporte_pdf(nombre_archivo, titulo, contenido):
         nombre_archivo = filedialog.asksaveasfilename(defaultextension=".pdf",
