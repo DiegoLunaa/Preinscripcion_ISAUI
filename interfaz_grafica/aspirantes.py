@@ -5,7 +5,7 @@ from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,p
 from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
-from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera
+from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera, obtener_carreras_disponibles,obtener_estado
 from main_modif import abrir_ventana_modificar
 
 
@@ -37,17 +37,6 @@ def abrir_ventana_aspirantes(main_adm):
     label_acciones = Label(aspirantes, text= "ACCIONES", fg="White", font=("Arial",38))
     label_acciones.configure(bg="#274357")
     label_acciones.place(x=1027,y=201)
-
-    #BUSCADOR
-    entry_buscador = Entry(aspirantes, width = 22, font=("Arial",14))
-    entry_buscador.place(x=380, y=140)
-    #Boton lupa
-    imagen = Image.open(path_lupa)
-    imagen_redimensionada = imagen.resize((16,16)) 
-    imagen_lupa = ImageTk.PhotoImage(imagen_redimensionada)
-    boton_lupa = Button(aspirantes, image=imagen_lupa, bg="#274357", width=20, height=20, borderwidth=2)
-    boton_lupa.place(x=630, y=141)
-    boton_lupa.image = imagen_lupa  # Mantiene una referencia a la imagen
 
 
     def obtener_info_alumno_seleccionado():
@@ -231,10 +220,67 @@ def abrir_ventana_aspirantes(main_adm):
     boton_inicio.place(x=1184, y=679) 
 
 
-    #combobox
-    combobox_carreras = ttk.Combobox(aspirantes, font=("Arial", 14), state='readonly')
-    combobox_carreras.set("Filtrado de carrera")
-    combobox_carreras.place(x=380, y=100)
+    #combobox de filtro
+    #Boton lupa
+    imagen = Image.open(path_lupa)
+    imagen_redimensionada = imagen.resize((16,16)) 
+    imagen_lupa = ImageTk.PhotoImage(imagen_redimensionada)
+    boton_lupa = Button(aspirantes, image=imagen_lupa, bg="#274357", width=20, height=20, borderwidth=2)
+    boton_lupa.place(x=630, y=141)
+    boton_lupa.image = imagen_lupa  # Mantiene una referencia a la imagen
+
+    frame_filtro = Frame(aspirantes, width=24 * 10, height=27, bg="#1F6680")
+    frame_filtro.place(x=380, y=140)
+
+    def cambiar_filtro(event):
+        filtro = combobox_filtro.get()
+
+        for widget in frame_filtro.winfo_children():
+            widget.destroy()
+
+        if filtro == "Todos":
+            pass
+        
+        elif filtro == "Carreras":
+            # Combobox para seleccionar carrera
+            combobox_carrera = ttk.Combobox(frame_filtro,font=("Arial", 14), state="readonly")
+            combobox_carrera.pack(fill="both", expand=True)
+            carreras_id_mapeo = {}
+
+            def cargar_carreras():
+                carreras_db = obtener_carreras_disponibles()
+                lista_carreras = []
+                for id_carrera, nombre, cupos_disponibles, cupos_maximos in carreras_db:
+                    lista_carreras.append(f"{nombre}")
+                    carreras_id_mapeo[nombre] = id_carrera  # Guarda el ID de cada carrera
+
+                combobox_carrera['values'] = lista_carreras
+            def obtener_id_carrera_seleccionada():
+                nombre_seleccionado = combobox_carrera.get().split(" (")[0]  # Extrae el nombre sin los cupos
+                return carreras_id_mapeo.get(nombre_seleccionado)
+            cargar_carreras()
+        elif filtro == "Estado":
+            # Combobox para seleccionar estado
+            combobox_estado = ttk.Combobox(frame_filtro,font=("Arial", 14), values=["En espera", "Confirmado", "Rechazado"], state="readonly")
+            combobox_estado.pack(fill="both", expand=True)
+            
+            def cargar_estado():
+                estados_db = obtener_estado()
+                lista_estados = []
+                for estado in estados_db:
+                    lista_estados.append(estado)
+                combobox_estado['values'] = lista_estados
+            cargar_estado()
+            
+        elif filtro == "Apellido" or filtro == "DNI":
+            entry_buscador = Entry(frame_filtro, width = 22, font=("Arial",14))
+            entry_buscador.pack(fill="both", expand=True)
+
+    combobox_filtro = ttk.Combobox(aspirantes, font=("Arial", 14), state='readonly')
+    combobox_filtro.set("Filtrar por:")
+    combobox_filtro['values'] = ("Todos","Carreras","Estado","Apellido","DNI")
+    combobox_filtro.bind("<<ComboboxSelected>>",cambiar_filtro)
+    combobox_filtro.place(x=380, y=100)
 
 
     aspirantes.mainloop()
