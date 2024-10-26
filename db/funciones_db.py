@@ -41,23 +41,39 @@ def verificar_login(usuario, contrasena_plana):
         conexion.close()  # Mueve esto aquí
         return False, usuario_autenticado
 
-def verificar_acceso():
-    global usuario_autenticado
-    if usuario_autenticado is None:
-        print("Acceso denegado. Por favor, inicia sesión como administrador.")
-        return False
-    return True
-
 def cerrar_sesion():
     global usuario_autenticado
-    # Confirmación de cierre de sesión
-    confirmar = messagebox.askyesno("Confirmar", "¿Estás seguro de que deseas cerrar sesión?")
-    if confirmar:
-        usuario_autenticado = None
-        print("Sesión cerrada exitosamente.")
-        return usuario_autenticado
+    usuario_autenticado = None
+    print("Sesión cerrada exitosamente.")
+    return usuario_autenticado
+
+def obtener_nombres_admin():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT nombre FROM administrador") 
+    nombres = [fila[0] for fila in cursor.fetchall()]
+    conexion.close()
+    return nombres
+
+def verificar_usuario_autenticado():
+    global usuario_autenticado
+    nombres_admin = obtener_nombres_admin()
+    if usuario_autenticado in nombres_admin:
+        return True
     else:
-        print("Cierre de sesión cancelado.")
+        print("Acceso denegado. Por favor, inicia sesión como administrador.")
+        usuario_autenticado = None
+        return False
+    
+# def acceso_requerido(parent):
+#     def decorator(func):
+#         def wrapper(*args, **kwargs):
+#             if verificar_usuario_autenticado is False:
+#                 messagebox.showerror("Acceso denegado", "Debe estar autenticado como administrador.", parent=parent)
+#                 return
+#             return func(*args, **kwargs)
+#         return wrapper
+#     return decorator
 
 # Funciones auxiliares
 
@@ -105,7 +121,7 @@ def crear_aspirante(datos): # ANDA
     return aspirante_id
 
 def leer_aspirante(id_aspirante):
-    # if not verificar_acceso():
+    # if not verificar_usuario_autenticado():
     #     print("Acceso denegado.")
     #     return None  # O lanza una excepción según tu lógica
 
@@ -180,7 +196,7 @@ def preparar_datos_para_sql(diccionario):
 
 def eliminar_aspirante(id_aspirante): # ANDA
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
     
     conexion = conectar()
@@ -231,7 +247,7 @@ def obtener_aspirantes_confirmados():
 
 def leer_carrera(id_carrera):
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
     
     conexion = conectar()
@@ -245,7 +261,7 @@ def leer_carrera(id_carrera):
 
 def actualizar_carrera(id_carrera, datos_actualizados):
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
     
     conexion = conectar()
@@ -273,7 +289,7 @@ def crear_formulario(datos):
 
 def eliminar_formulario(id_formulario):
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
     
     conexion = conectar()
@@ -299,7 +315,7 @@ def crear_constancia(datos):
 
 def leer_constancia(id_constancia):
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
 
     conexion = conectar()
@@ -313,7 +329,7 @@ def leer_constancia(id_constancia):
 
 def eliminar_constancia(id_constancia):
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
     
     conexion = conectar()
@@ -339,7 +355,7 @@ def crear_reporte(datos):
 
 def leer_reporte(id_reporte):
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
     
     conexion = conectar()
@@ -353,7 +369,7 @@ def leer_reporte(id_reporte):
 
 def eliminar_reporte(id_reporte):
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
    
     conexion = conectar()
@@ -425,7 +441,7 @@ def cupos_max(id_carrera):
 
 def modificar_cantidad_cupos(id_carrera, cupos_max_nuevo):
 
-    if not verificar_acceso():
+    if not verificar_usuario_autenticado():
         return
     
     cupos_max_nuevo = int(cupos_max_nuevo)

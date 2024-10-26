@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 from main_adm import abrir_ventana_main_adm
 from interfaz_grafica.config import path_usuario, path_flecha
 from db.funciones_db import *
+from db import funciones_db
 
 def abrir_ventana_login():
 
@@ -59,10 +60,10 @@ def abrir_ventana_login():
     def ingresar():
         usuario = entry_usuario.get().strip()
         contrasena = entry_contrasena.get().strip()
-        login_valido, usuario_autenticado = verificar_login(usuario, contrasena)
+        login_valido, funciones_db.usuario_autenticado = verificar_login(usuario, contrasena)
         if login_valido:
             login.withdraw()
-            abrir_ventana_main_adm(login, usuario_autenticado)
+            abrir_ventana_main_adm(login)
             entry_usuario.delete(0, END)
             entry_contrasena.delete(0, END)
         else:
