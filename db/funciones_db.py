@@ -155,6 +155,24 @@ def leer_todos_los_aspirantes():
         cursor.close()
         conexion.close()
 
+def leer_todos_los_aspirantes_basico():
+    conexion = conectar()
+    if conexion is None:
+        print("No se pudo conectar a la base de datos.")
+        return []
+
+    try:
+        cursor = conexion.cursor()
+        cursor.execute("SELECT nombre, apellido, dni, id_carrera, estado FROM Aspirante")  # Ajusta la consulta según tu tabla
+        resultados = cursor.fetchall()  # Obtiene todos los registros
+        return resultados
+    except Error as e:
+        print(f"Error al leer los aspirantes: {e}")
+        return []
+    finally:
+        cursor.close()
+        conexion.close()
+
 def actualizar_aspirante(id_aspirante, datos_actualizados): # ANDA
 
     # if not verificar_acceso():
