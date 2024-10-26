@@ -42,7 +42,7 @@ def abrir_ventana_aspirantes(main_adm):
     def obtener_info_alumno_seleccionado():
         seleccion = arbol.selection()
         if not seleccion:
-            messagebox.showerror("Error", "Por favor, selecciona un alumno.")
+            messagebox.showerror("Error", "Por favor, selecciona un alumno.", parent=aspirantes)
             return
     
         item = seleccion[0]
@@ -55,7 +55,7 @@ def abrir_ventana_aspirantes(main_adm):
     def obtener_info_y_verla():
         seleccion = arbol.selection()
         if not seleccion:
-            messagebox.showerror("Error", "Por favor, selecciona un alumno.")
+            messagebox.showerror("Error", "Por favor, selecciona un alumno.", parent=aspirantes)
             return
     
         item = seleccion[0]
@@ -68,40 +68,40 @@ def abrir_ventana_aspirantes(main_adm):
     def eliminar_aspirante_seleccionado():
         seleccion = arbol.selection()
         if not seleccion:
-            messagebox.showerror("Error", "Por favor, selecciona un aspirante.")
+            messagebox.showerror("Error", "Por favor, selecciona un aspirante.", parent=aspirantes)
             return
 
         item = seleccion[0]
         aspirante_info = arbol.item(item, 'values')
         aspirante_id = aspirante_info[0]
 
-        respuesta = messagebox.askyesno("Confirmar eliminación", f"¿Está seguro que desea eliminar al aspirante con ID {aspirante_id}?")
+        respuesta = messagebox.askyesno("Confirmar eliminación", f"¿Está seguro que desea eliminar al aspirante con ID {aspirante_id}?", parent=aspirantes)
         if respuesta:
             eliminar_aspirante(aspirante_id)  # Llamar a la función que elimina de la base de datos
             arbol.delete(item)  # Eliminar del Treeview
-            messagebox.showinfo("Eliminado", "Aspirante eliminado correctamente.")
+            messagebox.showinfo("Eliminado", "Aspirante eliminado correctamente.", parent=aspirantes)
         else:
-            messagebox.showinfo("Cancelado", "Eliminación cancelada.")
+            messagebox.showinfo("Cancelado", "Eliminación cancelada.", parent=aspirantes)
 
     def confirmar_aspirante_seleccionado():
         seleccion = arbol.selection()
         if not seleccion:
-            messagebox.showerror("Error", "Por favor, selecciona un aspirante.")
+            messagebox.showerror("Error", "Por favor, selecciona un aspirante.", parent=aspirantes)
             return
         
         item = seleccion[0]
         aspirante_info = arbol.item(item, 'values')
         aspirante_id = aspirante_info[0]
         
-        respuesta = messagebox.askyesno("Confirmación del aspirante", f"¿Está seguro que desea confirmar al aspirante con ID {aspirante_id}?")
+        respuesta = messagebox.askyesno("Confirmación del aspirante", f"¿Está seguro que desea confirmar al aspirante con ID {aspirante_id}?", parent=aspirantes)
         if respuesta:
             resultado, mensaje = confirmar_aspirante(aspirante_id)
             if not resultado:
-                messagebox.showwarning("Error", mensaje) 
+                messagebox.showwarning("Error", mensaje, parent=aspirantes) 
             else:
-                messagebox.showinfo("Confirmado", mensaje)  
+                messagebox.showinfo("Confirmado", mensaje, parent=aspirantes)  
         else:
-            messagebox.showinfo("Cancelado", "Confirmación cancelada.")
+            messagebox.showinfo("Cancelado", "Confirmación cancelada.", parent=aspirantes)
 
     #Botones, acciones
 
@@ -127,12 +127,12 @@ def abrir_ventana_aspirantes(main_adm):
 
         #Boton y label Trash
     def mensaje_eliminar():
-        respuesta = messagebox.askyesno("Confirmar eliminación", "Usted está a punto de eliminar al aspirante.\n¿Está seguro?")    
+        respuesta = messagebox.askyesno("Confirmar eliminación", "Usted está a punto de eliminar al aspirante.\n¿Está seguro?", parent=aspirantes)    
         if respuesta:  
-            messagebox.showwarning("ELIMINADO","ASPIRANTE ELIMINADO")
+            messagebox.showwarning("ELIMINADO","ASPIRANTE ELIMINADO", parent=aspirantes)
             #eliminar_aspirante() 
         else:
-            messagebox.showwarning("CANCELADO", "ELIMINACIÓN CANCELADA")
+            messagebox.showwarning("CANCELADO", "ELIMINACIÓN CANCELADA", parent=aspirantes)
 
     imagen = Image.open(path_basura)
     imagen_redimensionada = imagen.resize((34,34)) 
