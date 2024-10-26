@@ -54,8 +54,8 @@ opciones_carreras = {
 
 opciones = ttk.Combobox(ventana, values=list(opciones_carreras.keys()), width=25, font=("Arial", 10))
 opciones.config(state='readonly')
-opciones.set("Selecciona una opción")  # Establecer un valor predeterminado
-opciones.place(relx=0.5, y=125, anchor='center')  # Añadir el opcionesbox a la ventana
+opciones.set("Selecciona una opción")
+opciones.place(relx=0.5, y=125, anchor='center') 
 
 boton_imprimir = Button(ventana, text="Imprimir", command=seleccionar_opcion, bg="#274357", width=25, fg="White", font=("Arial", 10))
 boton_imprimir.place(relx=0.5, y=185, anchor='center')
@@ -94,13 +94,12 @@ def buscar_aspirantes_por_carrera(carrera):
         nombre_archivo = filedialog.asksaveasfilename(defaultextension=".pdf",
         initialfile='reporte',
         filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")])
-        if not nombre_archivo:  # Si el usuario cancela el diálogo
+        if not nombre_archivo:  
             return
         doc = SimpleDocTemplate(nombre_archivo, pagesize=letter)
         styles = getSampleStyleSheet()
         story = []
 
-        # Agregar título
         title_style = ParagraphStyle(
             'TitleStyle',
             parent=styles['Heading1'],
@@ -114,7 +113,7 @@ def buscar_aspirantes_por_carrera(carrera):
             parent=styles['BodyText'],
             fontName="Helvetica",
             fontSize=10,
-            leading=24  # Espaciado entre líneas para mayor legibilidad
+            leading=24  
         )
 
         story = []
@@ -124,24 +123,13 @@ def buscar_aspirantes_por_carrera(carrera):
         content_paragraph = Paragraph(contenido.replace("\n", "<br/>"), content_style)
         story.append(content_paragraph)
 
-
         # Crear el documento PDF
         doc.build(story)
 
-
-
-    
-    # Usar la función para crear un reporte
     titulo = "Reporte sobre los aspirantes confirmados"
     contenido = texto.replace("\n", "<br/>")  # Convertir saltos de línea para HTML
     nombre_archivo = "reporte_confirmados.pdf"
     generar_reporte_pdf(nombre_archivo, titulo, contenido)
-
-    print(texto)
-    return texto
-
-
-
 
 ventana.mainloop()
 
