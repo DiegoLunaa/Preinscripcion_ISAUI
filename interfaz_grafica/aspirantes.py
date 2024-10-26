@@ -185,10 +185,10 @@ def abrir_ventana_aspirantes(main_adm):
     arbol.column("estado", width=85)
     arbol.column("carrera", width=200)
 
-    """if aspirante_data:
+    if aspirante_data:
         for aspirante in aspirante_data:
             carrera = obtener_nombre_carrera(aspirante[33])
-            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3], carrera))  """
+            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],aspirante[31], carrera ))  
 
     #Botones superiores
     def volver():
