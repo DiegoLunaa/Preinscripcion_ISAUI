@@ -387,6 +387,16 @@ def obtener_nombre_carrera(id_carrera):
     conexion.close()
     return carrera[0] if carrera else "Carrera no encontrada"
 
+def obtener_estado():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT DISTINCT Estado FROM Aspirante"
+    cursor.execute(query)
+    estados = cursor.fetchall()
+    cursor.close()
+    conexion.close()
+    return [estado[0] for estado in estados]
+
 def cupos_disponibles(id_carrera):
     conexion = conectar()
     cursor = conexion.cursor()

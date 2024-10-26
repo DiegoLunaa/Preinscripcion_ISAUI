@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+import sys
 from PIL import Image, ImageTk
 from interfaz_grafica.form1 import abrir_ventana_form1
 from interfaz_grafica.config import path_isaui
@@ -95,6 +96,9 @@ boton_admin.place(x=1150, y=20)  # Ajuste de posición
 
 # Cambiar el comando del botón "Avanzar" para usar la nueva función
 boton_avanzar = tk.Button(ventana, text="Avanzar", bg="White", fg="Black", font=("Arial", 16), command=avanzar_form1)
-boton_avanzar.place(relx=0.5, y=650, anchor='center', width=200, height=50)  # Centrado horizontalmente
+boton_avanzar.place(relx=0.5, y=580, anchor='center', width=200, height=50)  # Centrado horizontalmente
+
+boton_salir = tk.Button(ventana, text="Salir", bg="White", fg="Black", font=("Arial", 16), command=sys.exit)
+boton_salir.place(relx=0.5, y=670, anchor='center', width=200, height=50)
 
 ventana.mainloop()
