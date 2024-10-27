@@ -272,9 +272,9 @@ def abrir_mod1(aspirante_id):
             mostrar_errores(errores, form)
         elif cambios:
             actualizar_aspirante(aspirante_id, cambios)
-            messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.")
+            messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.", parent=form)
         else:
-            messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.")
+            messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.", parent=form)
 
         form.destroy()  # Esto cerrará la ventana actual
 

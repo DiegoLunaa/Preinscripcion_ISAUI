@@ -242,7 +242,7 @@ def abrir_mod2(aspirante_id):
     carrera_superior_actual, institucion_actual,
     provincia_superior_actual, año_ingreso_superior_actual, año_egreso_superior_actual,
     trabaja_actual, horas_lab_actual, descripcion_laboral_actual, a_cargo_actual,
-    _, _, _
+    _, _, _, _
 ) = aspirante_info
 
     # VER TEMA DE LA FECHA

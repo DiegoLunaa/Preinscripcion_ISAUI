@@ -63,7 +63,7 @@ def abrir_ventana_info_aspirante(aspirante_id):
         año_egreso_medio, provincia_medio, titulo_medio, nivel_superior, 
         carrera_superior, institucion, provincia_superior, año_ingreso_superior,
         año_egreso_superior, trabaja, horas_lab, descripcion_laboral, a_cargo,
-        estado, fecha_envio, carrera
+        estado, fecha_envio, carrera, activo
         ) = aspirante_info
         
             datos = [
@@ -100,7 +100,8 @@ def abrir_ventana_info_aspirante(aspirante_id):
             ('Descripción laboral', descripcion_laboral),
             ('¿Tiene personas a cargo?', a_cargo),
             ('Estado del registro', estado),
-            ('Fecha de envío', fecha_envio)
+            ('Fecha de envío', fecha_envio),
+            ('Está activo?', activo)
         ]
         # Insertar los campos y su información en el árbol
             for campo, info in datos:
