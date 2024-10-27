@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from main_adm import abrir_ventana_main_adm
+from interfaz_grafica.main_adm import abrir_ventana_main_adm
 from interfaz_grafica.config import path_usuario, path_flecha
 from db.funciones_db import *
 from db import funciones_db

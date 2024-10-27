@@ -50,7 +50,7 @@ def cerrar_sesion():
 def obtener_nombres_admin():
     conexion = conectar()
     cursor = conexion.cursor()
-    cursor.execute("SELECT nombre FROM administrador") 
+    cursor.execute("SELECT usuario FROM administrador") 
     nombres = [fila[0] for fila in cursor.fetchall()]
     conexion.close()
     return nombres
@@ -64,16 +64,6 @@ def verificar_usuario_autenticado():
         print("Acceso denegado. Por favor, inicia sesión como administrador.")
         usuario_autenticado = None
         return False
-    
-# def acceso_requerido(parent):
-#     def decorator(func):
-#         def wrapper(*args, **kwargs):
-#             if verificar_usuario_autenticado is False:
-#                 messagebox.showerror("Acceso denegado", "Debe estar autenticado como administrador.", parent=parent)
-#                 return
-#             return func(*args, **kwargs)
-#         return wrapper
-#     return decorator
 
 # Funciones auxiliares
 
@@ -161,8 +151,8 @@ def leer_todos_los_aspirantes():
 
     try:
         cursor = conexion.cursor()
-        cursor.execute("SELECT * FROM Aspirante")  # Ajusta la consulta según tu tabla
-        resultados = cursor.fetchall()  # Obtiene todos los registros
+        cursor.execute("SELECT * FROM Aspirante WHERE Activo = TRUE")  # Solo selecciona aspirantes activos
+        resultados = cursor.fetchall()  # Obtiene todos los registros activos
         return resultados
     except Error as e:
         print(f"Error al leer los aspirantes: {e}")
@@ -212,17 +202,16 @@ def preparar_datos_para_sql(diccionario):
     # Extraemos los valores en el mismo orden que en la consulta SQL
     return tuple(diccionario.values())
 
-def eliminar_aspirante(id_aspirante): # ANDA
-
+def eliminar_aspirante(id_aspirante):
     if not verificar_usuario_autenticado():
         return
     
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "DELETE FROM Aspirante WHERE ID_Aspirante = %s"
-    cursor.execute(query, (id_aspirante,))
+    query = "UPDATE Aspirante SET Activo = %s WHERE ID_Aspirante = %s"
+    cursor.execute(query, (False, id_aspirante))
     conexion.commit()
-    print("Aspirante eliminado.")
+    print("El aspirante ha sido marcado como inactivo.")
     cursor.close()
     conexion.close()
     

@@ -5,8 +5,8 @@ from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,p
 from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
+from interfaz_grafica.main_modif import abrir_ventana_modificar
 from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera, obtener_carreras_disponibles,obtener_estado
-from main_modif import abrir_ventana_modificar
 
 
 def abrir_ventana_aspirantes(main_adm):
@@ -103,7 +103,28 @@ def abrir_ventana_aspirantes(main_adm):
         else:
             messagebox.showinfo("Cancelado", "Confirmación cancelada.", parent=aspirantes)
 
+    def actualizar_lista_aspirantes():
+        # Limpia el árbol o la lista donde se muestran los aspirantes
+        arbol.delete(*arbol.get_children())  # Ajusta según tu widget
+        
+        # Lee los aspirantes activos de la base de datos
+        aspirantes = leer_todos_los_aspirantes()
+        
+        # Agrega cada aspirante al árbol
+        for aspirante in aspirantes:
+            id_aspirante = aspirante[0]  
+            apellido = aspirante[1]
+            nombre = aspirante[2]
+            dni = aspirante[3]
+            carrera = obtener_nombre_carrera(aspirante[33])        
+            estado = aspirante[31] 
+            arbol.insert("", "end", values=(id_aspirante, nombre, apellido, dni, estado, carrera))
+
     #Botones, acciones
+
+    # ver por que no se ve
+    btn_actualizar = Button(aspirantes, text="Actualizar", bg="#1F6680", fg="White", font=("Arial", 18), command=actualizar_lista_aspirantes)
+    btn_actualizar.place(x=0, y=0) 
 
         #Boton y label ojo
     imagen = Image.open(path_ojo)
@@ -153,6 +174,7 @@ def abrir_ventana_aspirantes(main_adm):
     boton_check.image = imagen_check
     label_basura = Label(aspirantes,text="CONFIRMAR ASPIRANTE", bg="#1F6680", fg="White", font=("Arial", 18))
     label_basura.place(x=1050, y=540)
+
     #Logo isaui
     imagen = Image.open(path_isaui)
     imagen_redimensionada = imagen.resize((230, 200)) 
