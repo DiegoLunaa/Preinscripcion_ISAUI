@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 from PIL import Image, ImageTk
 from db.funciones_db import *
 from interfaz_grafica.confirmacion import mostrar_confirmacion
@@ -33,10 +34,10 @@ def abrir_mod2(aspirante_id):
         a_cargo = radio_cargo_var.get()
         provincia_medio = entry_prov.get().strip()
         provincia_superior = entry_prov_ins.get().strip()
-        año_ingreso_medio = spin_año_ingreso.get()
-        año_egreso_medio = spin_año_egreso.get()
-        año_ingreso_superior = spin_año_ingreso_sup.get()
-        año_egreso_superior = spin_año_egreso_sup.get()
+        año_ingreso_medio = combo_año_ingreso.get()
+        año_egreso_medio = combo_año_egreso.get()
+        año_ingreso_superior = combo_año_ingreso_sup.get()
+        año_egreso_superior = combo_año_egreso_sup.get()
         titulo_medio = entry_titulo.get().strip()
         carrera_superior = entry_carrera.get().strip()
         institucion = entry_institucion.get().strip()
@@ -68,27 +69,22 @@ def abrir_mod2(aspirante_id):
             widget.config(state=estado)  # Cambia el estado del widget
             if estado == DISABLED:  # Si se deshabilita, limpia el contenido
                 if isinstance(widget, Entry):
-                    widget.config(state="normal")  
-                    widget.delete(0, END)  
-                    widget.insert(0, '')       
-                    widget.config(state="readonly")            
+                    widget.config(state="normal")
+                    widget.delete(0, END)
+                    widget.insert(0, '')
+                    widget.config(state="readonly")
                 elif isinstance(widget, Text):
-                    widget.config(state="normal") 
-                    widget.delete("1.0", END) 
+                    widget.config(state="normal")
+                    widget.delete("1.0", END)
                     widget.insert("1.0", '')
                     widget.config(state='disabled')
-                elif isinstance(widget, Spinbox):
-                    widget.config(state="normal") 
-                    widget.delete(0, END)  
-                    widget.insert(0, '')  
-                    widget.config(state="readonly")
+                elif isinstance(widget, ttk.Combobox):
+                    widget.set('')  # Limpia el valor seleccionado en el Combobox
+                    widget.config(state="disabled")  # Deshabilita el Combobox
             elif estado == NORMAL:
-                if isinstance(widget, Spinbox):
-                    if widget.get() == '' or widget.get() == '0':
-                        widget.config(state="normal") 
-                        widget.delete(0, END) 
-                        widget.insert(0, '1960')  
-                        widget.config(state="readonly")
+                if isinstance(widget, ttk.Combobox):
+                    if widget.get() == '':
+                        widget.config(state="readonly")  # Activa el Combobox en estado readonly
 
     def activar_pantalla_completa(event=None):
         form2.attributes("-fullscreen", True)
@@ -117,8 +113,8 @@ def abrir_mod2(aspirante_id):
     radio_medio_no = Radiobutton(form2, text="No", bg="#1F6680", fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_medio_var, value=0)
     radio_medio_no.place(x=220, y=140)
 
-    radio_medio_si.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
-    radio_medio_no.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
+    radio_medio_si.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, combo_año_ingreso, combo_año_egreso, entry_titulo))
+    radio_medio_no.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, combo_año_ingreso, combo_año_egreso, entry_titulo))
 
     radio_superior_si = Radiobutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_superior_var, value=1)
     radio_superior_si.place(x=200, y=250)
@@ -127,9 +123,9 @@ def abrir_mod2(aspirante_id):
     radio_superior_en_curso = Radiobutton(form2, text="En curso",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_superior_var, value=2)
     radio_superior_en_curso.place(x=300, y=250)
 
-    radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
-    radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
-    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup))
+    radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup))
+    radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup))
+    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup))
 
     radio_trabaja_si = Radiobutton(form2, text="Sí",bg="#1F6680",fg="White", font=("Arial", 14), selectcolor="#274357", variable=radio_trabaja_var, value=1)
     radio_trabaja_si.place(x=170, y=490)
@@ -142,17 +138,21 @@ def abrir_mod2(aspirante_id):
     radio_cargo_no.place(x=1000, y=490)
     
     #Primera fila
+    años = list(range(1960, 2025))
+
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=180)
     
-    spin_año_ingreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16),state='readonly')
-    spin_año_ingreso.place(x=20, y=210, width=150)
+    combo_año_ingreso = ttk.Combobox(form2, values=años, width=10, font=("Arial", 16), state="readonly")
+    combo_año_ingreso.set("")  # Valor inicial vacío
+    combo_año_ingreso.place(x=20, y=210, width=150)
     
     label_año_egreso = Label(form2, text="Año egreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=180)
     
-    spin_año_egreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16),state='readonly')
-    spin_año_egreso.place(x=190, y=210, width=150)
+    combo_año_egreso = ttk.Combobox(form2, values=años, width=10, font=("Arial", 16), state="readonly")
+    combo_año_egreso.set("")  # Valor inicial vacío
+    combo_año_egreso.place(x=190, y=210, width=150)
     
     label_prov = Label(form2, text="Provincia:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_prov.place(x=370, y=180)
@@ -167,8 +167,8 @@ def abrir_mod2(aspirante_id):
     entry_titulo.place(x=800, y=210, width=400)
 
      # Asignar comando a los Radiobuttons después de crear los widgets
-    radio_medio_si.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
-    radio_medio_no.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
+    radio_medio_si.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, combo_año_ingreso, combo_año_egreso, entry_titulo))
+    radio_medio_no.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, combo_año_ingreso, combo_año_egreso, entry_titulo))
 
     #Siguiente fila de nivel superior
     label_carrera = Label(form2, text="Carrera:", bg="#1F6680", fg="White", font=("Arial", 14))
@@ -189,18 +189,20 @@ def abrir_mod2(aspirante_id):
     #siguiente fila
     label_año_ingreso = Label(form2, text="Año ingreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=350)
-    spin_año_ingreso_sup = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16),state='readonly')
-    spin_año_ingreso_sup.place(x=20, y=380, width=150)
+    combo_año_ingreso_sup = ttk.Combobox(form2, values=años, width=10, font=("Arial", 16), state="disabled")
+    combo_año_ingreso_sup.set("")  # Valor inicial vacío
+    combo_año_ingreso_sup.place(x=20, y=380, width=150)
 
     label_año_egreso = Label(form2, text="Año egreso:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=350)
-    spin_año_egreso_sup = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16),state='readonly')
-    spin_año_egreso_sup.place(x=190, y=380, width=150)
+    combo_año_egreso_sup = ttk.Combobox(form2, values=años, width=10, font=("Arial", 16), state="disabled")
+    combo_año_egreso_sup.set("")  # Valor inicial vacío
+    combo_año_egreso_sup.place(x=190, y=380, width=150)
 
     # Asignar comando a los Radiobuttons después de crear los widgets
-    radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
-    radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
-    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup))
+    radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup))
+    radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup))
+    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup))
     
 
     #LABEL SITUACION LABORAL Y RESPONSABILIDADES
@@ -246,16 +248,16 @@ def abrir_mod2(aspirante_id):
     # VER TEMA DE LA FECHA
     cargar_datos = [
         (radio_medio_var, nivel_medio_actual),
-        (spin_año_ingreso, año_ingreso_medio_actual),
-        (spin_año_egreso, año_egreso_medio_actual),
+        (combo_año_ingreso, año_ingreso_medio_actual),
+        (combo_año_egreso, año_egreso_medio_actual),
         (entry_prov, provincia_medio_actual),
         (entry_titulo, titulo_medio_actual),
         (radio_superior_var, nivel_superior_actual),
         (entry_carrera, carrera_superior_actual),
         (entry_institucion, institucion_actual),
         (entry_prov_ins, provincia_superior_actual),
-        (spin_año_ingreso_sup, año_ingreso_superior_actual),
-        (spin_año_egreso_sup, año_egreso_superior_actual),
+        (combo_año_ingreso_sup, año_ingreso_superior_actual),
+        (combo_año_egreso_sup, año_egreso_superior_actual),
         (radio_trabaja_var, trabaja_actual),
         (entry_horas, horas_lab_actual),
         (texto_descrip, descripcion_laboral_actual),
@@ -266,24 +268,21 @@ def abrir_mod2(aspirante_id):
         if valor is not None:
             if isinstance(clave, IntVar):
                 clave.set(valor)
-            elif isinstance(clave, Spinbox):
-                clave.config(state="normal")
-                clave.delete(0, END)
-                clave.insert(0, str(valor))
-                clave.config(state="readonly")
+            elif isinstance(clave, ttk.Combobox):
+                clave.set(str(valor))  # Establece el valor en el Combobox
+                clave.config(state="readonly")  # Asegura que el Combobox sea readonly
             elif isinstance(clave, Entry):
                 clave.insert(0, valor)
             elif isinstance(clave, Text):
                 clave.insert("1.0", valor)
         else:
-            if isinstance(clave, Spinbox):
-                clave.config(state="normal")
-                clave.delete(0, END)
-                clave.insert(0, '')
-                clave.config(state="readonly")
+            if isinstance(clave, ttk.Combobox):
+                clave.set('')  # Limpia el valor seleccionado en el Combobox
+                clave.config(state="disabled")  # Deshabilita el Combobox
+
     
-    toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo)
-    toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup)
+    toggle_entries(radio_medio_var, entry_prov, combo_año_ingreso, combo_año_egreso, entry_titulo)
+    toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup)
     toggle_entries(radio_trabaja_var, entry_horas, texto_descrip)
 
 
@@ -306,11 +305,11 @@ def abrir_mod2(aspirante_id):
         # Validaciones de campos obligatorios # Falta validar si tiene personas a cargo
         entries = []
         if radio_medio_var.get() == 1:
-            entries += [spin_año_ingreso, spin_año_egreso, entry_prov, entry_titulo]
+            entries += [combo_año_ingreso, combo_año_egreso, entry_prov, entry_titulo]
         if radio_superior_var.get() == 1:
-            entries += [entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup]
+            entries += [entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup]
         if radio_superior_var.get() == 2:
-            entries += [entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup]
+            entries += [entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup]
         if radio_trabaja_var.get() == 1:
             entries += [entry_horas, texto_descrip]
         if len(entries) > 1:
@@ -353,9 +352,9 @@ def abrir_mod2(aspirante_id):
             mostrar_errores(errores)
         elif cambios:
             actualizar_aspirante(aspirante_id, cambios)
-            messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.")
+            messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.", parent=form2)
         else:
-            messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.")
+            messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.", parent=form2)
 
         form2.destroy()  # Esto cerrará la ventana actual
 

@@ -27,10 +27,10 @@ def abrir_ventana_form2(form, datos_temporales):
         a_cargo = radio_cargo_var.get()
         provincia_medio = entry_prov.get().strip()
         provincia_superior = entry_prov_ins.get().strip()
-        año_ingreso_medio = spin_año_ingreso.get()
-        año_egreso_medio = spin_año_egreso.get()
-        año_ingreso_superior = spin_año_ingreso_sup.get()
-        año_egreso_superior = spin_año_egreso_sup.get()
+        año_ingreso_medio = combo_año_ingreso.get()
+        año_egreso_medio = combo_año_egreso.get()
+        año_ingreso_superior = combo_año_ingreso_sup.get()
+        año_egreso_superior = combo_año_egreso_sup.get()
         titulo_medio = entry_titulo.get().strip()
         carrera_superior = entry_carrera.get().strip()
         institucion = entry_institucion.get().strip()
@@ -59,7 +59,11 @@ def abrir_ventana_form2(form, datos_temporales):
     def toggle_entries(variable, *widgets):
         estado = NORMAL if variable.get() in [1, 2] else DISABLED
         for widget in widgets:
-            widget.config(state=estado)
+            # Cambia el estado a "readonly" si el widget es un Combobox
+            if isinstance(widget, ttk.Combobox) and estado == NORMAL:
+                widget.config(state="readonly")
+            else:
+                widget.config(state=estado)
 
     def activar_pantalla_completa(event=None):
         form2.attributes("-fullscreen", True)
@@ -111,17 +115,21 @@ def abrir_ventana_form2(form, datos_temporales):
     radio_cargo_no.place(x=1000, y=490)
 
     # Nivel Medio - Labels y widgets
+    años = list(range(1960, 2025))
+
     label_año_ingreso = Label(form2, text="Año ingreso:*", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=180)
     
-    spin_año_ingreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16), textvariable=StringVar(value=""), state=DISABLED)
-    spin_año_ingreso.place(x=20, y=210, width=150)
+    combo_año_ingreso = ttk.Combobox(form2, values=años, width=10, font=("Arial", 16), state="disabled")
+    combo_año_ingreso.set("")  # Valor inicial vacío
+    combo_año_ingreso.place(x=20, y=210, width=150)
     
     label_año_egreso = Label(form2, text="Año egreso:*", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=180)
     
-    spin_año_egreso = Spinbox(form2, from_=1960, to=2024, width=10, font=("Arial", 16), textvariable=StringVar(value=""), state=DISABLED)
-    spin_año_egreso.place(x=190, y=210, width=150)
+    combo_año_egreso = ttk.Combobox(form2, values=años, width=10, font=("Arial", 16), state="disabled")
+    combo_año_egreso.set("")  # Valor inicial vacío
+    combo_año_egreso.place(x=190, y=210, width=150)
     
     label_prov = Label(form2, text="Provincia:*", bg="#1F6680", fg="White", font=("Arial", 14))
     label_prov.place(x=370, y=180)
@@ -136,8 +144,8 @@ def abrir_ventana_form2(form, datos_temporales):
     entry_titulo.place(x=800, y=210, width=400)
 
     # Asignar comando a los Radiobuttons después de crear los widgets
-    radio_medio_si.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
-    radio_medio_no.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, spin_año_ingreso, spin_año_egreso, entry_titulo))
+    radio_medio_si.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, combo_año_ingreso, combo_año_egreso, entry_titulo))
+    radio_medio_no.config(command=lambda: toggle_entries(radio_medio_var, entry_prov, combo_año_ingreso, combo_año_egreso, entry_titulo))
 
     # Nivel Superior - Labels y entries
     label_carrera = Label(form2, text="Carrera:*", bg="#1F6680", fg="White", font=("Arial", 14))
@@ -158,18 +166,20 @@ def abrir_ventana_form2(form, datos_temporales):
     # siguiente fila
     label_año_ingreso = Label(form2, text="Año ingreso:*", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_ingreso.place(x=20, y=350)
-    spin_año_ingreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16), textvariable=StringVar(value=""), state=DISABLED)
-    spin_año_ingreso_sup.place(x=20, y=380, width=150)
+    combo_año_ingreso_sup = ttk.Combobox(form2, values=años, width=10, font=("Arial", 16), state="disabled")
+    combo_año_ingreso_sup.set("")  # Valor inicial vacío
+    combo_año_ingreso_sup.place(x=20, y=380, width=150)
 
     label_año_egreso = Label(form2, text="Año egreso:*", bg="#1F6680", fg="White", font=("Arial", 14))
     label_año_egreso.place(x=190, y=350)
-    spin_año_egreso_sup = Spinbox(form2, from_=1980, to=2024, width=10, font=("Arial", 16), textvariable=StringVar(value=""), state=DISABLED)
-    spin_año_egreso_sup.place(x=190, y=380, width=150)
+    combo_año_egreso_sup = ttk.Combobox(form2, values=años, width=10, font=("Arial", 16), state="disabled")
+    combo_año_egreso_sup.set("")  # Valor inicial vacío
+    combo_año_egreso_sup.place(x=190, y=380, width=150)
     
     # Asignar comando a los Radiobuttons después de crear los widgets
-    radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
-    radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup))
-    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup))
+    radio_superior_si.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup))
+    radio_superior_no.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup))
+    radio_superior_en_curso.config(command=lambda: toggle_entries(radio_superior_var, entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup))
 
     # Situación laboral y responsabilidades - Headers
     label_sit_laboral = Label(form2, text="SITUACIÓN LABORAL:", fg="White", font=("Arial", 24))
@@ -215,11 +225,11 @@ def abrir_ventana_form2(form, datos_temporales):
 
         entries = []
         if radio_medio_var.get() == 1:
-            entries += [spin_año_ingreso, spin_año_egreso, entry_prov, entry_titulo]
+            entries += [combo_año_ingreso, combo_año_egreso, entry_prov, entry_titulo]
         if radio_superior_var.get() == 1:
-            entries += [entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup, spin_año_egreso_sup]
+            entries += [entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup, combo_año_egreso_sup]
         if radio_superior_var.get() == 2:
-            entries += [entry_carrera, entry_institucion, entry_prov_ins, spin_año_ingreso_sup]
+            entries += [entry_carrera, entry_institucion, entry_prov_ins, combo_año_ingreso_sup]
         if radio_trabaja_var.get() == 1:
             entries += [entry_horas, texto_descrip]
         if len(entries) > 1:

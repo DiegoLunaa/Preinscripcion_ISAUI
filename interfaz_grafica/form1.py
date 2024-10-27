@@ -1,10 +1,12 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 from tkinter import ttk
 from interfaz_grafica.form2 import abrir_ventana_form2
 from interfaz_grafica.config import path_flecha
 from interfaz_grafica.validaciones import *
+from db.funciones_db import dni_existe_en_db, correo_existe_en_db
 
 # Diccionario para guardar los datos temporalmente
 datos_temporales = {}
@@ -192,6 +194,15 @@ def abrir_ventana_form1(id_carrera):
     def avanzar_form2():
 
         apellido, nombre, dni, telefono, correo, domicilio, cuil, localidad, barrio, codigo_postal, fecha_nacimiento, sexo, pais_nacimiento, provincia_nacimiento, ciudad_nacimiento = getEntradasUsuario()
+
+        # Validaciones de duplicidad de campos únicos
+        if dni_existe_en_db(dni) > 0 and correo_existe_en_db(correo) > 0:
+            messagebox.showerror("ATENCIÓN", "El DNI y el correo ya están registrados en el sistema.", parent=form)
+        else:
+            if dni_existe_en_db(dni) > 0:
+                messagebox.showerror("ATENCIÓN", "El DNI ya está registrado en el sistema.", parent=form)
+            if correo_existe_en_db(correo) > 0:
+                messagebox.showerror("ATENCIÓN", "El correo ya está registrado en el sistema.", parent=form)
 
         # Lista para almacenar errores
         errores = []

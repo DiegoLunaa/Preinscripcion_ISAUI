@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
-from mod1 import abrir_mod1
-from mod2 import abrir_mod2
+from interfaz_grafica.mod1 import abrir_mod1
+from interfaz_grafica.mod2 import abrir_mod2
 
 def abrir_ventana_modificar(aspirante_id):
     def modificar_datos_personales():
