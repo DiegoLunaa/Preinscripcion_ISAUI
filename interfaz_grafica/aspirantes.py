@@ -50,8 +50,8 @@ def abrir_ventana_aspirantes(main_adm):
         aspirante_id = aspirante_info[0]  # Obtener la ID del alumno seleccionado
         print(f"Aspirante seleccionado: {aspirante_info}, y su id es {aspirante_id}")  # Imprimir en consola
         # Llamar a la función para abrir la ventana de modificación
-        abrir_ventana_modificar(aspirante_id)
-    
+        abrir_ventana_modificar(aspirante_id, actualizar_lista_aspirantes)
+        
     def obtener_info_y_verla():
         seleccion = arbol.selection()
         if not seleccion:
@@ -102,7 +102,7 @@ def abrir_ventana_aspirantes(main_adm):
                 messagebox.showinfo("Confirmado", mensaje, parent=aspirantes)  
         else:
             messagebox.showinfo("Cancelado", "Confirmación cancelada.", parent=aspirantes)
-
+    
     def actualizar_lista_aspirantes():
         # Limpia el árbol o la lista donde se muestran los aspirantes
         arbol.delete(*arbol.get_children())  # Ajusta según tu widget
@@ -185,7 +185,7 @@ def abrir_ventana_aspirantes(main_adm):
 
 
     #Arbol
-    aspirante_data = leer_todos_los_aspirantes()
+    
     frame_arbol = Frame(aspirantes, width=571, height=458)
     frame_arbol.place(x=380, y=181)
     frame_arbol.pack_propagate(False) #No cambia de tamaño / tamaño fijo
@@ -207,10 +207,8 @@ def abrir_ventana_aspirantes(main_adm):
     arbol.column("estado", width=85)
     arbol.column("carrera", width=200)
 
-    if aspirante_data:
-        for aspirante in aspirante_data:
-            carrera = obtener_nombre_carrera(aspirante[33])
-            arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],aspirante[31], carrera ))  
+    actualizar_lista_aspirantes()
+      
 
     #Botones superiores
     def volver():
@@ -252,7 +250,7 @@ def abrir_ventana_aspirantes(main_adm):
 
     def cambiar_filtro(event):
         filtro = combobox_filtro.get()
-
+        aspirante_data = leer_todos_los_aspirantes()
         for widget in frame_filtro.winfo_children():
             widget.destroy()
 
