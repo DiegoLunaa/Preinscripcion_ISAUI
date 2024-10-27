@@ -15,7 +15,7 @@ import datetime
 id_carrera_seleccionada = None
 datos_aspirante = {}
 
-def abrir_mod1(aspirante_id):
+def abrir_mod1(aspirante_id, actualizar_lista_aspirantes):
 
     form = Toplevel()
     form.title("Modificar datos personales")
@@ -273,10 +273,11 @@ def abrir_mod1(aspirante_id):
         elif cambios:
             actualizar_aspirante(aspirante_id, cambios)
             messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.", parent=form)
+            actualizar_lista_aspirantes()
+            form.destroy() 
         else:
             messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.", parent=form)
-
-        form.destroy()  # Esto cerrará la ventana actual
+        
 
     boton_siguiente = Button(form, text="Guardar", bg="White", fg="Black", font=("Arial", 12), borderwidth=2, command=guardar_validar)
     boton_siguiente.place(x=1240, y=700, width=120, height=64)

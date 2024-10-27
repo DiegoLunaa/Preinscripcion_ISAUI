@@ -3,12 +3,12 @@ from tkinter import messagebox
 from interfaz_grafica.mod1 import abrir_mod1
 from interfaz_grafica.mod2 import abrir_mod2
 
-def abrir_ventana_modificar(aspirante_id):
+def abrir_ventana_modificar(aspirante_id, actualizar_lista_aspirantes):
     def modificar_datos_personales():
-        abrir_mod1(aspirante_id)
+        abrir_mod1(aspirante_id, actualizar_lista_aspirantes)
 
     def modificar_estudios():
-        abrir_mod2(aspirante_id)
+        abrir_mod2(aspirante_id, actualizar_lista_aspirantes)
 
     # Crear la ventana principal
     ventana = Toplevel()
