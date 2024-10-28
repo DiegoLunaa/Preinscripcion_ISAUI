@@ -242,10 +242,43 @@ def confirmar_aspirante(id_aspirante):
     conexion.close()
     return True, "Aspirante confirmado exitosamente."
 
+def poner_en_lista_espera(id_aspirante):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    
+    # Obtener estado actual y carrera del aspirante
+    query = "SELECT Estado, ID_Carrera FROM Aspirante WHERE ID_Aspirante = %s"
+    cursor.execute(query, (id_aspirante,))
+    resultado = cursor.fetchone()
+    
+    estado = resultado[0]
+    id_carrera = resultado[1]
+
+    # Verificar si el aspirante ya está en lista de espera
+    if estado == 'En espera':
+        cursor.close()
+        conexion.close()
+        return False, "El aspirante ya está en lista de espera."
+
+    # Verificar disponibilidad de cupos
+    cupos = cupos_disponibles(id_carrera)
+    if cupos > 0:
+        cursor.close()
+        conexion.close()
+        return False, "Aún hay cupos disponibles para esta carrera. El aspirante no necesita estar en lista de espera."
+    
+    # Poner al aspirante en lista de espera si no hay cupos disponibles
+    query = "UPDATE Aspirante SET Estado = 'En espera' WHERE ID_Aspirante = %s"
+    cursor.execute(query, (id_aspirante,))
+    conexion.commit()
+    cursor.close()
+    conexion.close()
+    return True, "Aspirante puesto en lista de espera exitosamente."
+
 def obtener_aspirantes_confirmados():
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "SELECT * FROM Aspirante WHERE Estado = 'Confirmado'"
+    query = "SELECT * FROM Aspirante WHERE Estado = 'Confirmado' AND Activo = 1"
     cursor.execute(query)
     resultados = cursor.fetchall()
     cursor.close()
@@ -255,7 +288,7 @@ def obtener_aspirantes_confirmados():
 def obtener_aspirantes_espera():
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "SELECT * FROM Aspirante WHERE Estado = 'En espera'"
+    query = "SELECT * FROM Aspirante WHERE Estado = 'En espera' AND Activo = 1"
     cursor.execute(query)
     resultados = cursor.fetchall()
     cursor.close()
@@ -271,6 +304,30 @@ def contar_aspirantes_espera():
     cursor.close()
     conexion.close()
     return cantidad
+
+def contar_confirmados_por_carrera():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    
+    query = """
+    SELECT id_carrera, COUNT(*) AS cantidad_confirmados
+    FROM Aspirante
+    WHERE Estado = 'Confirmado'
+    GROUP BY id_carrera
+    """
+    
+    cursor.execute(query)
+    resultados = cursor.fetchall()
+    
+    cursor.close()
+    conexion.close()
+    
+
+    confirmados_por_carrera = {}
+    for id_carrera, cantidad in resultados:
+        confirmados_por_carrera[id_carrera] = cantidad
+    
+    return confirmados_por_carrera
 
 
 def leer_carrera(id_carrera):

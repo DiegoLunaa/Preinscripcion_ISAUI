@@ -7,7 +7,7 @@ from interfaz_grafica.config import path_flecha
 from interfaz_grafica.validaciones import *
 
 
-def abrir_mod2(aspirante_id):
+def abrir_mod2(aspirante_id, actualizar_lista_aspirantes):
     form2 = Toplevel()
     form2.title("Formulario de preinscripción")
     form2.geometry("1366x768")
@@ -353,6 +353,7 @@ def abrir_mod2(aspirante_id):
         elif cambios:
             actualizar_aspirante(aspirante_id, cambios)
             messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.", parent=form2)
+            actualizar_lista_aspirantes()
         else:
             messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.", parent=form2)
 
