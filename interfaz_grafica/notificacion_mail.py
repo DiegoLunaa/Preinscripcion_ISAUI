@@ -22,6 +22,8 @@ def abrir_mail():
     ventana.title("Enviar Notificaciones vía Gmail")
     ventana.configure(bg="#1F6680")
     ventana.geometry("800x600") 
+    ventana.protocol("WM_DELETE_WINDOW", lambda: None) #PARA QUE NO FUNCIONE LA X DE WINDOWS
+    ventana.bind("<Configure>", lambda evento: ventana.state("normal")) #NO FUNCIONA MAXIMIZAR NI MINIMIZAR
 
     padding = 10
 
@@ -42,6 +44,9 @@ def abrir_mail():
 
     label_mensajes = Label(ventana, text="Seleccionar Mensaje Predeterminado:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_mensajes.pack(pady=padding)
+
+    boton_salir = Button(ventana, text="SALIR", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command= ventana.destroy)
+    boton_salir.place(x=630, y=550)
 
     mensajes_predeterminados = {
         "Falta de documentos.": ("Información faltante en su preinscripción", """Le escribimos desde el Instituto Superior Arturo Umberto Illia para informarle que, al revisar su solicitud de preinscripción a la carrera de [Nombre de la Carrera], hemos detectado que falta información necesaria para completar su proceso de preinscripción. Los documentos/información faltante son los siguientes:
