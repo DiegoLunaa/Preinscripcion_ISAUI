@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
-from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,path_basura,path_ojo,path_mail
+from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,path_basura,path_ojo,path_mail,path_reloj
 from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
@@ -30,13 +30,13 @@ def abrir_ventana_aspirantes(main_adm):
     frame1.place(x=0, y=0)  
     frame2 = Frame(aspirantes, bg="#1F6680", width=1052, height=713)
     frame2.place(x=314, y=55) 
-    frame3 = Frame(aspirantes, bg="#274357", width=326 , height=90)
+    frame3 = Frame(aspirantes, bg="#274357", width=326 , height=50)
     frame3.place(x=997, y=181)
 
     #Label Acciones
-    label_acciones = Label(aspirantes, text= "ACCIONES", fg="White", font=("Arial",38))
+    label_acciones = Label(frame3, text= "ACCIONES", fg="White", font=("Arial",28))
     label_acciones.configure(bg="#274357")
-    label_acciones.place(x=1027,y=201)
+    label_acciones.place(relx=0.5, rely=0.5, anchor='center')
 
 
     def obtener_info_alumno_seleccionado():
@@ -166,20 +166,20 @@ def abrir_ventana_aspirantes(main_adm):
     imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
     boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#007AFF", width=50, height=50, borderwidth=2,command=obtener_info_y_verla)
     #boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#007AFF", width=50, height=50, borderwidth=2,command=poner_aspirante_seleccionado_en_espera)
-    boton_ojo.place(x=989, y=296)
+    boton_ojo.place(x=989, y=249)
     boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
     label_ojo = Label(aspirantes,text="VER INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_ojo.place(x=1050, y=307)
+    label_ojo.place(x=1050, y=259)
 
         #Boton y label Lapiz
     imagen = Image.open(path_lapiz)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_lapiz = ImageTk.PhotoImage(imagen_redimensionada)
     boton_lapiz = Button(aspirantes, image=imagen_lapiz, bg="#E7EB1E", width=50, height=50, borderwidth=2,command=obtener_info_alumno_seleccionado)
-    boton_lapiz.place(x=989, y=363)
+    boton_lapiz.place(x=989, y=316)
     boton_lapiz.image = imagen_lapiz
     label_lapiz = Label(aspirantes,text="EDITAR INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_lapiz.place(x=1050, y=373)
+    label_lapiz.place(x=1050, y=326)
 
         #Boton y label Trash
     def mensaje_eliminar():
@@ -194,10 +194,10 @@ def abrir_ventana_aspirantes(main_adm):
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_basura = ImageTk.PhotoImage(imagen_redimensionada)
     boton_basura = Button(aspirantes, image=imagen_basura, bg="#FF0000", width=50, height=50, borderwidth=2,command=eliminar_aspirante_seleccionado)
-    boton_basura.place(x=989, y=430)
+    boton_basura.place(x=989, y=383)
     boton_basura.image = imagen_lapiz
     label_basura = Label(aspirantes,text="ELIMINAR INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_basura.place(x=1050, y=440)
+    label_basura.place(x=1050, y=393)
 
         #Boton y label Check
     imagen = Image.open(path_check)
@@ -205,20 +205,31 @@ def abrir_ventana_aspirantes(main_adm):
     imagen_check = ImageTk.PhotoImage(imagen_redimensionada)
     boton_check = Button(aspirantes, image=imagen_check, bg="#1F8930", width=50, height=50, borderwidth=2, command=confirmar_aspirante_seleccionado)
 
-    boton_check.place(x=989, y=497)
+    boton_check.place(x=989, y=450)
     boton_check.image = imagen_check
     label_basura = Label(aspirantes,text="CONFIRMAR ASPIRANTE", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_basura.place(x=1050, y=510)
+    label_basura.place(x=1050, y=460)
+
+    #boton en espera
+    imagen = Image.open(path_reloj)
+    imagen_redimensionada = imagen.resize((34,34)) 
+    imagen_reloj = ImageTk.PhotoImage(imagen_redimensionada)
+    boton_reloj = Button(aspirantes, image=imagen_reloj, bg="#B700FF", width=50, height=50, borderwidth=2,command=poner_aspirante_seleccionado_en_espera)
+    boton_reloj.place(x=989, y=517)
+    boton_reloj.image = imagen_reloj  # Mantiene una referencia a la imagen
+    label_reloj = Label(aspirantes,text="PONER EN ESPERA", bg="#1F6680", fg="White", font=("Arial", 18))
+    label_reloj.place(x=1050, y=527)
 
     #Boton mail
     imagen = Image.open(path_mail)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
     boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#F5A656", width=50, height=50, borderwidth=2,command=obtener_asp_mail)
-    boton_ojo.place(x=989, y=564)
+    boton_ojo.place(x=989, y=584)
     boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
     label_ojo = Label(aspirantes,text="ENVIAR MAIL", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_ojo.place(x=1050, y=574)
+    label_ojo.place(x=1050, y=594)
+
 
     #Logo isaui
     imagen = Image.open(path_isaui)
@@ -276,18 +287,15 @@ def abrir_ventana_aspirantes(main_adm):
      #Botones
     label_aspirantes = Label(frame1,text="ASPIRANTES", bg="#274357", fg="White", font=("Arial", 16))
     label_aspirantes.place(relx=0.5, y=200, anchor='center')
-
-    boton_poner_en_espera = Button(aspirantes, text="PONER EN ESPERA", width=18, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=poner_aspirante_seleccionado_en_espera)
-    boton_poner_en_espera.place(x=714, y=679)
     
     boton_en_espera = Button(aspirantes, text="EN ESPERA", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=ingresar_en_espera)
-    boton_en_espera.place(x=894, y=679)  
+    boton_en_espera.place(x=894, y=689)  
 
     boton_confirmados = Button(aspirantes, text="CONFIRMADOS", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=ingresar_confirmados)
-    boton_confirmados.place(x=1039, y=679)  
+    boton_confirmados.place(x=1039, y=689)  
 
     boton_inicio = Button(aspirantes, text="VOLVER", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command= volver)
-    boton_inicio.place(x=1184, y=679) 
+    boton_inicio.place(x=1184, y=689) 
 
 
     #combobox de filtro
