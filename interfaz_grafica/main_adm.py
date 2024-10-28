@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from interfaz_grafica.config import path_facu, path_isaui
 from interfaz_grafica.aspirantes import abrir_ventana_aspirantes
 from interfaz_grafica.cupos import abrir_ventana_cupos
+from interfaz_grafica.reportes import abrir_ventana_reportes
 from db.funciones_db import cerrar_sesion
 from db import funciones_db
 
@@ -60,6 +61,9 @@ def abrir_ventana_main_adm(login):
     
     boton_cupos = Button(main_adm, text="CUPOS", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=avanzar_cupos)
     boton_cupos.place(x=64, y=249)  
+    
+    boton_reportes = Button(main_adm, text="REPORTES", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=abrir_ventana_reportes)
+    boton_reportes.place(x=64, y=314)  
 
     #Botones superiores
     def logout():

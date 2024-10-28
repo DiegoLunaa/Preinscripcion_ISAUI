@@ -1,13 +1,13 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
-from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,path_basura,path_ojo
+from interfaz_grafica.config import path_isaui,path_lupa,path_lapiz,path_check,path_basura,path_ojo,path_mail
 from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
 from interfaz_grafica.main_modif import abrir_ventana_modificar
 from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera, obtener_carreras_disponibles,obtener_estado
-
+from interfaz_grafica.notificacion_mail import abrir_mail
 
 def abrir_ventana_aspirantes(main_adm):
     aspirantes = Toplevel()
@@ -131,20 +131,20 @@ def abrir_ventana_aspirantes(main_adm):
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
     boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#007AFF", width=50, height=50, borderwidth=2,command=obtener_info_y_verla)
-    boton_ojo.place(x=989, y=326)
+    boton_ojo.place(x=989, y=296)
     boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
     label_ojo = Label(aspirantes,text="VER INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_ojo.place(x=1050, y=337)
+    label_ojo.place(x=1050, y=307)
 
         #Boton y label Lapiz
     imagen = Image.open(path_lapiz)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_lapiz = ImageTk.PhotoImage(imagen_redimensionada)
     boton_lapiz = Button(aspirantes, image=imagen_lapiz, bg="#E7EB1E", width=50, height=50, borderwidth=2,command=obtener_info_alumno_seleccionado)
-    boton_lapiz.place(x=989, y=393)
+    boton_lapiz.place(x=989, y=363)
     boton_lapiz.image = imagen_lapiz
     label_lapiz = Label(aspirantes,text="EDITAR INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_lapiz.place(x=1050, y=403)
+    label_lapiz.place(x=1050, y=373)
 
         #Boton y label Trash
     def mensaje_eliminar():
@@ -159,10 +159,10 @@ def abrir_ventana_aspirantes(main_adm):
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_basura = ImageTk.PhotoImage(imagen_redimensionada)
     boton_basura = Button(aspirantes, image=imagen_basura, bg="#FF0000", width=50, height=50, borderwidth=2,command=eliminar_aspirante_seleccionado)
-    boton_basura.place(x=989, y=460)
+    boton_basura.place(x=989, y=430)
     boton_basura.image = imagen_lapiz
     label_basura = Label(aspirantes,text="ELIMINAR INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_basura.place(x=1050, y=470)
+    label_basura.place(x=1050, y=440)
 
         #Boton y label Check
     imagen = Image.open(path_check)
@@ -170,10 +170,20 @@ def abrir_ventana_aspirantes(main_adm):
     imagen_check = ImageTk.PhotoImage(imagen_redimensionada)
     boton_check = Button(aspirantes, image=imagen_check, bg="#1F8930", width=50, height=50, borderwidth=2, command=confirmar_aspirante_seleccionado)
 
-    boton_check.place(x=989, y=527)
+    boton_check.place(x=989, y=497)
     boton_check.image = imagen_check
     label_basura = Label(aspirantes,text="CONFIRMAR ASPIRANTE", bg="#1F6680", fg="White", font=("Arial", 18))
-    label_basura.place(x=1050, y=540)
+    label_basura.place(x=1050, y=510)
+
+    #Boton mail
+    imagen = Image.open(path_mail)
+    imagen_redimensionada = imagen.resize((34,34)) 
+    imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
+    boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#F5A656", width=50, height=50, borderwidth=2,command=abrir_mail)
+    boton_ojo.place(x=989, y=564)
+    boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
+    label_ojo = Label(aspirantes,text="ENVIAR MAIL", bg="#1F6680", fg="White", font=("Arial", 18))
+    label_ojo.place(x=1050, y=574)
 
     #Logo isaui
     imagen = Image.open(path_isaui)
