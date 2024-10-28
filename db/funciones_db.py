@@ -265,12 +265,22 @@ def obtener_aspirantes_espera():
 def contar_aspirantes_espera():
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "SELECT COUNT(*) FROM Aspirante WHERE Estado = 'En espera'"
+    query = """
+    SELECT id_carrera, COUNT(*) AS cantidad_confirmados
+    FROM Aspirante
+    WHERE Estado = 'En espera'
+    GROUP BY id_carrera
+    """
     cursor.execute(query)
-    cantidad = cursor.fetchone()[0]
+    resultados = cursor.fetchall()
     cursor.close()
     conexion.close()
-    return cantidad
+
+    espera_por_carrera = {}
+    for id_carrera, cantidad in resultados:
+        espera_por_carrera[id_carrera] = cantidad
+    
+    return espera_por_carrera
 
 def contar_confirmados_por_carrera():
     conexion = conectar()
