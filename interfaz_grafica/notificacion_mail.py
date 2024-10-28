@@ -17,7 +17,7 @@ smtp_port = config['smtp_port']
 remitente = config['remitente']
 contraseña = config['contrasena_smtp']
 
-def abrir_mail():
+def abrir_mail(aspirante_id,aspirante_mail):
     ventana = Toplevel()
     ventana.title("Enviar Notificaciones vía Gmail")
     ventana.configure(bg="#1F6680")
@@ -31,6 +31,9 @@ def abrir_mail():
     label_destinatario.pack(pady=padding)
     entrada_destinatario = Entry(ventana, width=60, font=("Arial", 12))
     entrada_destinatario.pack(pady=padding)
+    entrada_destinatario.insert(0,aspirante_mail)
+
+    
 
     label_asunto = Label(ventana, text="Asunto:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_asunto.pack(pady=padding)
@@ -44,9 +47,6 @@ def abrir_mail():
 
     label_mensajes = Label(ventana, text="Seleccionar Mensaje Predeterminado:", bg="#1F6680", fg="White", font=("Arial", 14))
     label_mensajes.pack(pady=padding)
-
-    boton_salir = Button(ventana, text="SALIR", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command= ventana.destroy)
-    boton_salir.place(x=630, y=550)
 
     mensajes_predeterminados = {
         "Falta de documentos.": ("Información faltante en su preinscripción", """Le escribimos desde el Instituto Superior Arturo Umberto Illia para informarle que, al revisar su solicitud de preinscripción a la carrera de [Nombre de la Carrera], hemos detectado que falta información necesaria para completar su proceso de preinscripción. Los documentos/información faltante son los siguientes:
@@ -76,22 +76,6 @@ def abrir_mail():
     03541 43-1501
     secretaria@isaui.edu.ar"""),
     }
-
-    # ComboBox con mensajes predeterminados
-    combobox_mensajes = ttk.Combobox(ventana, values=list(mensajes_predeterminados.keys()), width=60, font=("Arial", 12))
-    combobox_mensajes.pack(pady=padding)
-    combobox_mensajes.set("Seleccione un mensaje predeterminado.")  # Seleccionar por defecto el primer mensaje
-    combobox_mensajes.bind("<<ComboboxSelected>>", actualizar_mensaje)  # Vincular la función
-
-    imagen_flecha = Image.open(path_flecha)
-    flecha_atras = ImageTk.PhotoImage(imagen_flecha)
-    boton_atras = Button(ventana, image=flecha_atras, bg="#274357", width=48, height=48, borderwidth=2, command=ventana.destroy)
-    boton_atras.place(x=20, y=20)
-    boton_atras.image = flecha_atras  # Mantiene una referencia a la imagen
-
-
-    boton_enviar = Button(ventana, text="Enviar Correo", command=enviar_notificacion, font=("Arial", 12), bg="lightblue")
-    boton_enviar.pack(pady=20)
 
     # Función para enviar correo
     def enviar_notificacion():
@@ -143,10 +127,18 @@ def abrir_mail():
             entrada_cuerpo.insert("1.0", cuerpo)
 
 
+    # ComboBox con mensajes predeterminados
+    combobox_mensajes = ttk.Combobox(ventana, values=list(mensajes_predeterminados.keys()), width=60, font=("Arial", 12))
+    combobox_mensajes.pack(pady=padding)
+    combobox_mensajes.set("Seleccione un mensaje predeterminado.")  # Seleccionar por defecto el primer mensaje
+    combobox_mensajes.bind("<<ComboboxSelected>>", actualizar_mensaje)  # Vincular la función
 
-        ventana.mainloop()
+    boton_salir = Button(ventana, text="SALIR", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command= ventana.destroy)
+    boton_salir.place(x=630, y=550)
 
-
+    boton_enviar = Button(ventana, text="Enviar Correo", command=enviar_notificacion, font=("Arial", 12),bg="#274357",fg="White",width=14)
+    boton_enviar.place(x=480,y=550)
+    ventana.mainloop()
 
 def confirmar_preinscripcion(aspirante_id):
     aspirante_info = leer_aspirante(aspirante_id)
@@ -185,8 +177,4 @@ def confirmar_preinscripcion(aspirante_id):
         servidor.quit()
     except Exception as e:
         messagebox.showerror("Error", f"No se pudo enviar el correo: {e}")
-
-
-
-
 
