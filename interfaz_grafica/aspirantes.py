@@ -6,7 +6,7 @@ from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
 from interfaz_grafica.main_modif import abrir_ventana_modificar
-from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera, obtener_carreras_disponibles,obtener_estado, poner_en_lista_espera
+from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera, obtener_carreras_disponibles,obtener_estado, poner_en_lista_espera,obtener_mail_aspirante
 from interfaz_grafica.notificacion_mail import abrir_mail
 
 def abrir_ventana_aspirantes(main_adm):
@@ -64,6 +64,20 @@ def abrir_ventana_aspirantes(main_adm):
         print(f"Aspirante seleccionado: {aspirante_info}, y su id es {aspirante_id}")  # Imprimir en consola
         # Llamar a la función para abrir la ventana de modificación
         abrir_ventana_info_aspirante(aspirante_id)
+
+    def obtener_asp_mail():
+        seleccion = arbol.selection()
+        if not seleccion:
+            messagebox.showerror("Error", "Por favor, selecciona un alumno.", parent=aspirantes)
+            return
+    
+        item = seleccion[0]
+        aspirante_info = arbol.item(item, 'values')  # Obtener los valores de la fila seleccionada
+        aspirante_id = aspirante_info[0]  # Obtener la ID del alumno seleccionado
+        aspirante_mail = obtener_mail_aspirante(aspirante_id)
+        print(f"Aspirante seleccionado: {aspirante_info}, y su id es {aspirante_id}")  # Imprimir en consola
+        # Llamar a la función para abrir la ventana de modificación
+        abrir_mail(aspirante_id,aspirante_mail)
     
     def eliminar_aspirante_seleccionado():
         seleccion = arbol.selection()
@@ -200,7 +214,7 @@ def abrir_ventana_aspirantes(main_adm):
     imagen = Image.open(path_mail)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
-    boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#F5A656", width=50, height=50, borderwidth=2,command=abrir_mail)
+    boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#F5A656", width=50, height=50, borderwidth=2,command=obtener_asp_mail)
     boton_ojo.place(x=989, y=564)
     boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
     label_ojo = Label(aspirantes,text="ENVIAR MAIL", bg="#1F6680", fg="White", font=("Arial", 18))

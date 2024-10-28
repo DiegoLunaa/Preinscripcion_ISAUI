@@ -563,8 +563,21 @@ def modificar_cantidad_cupos(id_carrera, cupos_max_nuevo):
             query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles - %s WHERE ID_Carrera = %s"
             cursor.execute(query_actualizar_cupos_disponibles, (diferencia_cupos, id_carrera))
 
+
     query_actualizar_cupos_max = "UPDATE Carrera SET Cupos_Maximos = %s WHERE ID_Carrera = %s"
     cursor.execute(query_actualizar_cupos_max, (cupos_max_nuevo, id_carrera))
     conexion.commit()
     cursor.close()
     conexion.close()
+
+def obtener_mail_aspirante(aspirante_id):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT Mail FROM Aspirante WHERE ID_Aspirante = %s"
+    cursor.execute(query, (aspirante_id,))
+    resultado = cursor.fetchone()
+    conexion.close()
+    if resultado:
+        return resultado[0]
+    else:
+        pass
