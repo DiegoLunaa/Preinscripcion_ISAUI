@@ -1,5 +1,4 @@
 CREATE DATABASE isaui_prematricula;
-
 USE isaui_prematricula;
 
 CREATE TABLE Aspirante (
@@ -16,21 +15,29 @@ CREATE TABLE Aspirante (
     Telefono VARCHAR(15),
     Mail VARCHAR(100) UNIQUE,
     Fecha_Nacimiento DATE,
-    Lugar_Nacimiento VARCHAR(100),
-    Completo_Nivel_Medio BOOLEAN,
-    Año_Ingreso_Medio INT,
-    Año_Egreso_Medio INT,
-    Provincia_Medio VARCHAR(100),
-    Titulo_Medio VARCHAR(100),
-    Completo_Nivel_Superior VARCHAR(100),
-    Carrera_Superior VARCHAR(100),
-    Institucion_Superior VARCHAR(100),
-    Provincia_Superior VARCHAR(100),
-    Año_Ingreso_Superior INT,
-    Año_Egreso_Superior INT,
-    Trabajo BOOLEAN,
-    Descripcion_Trabajo TEXT,
-    Personas_Cargo BOOLEAN
+    Pais_Nacimiento VARCHAR(100),
+    Provincia_Nacimiento VARCHAR(100),
+    Localidad_Nacimiento VARCHAR(100),
+    Completo_Nivel_Medio TINYINT DEFAULT 0,
+    Año_Ingreso_Medio INT DEFAULT NULL,
+    Año_Egreso_Medio INT DEFAULT NULL,
+    Provincia_Medio VARCHAR(100) DEFAULT NULL,
+    Titulo_Medio VARCHAR(100) DEFAULT NULL,
+    Completo_Nivel_Superior TINYINT DEFAULT 0,
+    Carrera_Superior VARCHAR(100) DEFAULT NULL,
+    Institucion_Superior VARCHAR(100) DEFAULT NULL,
+    Provincia_Superior VARCHAR(100) DEFAULT NULL,
+    Año_Ingreso_Superior INT DEFAULT NULL,
+    Año_Egreso_Superior INT DEFAULT NULL,
+    Trabajo TINYINT DEFAULT 0,
+    Horas_Trabajo INT DEFAULT NULL,
+    Descripcion_Trabajo TEXT DEFAULT NULL,
+    Personas_Cargo TINYINT DEFAULT 0,
+    Estado VARCHAR(20) DEFAULT 'Pendiente',
+    Fecha_Envio DATETIME DEFAULT NULL,
+    ID_Carrera INT,
+    Activo BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (ID_Carrera) REFERENCES Carrera(ID_Carrera)
 );
 
 CREATE TABLE Carrera (
@@ -38,18 +45,8 @@ CREATE TABLE Carrera (
     Nombre_Carrera VARCHAR(255),
     Duracion INT,
     Facultad VARCHAR(100),
-    Cupos_Disponibles INT
-);
-
-CREATE TABLE Formulario (
-    ID_Formulario INT PRIMARY KEY AUTO_INCREMENT,
-    Fecha_Envio DATE,
-    Estado VARCHAR(20),
-    Constancia_URL TEXT,
-    ID_Aspirante INT,
-    ID_Carrera INT,
-    FOREIGN KEY (ID_Aspirante) REFERENCES Aspirante(ID_Aspirante),
-    FOREIGN KEY (ID_Carrera) REFERENCES Carrera(ID_Carrera)
+    Cupos_Disponibles INT,
+    Cupos_Maximos INT
 );
 
 CREATE TABLE Administrador (
@@ -61,80 +58,16 @@ CREATE TABLE Administrador (
     Password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE Reporte (
-    ID_Reporte INT PRIMARY KEY AUTO_INCREMENT,
-    Fecha_Creacion DATE,
-    Descripcion TEXT,
-    URL_Reporte TEXT,
-    ID_Administrador INT,
-    FOREIGN KEY (ID_Administrador) REFERENCES Administrador(ID_Administrador)
-);
-
-CREATE TABLE Constancia (
-    ID_Constancia INT PRIMARY KEY AUTO_INCREMENT,
-    Fecha_Generacion DATE,
-    URL_Constancia TEXT,
-    Mensaje_Personalizado TEXT,
-    ID_Formulario INT,
-    FOREIGN KEY (ID_Formulario) REFERENCES Formulario(ID_Formulario)
-);
-
 -- Insertar carreras
-INSERT INTO Carrera (Nombre_Carrera, Duracion, Facultad, Cupos_Disponibles) VALUES
-('Tecnicatura Superior en Desarrollo de Software', 3, 'ISAUI', 50),
-('Tecnicatura Superior en Diseño de Espacios', 3, 'ISAUI', 50),
-('Tecnicatura Superior en Enfermería', 3, 'ISAUI', 50),
-('Tecnicatura Superior en Turismo y Hotelería', 3, 'ISAUI', 50),
-('Tecnicatura Superior en Guía de Turismo', 3, 'ISAUI', 50),
-('Tecnicatura Superior en Guía de Trekking y Guía de Turismo', 3, 'ISAUI', 50);
+INSERT INTO Carrera (Nombre_Carrera, Duracion, Facultad, Cupos_Disponibles, Cupos_Maximos) VALUES
+('Tecnicatura Superior en Desarrollo de Software', 3, 'ISAUI', 50, 60),
+('Tecnicatura Superior en Diseño de Espacios', 3, 'ISAUI', 50, 60),
+('Tecnicatura Superior en Enfermería', 3, 'ISAUI', 50, 60),
+('Tecnicatura Superior en Turismo y Hotelería', 3, 'ISAUI', 50, 60),
+('Tecnicatura Superior en Guía de Turismo', 3, 'ISAUI', 50, 60),
+('Tecnicatura Superior en Guía de Trekking y Guía de Turismo', 3, 'ISAUI', 50, 60);
 
 -- Insertar administrador
 INSERT INTO Administrador (Nombre, Apellido, Cargo, Usuario, Password) VALUES
-('Jorge', 'Aperlo', 'Administrador', 'admin', '$2b$12$UzRFtiVFgRqynR9PLlOw9ONxli4T0YW/s.hq7RwuXg6BLGZjt06lm')
-VALUES ('admin', 'admin', 'Administrador', 'adm', '$2b$12$g65hJdyYvneSALBS.3bQNeAwaZkxkeyLp9Hj2rxV3v1f2SP36zply');
-
-ALTER TABLE Aspirante
-MODIFY Completo_Nivel_Medio TINYINT DEFAULT 0,
-MODIFY Año_Ingreso_Medio INT DEFAULT NULL,
-MODIFY Año_Egreso_Medio INT DEFAULT NULL,
-MODIFY Provincia_Medio VARCHAR(100) DEFAULT NULL,
-MODIFY Titulo_Medio VARCHAR(100) DEFAULT NULL,
-MODIFY Completo_Nivel_Superior TINYINT DEFAULT 0,
-MODIFY Carrera_Superior VARCHAR(100) DEFAULT NULL,
-MODIFY Institucion_Superior VARCHAR(100) DEFAULT NULL,
-MODIFY Provincia_Superior VARCHAR(100) DEFAULT NULL,
-MODIFY Año_Ingreso_Superior INT DEFAULT NULL,
-MODIFY Año_Egreso_Superior INT DEFAULT NULL,
-MODIFY Trabajo TINYINT DEFAULT 0,
-MODIFY Descripcion_Trabajo TEXT DEFAULT NULL,
-MODIFY Personas_Cargo TINYINT DEFAULT 0;
-
-ALTER TABLE Aspirante 
-CHANGE COLUMN Lugar_Nacimiento Pais_Nacimiento VARCHAR(100);
-
-ALTER TABLE Aspirante 
-ADD COLUMN Provincia_Nacimiento VARCHAR(100) AFTER Pais_Nacimiento,
-ADD COLUMN Localidad_Nacimiento VARCHAR(100) AFTER Provincia_Nacimiento,
-ADD COLUMN Horas_Trabajo INT DEFAULT NULL AFTER Trabajo;
-
-ALTER TABLE Carrera ADD COLUMN Cupos_Maximos INT;
-UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 1;
-UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 2;
-UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 3;
-UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 4;
-UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 5;
-UPDATE Carrera SET Cupos_Maximos = 60 WHERE ID_Carrera = 6;
-
-ALTER TABLE constancia DROP FOREIGN KEY constancia_ibfk_1;
-ALTER TABLE constancia DROP COLUMN ID_Formulario;
-DROP TABLE Formulario;
-
-ALTER TABLE Aspirante 
-ADD COLUMN Estado VARCHAR(20) DEFAULT 'Pendiente',
-ADD COLUMN Fecha_Envio DATETIME DEFAULT NULL,
-ADD COLUMN ID_Carrera INT,
-ADD CONSTRAINT FK_Aspirante_Carrera FOREIGN KEY (ID_Carrera) REFERENCES Carrera(ID_Carrera);
-
-DROP TABLE constancia;
-
-ALTER TABLE Aspirante ADD COLUMN Activo BOOLEAN DEFAULT TRUE;
+('Jorge', 'Aperlo', 'Administrador', 'admin', '$2b$12$UzRFtiVFgRqynR9PLlOw9ONxli4T0YW/s.hq7RwuXg6BLGZjt06lm'),
+('admin', 'admin', 'Administrador', 'adm', '$2b$12$g65hJdyYvneSALBS.3bQNeAwaZkxkeyLp9Hj2rxV3v1f2SP36zply');
