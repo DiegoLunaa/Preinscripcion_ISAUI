@@ -242,10 +242,43 @@ def confirmar_aspirante(id_aspirante):
     conexion.close()
     return True, "Aspirante confirmado exitosamente."
 
+def poner_en_lista_espera(id_aspirante):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    
+    # Obtener estado actual y carrera del aspirante
+    query = "SELECT Estado, ID_Carrera FROM Aspirante WHERE ID_Aspirante = %s"
+    cursor.execute(query, (id_aspirante,))
+    resultado = cursor.fetchone()
+    
+    estado = resultado[0]
+    id_carrera = resultado[1]
+
+    # Verificar si el aspirante ya está en lista de espera
+    if estado == 'En espera':
+        cursor.close()
+        conexion.close()
+        return False, "El aspirante ya está en lista de espera."
+
+    # Verificar disponibilidad de cupos
+    cupos = cupos_disponibles(id_carrera)
+    if cupos > 0:
+        cursor.close()
+        conexion.close()
+        return False, "Aún hay cupos disponibles para esta carrera. El aspirante no necesita estar en lista de espera."
+    
+    # Poner al aspirante en lista de espera si no hay cupos disponibles
+    query = "UPDATE Aspirante SET Estado = 'En espera' WHERE ID_Aspirante = %s"
+    cursor.execute(query, (id_aspirante,))
+    conexion.commit()
+    cursor.close()
+    conexion.close()
+    return True, "Aspirante puesto en lista de espera exitosamente."
+
 def obtener_aspirantes_confirmados():
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "SELECT * FROM Aspirante WHERE Estado = 'Confirmado'"
+    query = "SELECT * FROM Aspirante WHERE Estado = 'Confirmado' AND Activo = 1"
     cursor.execute(query)
     resultados = cursor.fetchall()
     cursor.close()
@@ -255,7 +288,7 @@ def obtener_aspirantes_confirmados():
 def obtener_aspirantes_espera():
     conexion = conectar()
     cursor = conexion.cursor()
-    query = "SELECT * FROM Aspirante WHERE Estado = 'En espera'"
+    query = "SELECT * FROM Aspirante WHERE Estado = 'En espera' AND Activo = 1"
     cursor.execute(query)
     resultados = cursor.fetchall()
     cursor.close()
@@ -540,8 +573,21 @@ def modificar_cantidad_cupos(id_carrera, cupos_max_nuevo):
             query_actualizar_cupos_disponibles = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles - %s WHERE ID_Carrera = %s"
             cursor.execute(query_actualizar_cupos_disponibles, (diferencia_cupos, id_carrera))
 
+
     query_actualizar_cupos_max = "UPDATE Carrera SET Cupos_Maximos = %s WHERE ID_Carrera = %s"
     cursor.execute(query_actualizar_cupos_max, (cupos_max_nuevo, id_carrera))
     conexion.commit()
     cursor.close()
     conexion.close()
+
+def obtener_mail_aspirante(aspirante_id):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    query = "SELECT Mail FROM Aspirante WHERE ID_Aspirante = %s"
+    cursor.execute(query, (aspirante_id,))
+    resultado = cursor.fetchone()
+    conexion.close()
+    if resultado:
+        return resultado[0]
+    else:
+        pass

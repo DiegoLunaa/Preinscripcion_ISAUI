@@ -6,7 +6,7 @@ from interfaz_grafica.confirmados import abrir_ventana_confirmados
 from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
 from interfaz_grafica.main_modif import abrir_ventana_modificar
-from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera, obtener_carreras_disponibles,obtener_estado
+from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera, obtener_carreras_disponibles,obtener_estado, poner_en_lista_espera,obtener_mail_aspirante
 from interfaz_grafica.notificacion_mail import abrir_mail
 
 def abrir_ventana_aspirantes(main_adm):
@@ -64,6 +64,20 @@ def abrir_ventana_aspirantes(main_adm):
         print(f"Aspirante seleccionado: {aspirante_info}, y su id es {aspirante_id}")  # Imprimir en consola
         # Llamar a la función para abrir la ventana de modificación
         abrir_ventana_info_aspirante(aspirante_id)
+
+    def obtener_asp_mail():
+        seleccion = arbol.selection()
+        if not seleccion:
+            messagebox.showerror("Error", "Por favor, selecciona un alumno.", parent=aspirantes)
+            return
+    
+        item = seleccion[0]
+        aspirante_info = arbol.item(item, 'values')  # Obtener los valores de la fila seleccionada
+        aspirante_id = aspirante_info[0]  # Obtener la ID del alumno seleccionado
+        aspirante_mail = obtener_mail_aspirante(aspirante_id)
+        print(f"Aspirante seleccionado: {aspirante_info}, y su id es {aspirante_id}")  # Imprimir en consola
+        # Llamar a la función para abrir la ventana de modificación
+        abrir_mail(aspirante_id,aspirante_mail)
     
     def eliminar_aspirante_seleccionado():
         seleccion = arbol.selection()
@@ -103,6 +117,26 @@ def abrir_ventana_aspirantes(main_adm):
         else:
             messagebox.showinfo("Cancelado", "Confirmación cancelada.", parent=aspirantes)
     
+    def poner_aspirante_seleccionado_en_espera():
+        seleccion = arbol.selection()
+        if not seleccion:
+            messagebox.showerror("Error", "Por favor, selecciona un aspirante.", parent=aspirantes)
+            return
+        
+        item = seleccion[0]
+        aspirante_info = arbol.item(item, 'values')
+        aspirante_id = aspirante_info[0]
+        
+        respuesta = messagebox.askyesno("Lista de espera", f"¿Está seguro que desea poner al aspirante con ID {aspirante_id} en lista de espera?", parent=aspirantes)
+        if respuesta:
+            resultado, mensaje = poner_en_lista_espera(aspirante_id)
+            if not resultado:
+                messagebox.showwarning("Advertencia", mensaje, parent=aspirantes)
+            else:
+                messagebox.showinfo("En espera", mensaje, parent=aspirantes)
+        else:
+            messagebox.showinfo("Cancelado", "Operación cancelada.", parent=aspirantes)
+
     def actualizar_lista_aspirantes():
         # Limpia el árbol o la lista donde se muestran los aspirantes
         arbol.delete(*arbol.get_children())  # Ajusta según tu widget
@@ -123,14 +157,15 @@ def abrir_ventana_aspirantes(main_adm):
     #Botones, acciones
 
     # ver por que no se ve
-    btn_actualizar = Button(aspirantes, text="Actualizar", bg="#1F6680", fg="White", font=("Arial", 18), command=actualizar_lista_aspirantes)
-    btn_actualizar.place(x=0, y=0) 
+    # btn_actualizar = Button(aspirantes, text="Actualizar", bg="#1F6680", fg="White", font=("Arial", 18), command=actualizar_lista_aspirantes)
+    # btn_actualizar.place(x=0, y=0) 
 
         #Boton y label ojo
     imagen = Image.open(path_ojo)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
     boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#007AFF", width=50, height=50, borderwidth=2,command=obtener_info_y_verla)
+    #boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#007AFF", width=50, height=50, borderwidth=2,command=poner_aspirante_seleccionado_en_espera)
     boton_ojo.place(x=989, y=296)
     boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
     label_ojo = Label(aspirantes,text="VER INFORMACIÓN", bg="#1F6680", fg="White", font=("Arial", 18))
@@ -179,7 +214,7 @@ def abrir_ventana_aspirantes(main_adm):
     imagen = Image.open(path_mail)
     imagen_redimensionada = imagen.resize((34,34)) 
     imagen_ojo = ImageTk.PhotoImage(imagen_redimensionada)
-    boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#F5A656", width=50, height=50, borderwidth=2,command=abrir_mail)
+    boton_ojo = Button(aspirantes, image=imagen_ojo, bg="#F5A656", width=50, height=50, borderwidth=2,command=obtener_asp_mail)
     boton_ojo.place(x=989, y=564)
     boton_ojo.image = imagen_ojo  # Mantiene una referencia a la imagen
     label_ojo = Label(aspirantes,text="ENVIAR MAIL", bg="#1F6680", fg="White", font=("Arial", 18))
@@ -241,6 +276,9 @@ def abrir_ventana_aspirantes(main_adm):
      #Botones
     label_aspirantes = Label(frame1,text="ASPIRANTES", bg="#274357", fg="White", font=("Arial", 16))
     label_aspirantes.place(relx=0.5, y=200, anchor='center')
+
+    boton_poner_en_espera = Button(aspirantes, text="PONER EN ESPERA", width=18, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=poner_aspirante_seleccionado_en_espera)
+    boton_poner_en_espera.place(x=714, y=679)
     
     boton_en_espera = Button(aspirantes, text="EN ESPERA", width=14, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=ingresar_en_espera)
     boton_en_espera.place(x=894, y=679)  
