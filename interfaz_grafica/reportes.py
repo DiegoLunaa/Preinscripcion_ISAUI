@@ -68,6 +68,7 @@ def abrir_ventana_reportes():
     def buscar_aspirantes_por_carrera(carrera):
         aspirantes  = leer_todos_los_aspirantes_basico()
         cantidad_espera = contar_aspirantes_espera()
+        confirmados = contar_confirmados_por_carrera()
 
         aspirantes_confirmados = [
             (nombre, apellido, dni, id_carrera, estado) for nombre, apellido, dni, id_carrera, estado in aspirantes if estado == 'Confirmado'
@@ -80,13 +81,13 @@ def abrir_ventana_reportes():
                 if estado == 'Confirmado' and id_carrera == carrera:
                     nombre_carrera = obtener_nombre_carrera(id_carrera)
                     texto += f"\n{apellido} {nombre}, {dni}, {nombre_carrera}"
+            cantidad_confirmados = confirmados.get(carrera, 0)
             cupos = cupos_disponibles(id_carrera)
-            cupos_maximos = cupos_maximos(id_carrera)
-            texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cupos - cupos_maximos }</font></b>"
+            texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cantidad_confirmados}</font></b>\n"
             if cupos == 0:
-                texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_espera}</font></b>"
+                texto += f"<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_espera}</font></b>\n"
             else:
-                texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>"
+                texto += f"<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>\n"
 
         else:
             texto = ''
@@ -98,12 +99,12 @@ def abrir_ventana_reportes():
                     if estado == 'Confirmado' and id_carrera == i:
                         texto += f"\n{apellido} {nombre}, {dni}"
                 cupos = cupos_disponibles(i)
-                cupos_maximos = cupos_maximos(id_carrera)
-                texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cupos - cupos_maximos }</font></b>"
+                cantidad_confirmados = confirmados.get(i, 0)
+                texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cantidad_confirmados}</font></b>\n"
                 if cupos == 0:
                     texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_espera}</font></b>"
                 else:
-                    texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>"
+                    texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>\n"
 
         def generar_reporte_pdf(nombre_archivo, titulo, contenido):
             nombre_archivo = filedialog.asksaveasfilename(defaultextension=".pdf",

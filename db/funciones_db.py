@@ -272,6 +272,30 @@ def contar_aspirantes_espera():
     conexion.close()
     return cantidad
 
+def contar_confirmados_por_carrera():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    
+    query = """
+    SELECT id_carrera, COUNT(*) AS cantidad_confirmados
+    FROM Aspirante
+    WHERE Estado = 'Confirmado'
+    GROUP BY id_carrera
+    """
+    
+    cursor.execute(query)
+    resultados = cursor.fetchall()
+    
+    cursor.close()
+    conexion.close()
+    
+
+    confirmados_por_carrera = {}
+    for id_carrera, cantidad in resultados:
+        confirmados_por_carrera[id_carrera] = cantidad
+    
+    return confirmados_por_carrera
+
 
 def leer_carrera(id_carrera):
 
