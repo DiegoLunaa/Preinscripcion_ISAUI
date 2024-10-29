@@ -210,6 +210,11 @@ def eliminar_aspirante(id_aspirante):
     cursor = conexion.cursor()
     query = "UPDATE Aspirante SET Activo = %s WHERE ID_Aspirante = %s"
     cursor.execute(query, (False, id_aspirante))
+    query_carrera = "SELECT ID_Carrera FROM Aspirante WHERE ID_Aspirante = %s"
+    cursor.execute(query_carrera, (id_aspirante,))
+    resultado = cursor.fetchone()
+    query_aumentar_cupo = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles + 1 WHERE ID_Carrera = %s"
+    cursor.execute(query_aumentar_cupo, (resultado[0],))
     conexion.commit()
     print("El aspirante ha sido marcado como inactivo.")
     cursor.close()
@@ -531,6 +536,17 @@ def descontar_cupo(id_carrera):
         print(f"Cupos actualizados. Cupos restantes: {cupos_actuales - 1}")
     else:
         print("No hay cupos disponibles para esta carrera.")
+    cursor.close()
+    conexion.close()
+
+def incrementar_cupo(id_carrera):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    cupos_actuales = cupos_disponibles(id_carrera)
+    query = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles + 1 WHERE ID_Carrera = %s"
+    cursor.execute(query, (id_carrera,))
+    conexion.commit()
+    print(f"Cupos actualizados. Cupos restantes: {cupos_actuales + 1}")
     cursor.close()
     conexion.close()
 
