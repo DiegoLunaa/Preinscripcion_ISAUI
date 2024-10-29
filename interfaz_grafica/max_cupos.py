@@ -83,10 +83,14 @@ def abrir_ventana_max_cupos():
     def guardar_cambios(arbol):
         for item in arbol.get_children():
             id_carrera, nombre, cupos_max_nuevo = arbol.item(item, 'values')
+
+            if not cupos_max_nuevo.isdigit() or int(cupos_max_nuevo) < 0:
+                messagebox.showerror("Error", "Ingrese una cantidad válida.", parent=max)  
+                return  
             print(f"Actualizando carrera {nombre} con nuevo cupo maximo: {cupos_max_nuevo}")
             modificar_cantidad_cupos(id_carrera, cupos_max_nuevo)
     
         arbol.unbind("<Double-1>")  # Deshabilitar la edición después de guardar
-        messagebox.showinfo("Guardado", "Cambios guardados exitosamente.")
+        messagebox.showinfo("Guardado", "Cambios guardados exitosamente.", parent=max)
 
     max.mainloop()

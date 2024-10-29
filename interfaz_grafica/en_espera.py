@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 from interfaz_grafica.config import path_isaui
+from db.funciones_db import obtener_aspirantes_espera, obtener_nombre_carrera
 
 def abrir_ventana_en_espera(aspirantes):
     esperando = Toplevel()
@@ -72,6 +73,13 @@ def abrir_ventana_en_espera(aspirantes):
 
     label_aspirantes = Label(frame1,text="ASPIRANTES", bg="#274357", fg="White", font=("Arial", 16))
     label_aspirantes.place(relx=0.5, y=200, anchor='center')
+
+
+    aspirantes_en_espera = obtener_aspirantes_espera()
+    if aspirantes_en_espera:
+            for aspirante in aspirantes_en_espera:
+                carrera = obtener_nombre_carrera(aspirante[33])
+                arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],  aspirante[11], carrera)) 
 
     def volver():
         esperando.destroy()
