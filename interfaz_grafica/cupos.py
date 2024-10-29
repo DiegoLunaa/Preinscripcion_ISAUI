@@ -76,7 +76,10 @@ def abrir_ventana_cupos(main_adm):
     boton_volver.place(x=1184, y=679)
 
     boton_confirmados = Button(cupos, text="MÁXIMO DE CUPOS", width=16, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=abrir_ventana_max_cupos)
-    boton_confirmados.place(x=1000, y=679)  
+    boton_confirmados.place(x=1000, y=679)
+
+    boton_actualizar = Button(cupos, text="ACTUALIZAR", width=16, fg="White", font=("Arial", 12), bg="#274357",borderwidth=2,command=actualizar_progreso)
+    boton_actualizar.place(x=816, y=679) 
 
         #Botones superiores
 
