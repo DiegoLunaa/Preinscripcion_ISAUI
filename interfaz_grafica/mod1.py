@@ -273,7 +273,7 @@ def abrir_mod1(aspirante_id, actualizar_lista_aspirantes):
         elif cambios:
             actualizar_aspirante(aspirante_id, cambios)
             messagebox.showinfo("Éxito", "Los datos se han guardado correctamente.", parent=form)
-            actualizar_lista_aspirantes()
+            actualizar_lista_aspirantes(event=None)
             form.destroy() 
         else:
             messagebox.showinfo("Sin cambios", "No se realizaron cambios en los datos.", parent=form)
