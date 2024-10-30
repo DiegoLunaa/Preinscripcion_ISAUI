@@ -73,9 +73,6 @@ def abrir_ventana_en_espera(aspirantes):
                     arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3], aspirante[11], carrera))
     
 
-    frame_filtro = Frame(esperando, width=24 * 10, height=27, bg="#1F6680")
-    frame_filtro.place(x=380, y=140)
-
     carreras_id_mapeo = {}
     carreras_db = obtener_carreras_disponibles()
     lista_carreras = [nombre for _, nombre, _, _ in carreras_db]
