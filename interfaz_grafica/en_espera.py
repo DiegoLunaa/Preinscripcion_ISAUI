@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 from interfaz_grafica.config import path_isaui
-from db.funciones_db import obtener_aspirantes_espera, obtener_nombre_carrera
+from db.funciones_db import obtener_aspirantes_espera, obtener_nombre_carrera, obtener_carreras_disponibles, leer_todos_los_aspirantes
 
 def abrir_ventana_en_espera(aspirantes):
     esperando = Toplevel()
@@ -61,6 +61,34 @@ def abrir_ventana_en_espera(aspirantes):
     arbol.column("mail", width=250)
     arbol.column("carrera", width=250)
 
+    def cargar_esperando(event):
+        aspirantes = leer_todos_los_aspirantes()
+        arbol.delete(*arbol.get_children())
+        id_carrera_seleccionada = carreras_id_mapeo.get(combobox_filtro.get())
+        if id_carrera_seleccionada:
+            print(aspirantes)
+            for aspirante in aspirantes:
+                if aspirante[33] == id_carrera_seleccionada and aspirante[31] == "En espera":
+                    carrera = obtener_nombre_carrera(aspirante[33])
+                    arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3], aspirante[11], carrera))
+    
+
+    frame_filtro = Frame(esperando, width=24 * 10, height=27, bg="#1F6680")
+    frame_filtro.place(x=380, y=140)
+
+    carreras_id_mapeo = {}
+    carreras_db = obtener_carreras_disponibles()
+    lista_carreras = [nombre for _, nombre, _, _ in carreras_db]
+    carreras_id_mapeo.update({nombre: id_carrera for id_carrera, nombre, _, _ in carreras_db})
+
+    combobox_filtro = ttk.Combobox(esperando, font=("Arial", 14), state='readonly')
+    combobox_filtro.set("Filtrar por:")
+    combobox_filtro['values'] = lista_carreras
+    combobox_filtro.bind("<<ComboboxSelected>>", cargar_esperando)
+    combobox_filtro.place(x=400, y=200)
+
+    cargar_esperando(None)
+    
     #Scrollbar
     scrollbar = ttk.Scrollbar(frame2, orient=VERTICAL, command=arbol.yview)
     scrollbar.place(x=972 ,y=208, height=424)
@@ -75,11 +103,7 @@ def abrir_ventana_en_espera(aspirantes):
     label_aspirantes.place(relx=0.5, y=200, anchor='center')
 
 
-    aspirantes_en_espera = obtener_aspirantes_espera()
-    if aspirantes_en_espera:
-            for aspirante in aspirantes_en_espera:
-                carrera = obtener_nombre_carrera(aspirante[33])
-                arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],  aspirante[11], carrera)) 
+    
 
     def volver():
         esperando.destroy()
