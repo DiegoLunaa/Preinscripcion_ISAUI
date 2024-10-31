@@ -169,7 +169,7 @@ def leer_todos_los_aspirantes_basico():
 
     try:
         cursor = conexion.cursor()
-        cursor.execute("SELECT nombre, apellido, dni, id_carrera, estado FROM Aspirante")  # Ajusta la consulta según tu tabla
+        cursor.execute("SELECT nombre, apellido, dni, id_carrera, estado, activo FROM Aspirante")  # Ajusta la consulta según tu tabla
         resultados = cursor.fetchall()  # Obtiene todos los registros
         return resultados
     except Error as e:
@@ -304,7 +304,7 @@ def contar_aspirantes_espera():
     conexion = conectar()
     cursor = conexion.cursor()
     query = """
-    SELECT id_carrera, COUNT(*) AS cantidad_confirmados
+    SELECT id_carrera, COUNT(*) AS cantidad_espera
     FROM Aspirante
     WHERE Estado = 'En espera'
     GROUP BY id_carrera

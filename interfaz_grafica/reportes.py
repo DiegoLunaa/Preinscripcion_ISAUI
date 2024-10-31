@@ -71,14 +71,14 @@ def abrir_ventana_reportes():
         confirmados = contar_confirmados_por_carrera()
 
         aspirantes_confirmados = [
-            (nombre, apellido, dni, id_carrera, estado) for nombre, apellido, dni, id_carrera, estado in aspirantes if estado == 'Confirmado'
+            (nombre, apellido, dni, id_carrera, estado, activo) for nombre, apellido, dni, id_carrera, estado, activo in aspirantes if estado == 'Confirmado'
         ]
 
         if carrera != 0:
             texto = f"<b><font face='Helvetica-Bold'>Lista de Aspirantes confirmados para {carrera}:</font></b>"
             aspirantes_confirmados = sorted(aspirantes_confirmados, key=lambda x: (x[0], x[1]))
-            for nombre, apellido, dni, id_carrera, estado in aspirantes_confirmados:
-                if estado == 'Confirmado' and id_carrera == carrera:
+            for nombre, apellido, dni, id_carrera, estado, activo in aspirantes_confirmados:
+                if estado == 'Confirmado' and id_carrera == carrera and activo == 1:
                     nombre_carrera = obtener_nombre_carrera(id_carrera)
                     texto += f"\n{apellido} {nombre}, {dni}, {nombre_carrera}"
             cantidad_confirmados = confirmados.get(carrera, 0)
@@ -96,8 +96,8 @@ def abrir_ventana_reportes():
                 nombre_carrera = obtener_nombre_carrera(i)
                 texto += f"<b><font face='Helvetica-Bold'>Confirmados para la {nombre_carrera}:</font></b>"
                 aspirantes_confirmados = sorted(aspirantes_confirmados, key=lambda x: (x[0], x[1]))
-                for nombre, apellido, dni, id_carrera, estado in aspirantes_confirmados:
-                    if estado == 'Confirmado' and id_carrera == i:
+                for nombre, apellido, dni, id_carrera, estado, activo in aspirantes_confirmados:
+                    if estado == 'Confirmado' and id_carrera == i and activo == 1:
                         texto += f"\n{apellido} {nombre}, {dni}"
                 cupos = cupos_disponibles(i)
                 cantidad_confirmados = confirmados.get(i, 0)
