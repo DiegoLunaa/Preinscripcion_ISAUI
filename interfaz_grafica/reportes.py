@@ -75,7 +75,8 @@ def abrir_ventana_reportes():
         ]
 
         if carrera != 0:
-            texto = f"<b><font face='Helvetica-Bold'>Lista de Aspirantes confirmados para {carrera}:</font></b>"
+            nombre_carrera = obtener_nombre_carrera(carrera)
+            texto = f"<b><font face='Helvetica-Bold'>Lista de Aspirantes confirmados para {nombre_carrera}:</font></b>"
             aspirantes_confirmados = sorted(aspirantes_confirmados, key=lambda x: (x[0], x[1]))
             for nombre, apellido, dni, id_carrera, estado, activo in aspirantes_confirmados:
                 if estado == 'Confirmado' and id_carrera == carrera and activo == 1:
@@ -83,7 +84,7 @@ def abrir_ventana_reportes():
                     texto += f"\n{apellido} {nombre}, {dni}, {nombre_carrera}"
             cantidad_confirmados = confirmados.get(carrera, 0)
             cantidad_esperando = esperando.get(carrera, 0)
-            cupos = cupos_disponibles(id_carrera)
+            cupos = cupos_disponibles(carrera)
             texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cantidad_confirmados}</font></b>\n"
             if cupos == 0:
                 texto += f"<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_esperando}</font></b>\n"
