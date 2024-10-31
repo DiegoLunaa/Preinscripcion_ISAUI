@@ -7,6 +7,7 @@ from interfaz_grafica.form2 import abrir_ventana_form2
 from interfaz_grafica.config import path_flecha
 from interfaz_grafica.validaciones import *
 from db.funciones_db import dni_existe_en_db, correo_existe_en_db
+import datetime
 
 # Diccionario para guardar los datos temporalmente
 datos_temporales = {}
@@ -143,11 +144,14 @@ def abrir_ventana_form1(id_carrera):
     label_email.place(x=880, y=320)
     entry_email = Entry(form, font=("Arial", 16))
     entry_email.place(x=880, y=350, width=400)
-
+    current_year = datetime.datetime.now().year
     # Cuarta fila
     label_fecha = Label(form, text="Fecha de nacimiento:*", bg="#1F6680", fg="White", font=("Arial", 14))
     label_fecha.place(x=20, y=450)
-    entry_fecha = DateEntry(form, font=("Arial", 16), borderwidth=2, state='readonly')
+    entry_fecha = DateEntry(form, font=("Arial", 16), borderwidth=2, 
+                        year=current_year, date_pattern='dd/mm/yyyy',
+                        mindate=datetime.date(1900, 1, 1),
+                        maxdate=datetime.date(current_year, 12, 31))
     entry_fecha.place(x=20, y=480, width=400)
 
     sexo = {
