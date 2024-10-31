@@ -86,10 +86,8 @@ def abrir_ventana_reportes():
             cantidad_esperando = esperando.get(carrera, 0)
             cupos = cupos_disponibles(carrera)
             texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cantidad_confirmados}</font></b>\n"
-            if cupos == 0:
-                texto += f"<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_esperando}</font></b>\n"
-            else:
-                texto += f"<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>\n"
+            texto += f"<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_esperando}</font></b>\n"
+            texto += f"<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>\n\n"
 
         else:
             texto = ''
@@ -104,10 +102,8 @@ def abrir_ventana_reportes():
                 cantidad_confirmados = confirmados.get(i, 0)
                 cantidad_esperando = esperando.get(i, 0)
                 texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de confirmados: {cantidad_confirmados}</font></b>"
-                if cupos == 0:
-                    texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_esperando}</font></b>\n"
-                else:
-                    texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>\n"
+                texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cantidad de personas en espera: {cantidad_esperando}</font></b>"
+                texto += f"\n<b><font color='red' face='Helvetica-Bold'>Cupos disponibles: {cupos}</font></b>\n\n"
 
         def generar_reporte_pdf(nombre_archivo, titulo, contenido):
             nombre_archivo = filedialog.asksaveasfilename(defaultextension=".pdf",
