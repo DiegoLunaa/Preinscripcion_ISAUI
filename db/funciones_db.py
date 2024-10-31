@@ -264,15 +264,19 @@ def poner_en_lista_espera(id_aspirante):
         cursor.close()
         conexion.close()
         return False, "El aspirante ya está en lista de espera."
-
-    # Verificar disponibilidad de cupos
+    
     cupos = cupos_disponibles(id_carrera)
     if cupos > 0:
         cursor.close()
         conexion.close()
         return False, "Aún hay cupos disponibles para esta carrera. El aspirante no necesita estar en lista de espera."
     
-    # Poner al aspirante en lista de espera si no hay cupos disponibles
+    if estado == 'Confirmado':
+        query_incrementar_cupo = "UPDATE Carrera SET Cupos_Disponibles = Cupos_Disponibles + 1 WHERE ID_Carrera = %s"
+        cursor.execute(query_incrementar_cupo, (id_carrera,))
+        conexion.commit()
+
+    # Poner al aspirante en lista de espera si no hay cupos disponibles y su estado es confirmado o pendiente
     query = "UPDATE Aspirante SET Estado = 'En espera' WHERE ID_Aspirante = %s"
     cursor.execute(query, (id_aspirante,))
     conexion.commit()
