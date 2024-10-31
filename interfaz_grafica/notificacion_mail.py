@@ -112,7 +112,7 @@ def abrir_mail(aspirante_id,aspirante_mail):
             servidor.sendmail(remitente, destinatario, mensaje.as_string())
             servidor.quit()
             
-            messagebox.showinfo("Éxito", "Correo enviado correctamente.")
+            messagebox.showinfo("Éxito", "Correo enviado correctamente.", parent=ventana)
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo enviar el correo: {e}")
 
@@ -128,7 +128,7 @@ def abrir_mail(aspirante_id,aspirante_mail):
 
 
     # ComboBox con mensajes predeterminados
-    combobox_mensajes = ttk.Combobox(ventana, values=list(mensajes_predeterminados.keys()), width=60, font=("Arial", 12))
+    combobox_mensajes = ttk.Combobox(ventana, values=list(mensajes_predeterminados.keys()), width=60, font=("Arial", 12), state='readonly')
     combobox_mensajes.pack(pady=padding)
     combobox_mensajes.set("Seleccione un mensaje predeterminado.")  # Seleccionar por defecto el primer mensaje
     combobox_mensajes.bind("<<ComboboxSelected>>", actualizar_mensaje)  # Vincular la función
