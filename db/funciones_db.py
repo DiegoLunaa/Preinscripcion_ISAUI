@@ -310,7 +310,7 @@ def contar_aspirantes_espera():
     query = """
     SELECT id_carrera, COUNT(*) AS cantidad_espera
     FROM Aspirante
-    WHERE Estado = 'En espera'
+    WHERE Estado = 'En espera' AND Activo = 1
     GROUP BY id_carrera
     """
     cursor.execute(query)
@@ -331,7 +331,7 @@ def contar_confirmados_por_carrera():
     query = """
     SELECT id_carrera, COUNT(*) AS cantidad_confirmados
     FROM Aspirante
-    WHERE Estado = 'Confirmado'
+    WHERE Estado = 'Confirmado' AND Activo = 1
     GROUP BY id_carrera
     """
     
