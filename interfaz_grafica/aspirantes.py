@@ -7,7 +7,7 @@ from interfaz_grafica.en_espera import abrir_ventana_en_espera
 from interfaz_grafica.info_aspirante import abrir_ventana_info_aspirante
 from interfaz_grafica.main_modif import abrir_ventana_modificar
 from db.funciones_db import leer_todos_los_aspirantes, eliminar_aspirante, confirmar_aspirante, obtener_nombre_carrera, obtener_carreras_disponibles,obtener_estado, poner_en_lista_espera,obtener_mail_aspirante
-from interfaz_grafica.notificacion_mail import abrir_mail
+from interfaz_grafica.notificacion_mail import abrir_mail, confirmar_aspirante_mail, mandar_aspirante_espera
 
 def abrir_ventana_aspirantes(main_adm):
     aspirantes = Toplevel()
@@ -109,6 +109,7 @@ def abrir_ventana_aspirantes(main_adm):
         respuesta = messagebox.askyesno("Confirmación del aspirante", f"¿Está seguro que desea confirmar al aspirante con ID {aspirante_id}?", parent=aspirantes)
         if respuesta:
             resultado, mensaje = confirmar_aspirante(aspirante_id)
+            confirmar_aspirante_mail(aspirante_id)
             if not resultado:
                 messagebox.showwarning("Error", mensaje, parent=aspirantes) 
             else:
@@ -132,6 +133,7 @@ def abrir_ventana_aspirantes(main_adm):
         respuesta = messagebox.askyesno("Lista de espera", f"¿Está seguro que desea poner al aspirante con ID {aspirante_id} en lista de espera?", parent=aspirantes)
         if respuesta:
             resultado, mensaje = poner_en_lista_espera(aspirante_id)
+            mandar_aspirante_espera(aspirante_id)
             if not resultado:
                 messagebox.showwarning("Advertencia", mensaje, parent=aspirantes)
             else:

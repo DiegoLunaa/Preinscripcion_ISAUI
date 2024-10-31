@@ -292,7 +292,7 @@ def abrir_ventana_form2(form, datos_temporales):
             print(datos_aspirante)
             aspirante_id = crear_aspirante(datos_aspirante)
 
-            # confirmar_preinscripcion(aspirante_id)
+            confirmar_preinscripcion(aspirante_id)
 
             form2.destroy()
             mostrar_confirmacion()

@@ -148,6 +148,7 @@ def abrir_mail(aspirante_id,aspirante_mail):
     boton_enviar.place(x=480,y=550)
     ventana.mainloop()
 
+# Este se manda al finalizar el formulario
 def confirmar_preinscripcion(aspirante_id):
     aspirante_info = leer_aspirante(aspirante_id)
     (
@@ -155,18 +156,103 @@ def confirmar_preinscripcion(aspirante_id):
     ) = aspirante_info
     
     # Crear el mensaje
-    asunto = f"Confirmación de Preinscripción - {nombre}  {apellido}"
+    asunto = f"Evaluación de Preinscripción - {nombre}  {apellido}"
 
     cuerpo = f"""
     Estimado/a {nombre},
 
-    Su preinscripción para la carrera ha sido recibida. 
-    Su solicitud será revisada y se le notificará sobre el estado de su inscripción.
-    Para más información, visita isaui.edu.ar
+    Le informamos que hemos recibido su solicitud de preinscripción para la carrera seleccionada. Su postulación será evaluada por nuestro equipo de admisiones, y le notificaremos a la brevedad sobre el estado de su inscripción.
 
-    Saludos,
-    Secretaria ISAUI
+    Agradecemos su interés en formar parte de nuestra institución y quedamos a su disposición para cualquier consulta adicional. Puede obtener más información en nuestro sitio web, isaui.edu.ar.
+
+    Atentamente,  
+    Secretaría del Instituto Superior Arturo Umberto Illia (ISAUI)
     """
+    
+    mensaje = MIMEMultipart()
+    mensaje["From"] = remitente
+    mensaje["To"] = email
+    mensaje["Subject"] = asunto  
+    
+    # Adjuntar el cuerpo del mensaje
+    mensaje.attach(MIMEText(cuerpo, "plain", "utf-8"))  
+
+    try:
+        servidor = smtplib.SMTP(smtp_server, smtp_port)
+        servidor.starttls()  
+        servidor.login(remitente, contraseña)
+        
+        servidor.sendmail(remitente, email, mensaje.as_string())
+        servidor.quit()
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo enviar el correo: {e}")
+
+# Este es para mandar cuando se confirma en el view aspirantes
+def confirmar_aspirante_mail(aspirante_id):
+    aspirante_info = leer_aspirante(aspirante_id)
+    (
+    id, nombre, apellido, _, _,_, _, _, _,_, _, email, *otros_campos
+    ) = aspirante_info
+    
+    # Crear el mensaje
+    asunto = f"Confirmación de Preinscripción - {nombre} {apellido}"
+
+    cuerpo = f"""
+    Estimado/a {nombre},
+
+    Nos complace informarle que su preinscripción para la carrera ha sido confirmada exitosamente.
+    Próximamente, le notificaremos la fecha en la que deberá presentarse para continuar con el proceso de inscripción.
+
+    Quedamos a su disposición para cualquier consulta adicional. Puede obtener más información en nuestro sitio web, isaui.edu.ar.
+
+    Atentamente,  
+    Secretaría del Instituto Superior Arturo Umberto Illia (ISAUI)
+    """
+    
+    mensaje = MIMEMultipart()
+    mensaje["From"] = remitente
+    mensaje["To"] = email
+    mensaje["Subject"] = asunto  
+    
+    # Adjuntar el cuerpo del mensaje
+    mensaje.attach(MIMEText(cuerpo, "plain", "utf-8"))  
+
+    try:
+        servidor = smtplib.SMTP(smtp_server, smtp_port)
+        servidor.starttls()  
+        servidor.login(remitente, contraseña)
+        
+        servidor.sendmail(remitente, email, mensaje.as_string())
+        servidor.quit()
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo enviar el correo: {e}")
+
+#  Esto es para mandar cuando se mande a espera
+def mandar_aspirante_espera(aspirante_id):
+    aspirante_info = leer_aspirante(aspirante_id)
+    (
+    id, nombre, apellido, _, _,_, _, _, _,_, _, email, *otros_campos
+    ) = aspirante_info
+    
+    # Crear el mensaje
+    asunto = f"Confirmación de Preinscripción - {nombre} {apellido}"
+
+    asunto = f"Notificación de Lista de Espera - {nombre} {apellido}"
+
+    cuerpo = f"""
+    Estimado/a {nombre} {apellido},
+
+    Nos dirigimos a usted para confirmar que su solicitud de preinscripción ha superado satisfactoriamente la fase de confirmación. 
+    En este momento, su inscripción se encuentra en lista de espera, quedando únicamente sujeta a la disponibilidad de cupos en la carrera de su elección.
+
+    Le informaremos a la brevedad en caso de que se libere un cupo, momento en el cual su inscripción avanzará automáticamente, y recibirá las indicaciones pertinentes para continuar con el proceso.
+
+    Agradecemos su interés en formar parte de nuestra institución y quedamos a su disposición para cualquier consulta adicional. Puede obtener más información en nuestro sitio web, isaui.edu.ar.
+
+    Atentamente,  
+    Secretaría del Instituto Superior Arturo Umberto Illia (ISAUI)
+    """
+
     
     mensaje = MIMEMultipart()
     mensaje["From"] = remitente
