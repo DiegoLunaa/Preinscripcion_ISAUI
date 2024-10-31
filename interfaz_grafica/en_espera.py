@@ -99,7 +99,11 @@ def abrir_ventana_en_espera(aspirantes):
     label_aspirantes = Label(frame1,text="ASPIRANTES", bg="#274357", fg="White", font=("Arial", 16))
     label_aspirantes.place(relx=0.5, y=200, anchor='center')
 
-
+    aspirantes_espera = obtener_aspirantes_espera()
+    if aspirantes_espera:
+            for aspirante in aspirantes_espera:
+                carrera = obtener_nombre_carrera(aspirante[33])
+                arbol.insert("", "end", values=(aspirante[0], aspirante[2], aspirante[1], aspirante[3],  aspirante[11], carrera)) 
     
 
     def volver():
