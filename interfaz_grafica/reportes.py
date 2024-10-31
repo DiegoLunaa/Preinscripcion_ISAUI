@@ -111,7 +111,8 @@ def abrir_ventana_reportes():
         def generar_reporte_pdf(nombre_archivo, titulo, contenido):
             nombre_archivo = filedialog.asksaveasfilename(defaultextension=".pdf",
             initialfile='reporte',
-            filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")])
+            filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")],
+            parent=ventana)
             if not nombre_archivo:  
                 return
             doc = SimpleDocTemplate(nombre_archivo, pagesize=letter)
