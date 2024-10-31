@@ -21,7 +21,15 @@ def abrir_mail(aspirante_id,aspirante_mail):
     ventana = Toplevel()
     ventana.title("Enviar Notificaciones vía Gmail")
     ventana.configure(bg="#1F6680")
-    ventana.geometry("800x600") 
+    ventana.configure(bg="#1F6680") 
+    window_width = 800
+    window_height = 600
+    ventana.geometry(f"{window_width}x{window_height}")
+    screen_width = ventana.winfo_screenwidth()
+    screen_height = ventana.winfo_screenheight()
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    ventana.geometry(f"{window_width}x{window_height}+{x}+{y}")
     ventana.protocol("WM_DELETE_WINDOW", lambda: None) #PARA QUE NO FUNCIONE LA X DE WINDOWS
     ventana.bind("<Configure>", lambda evento: ventana.state("normal")) #NO FUNCIONA MAXIMIZAR NI MINIMIZAR
 
