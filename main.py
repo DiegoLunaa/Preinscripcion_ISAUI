@@ -43,11 +43,13 @@ def avanzar_form1():
         messagebox.showerror("Error", "Por favor, selecciona una carrera antes de avanzar.")
         return
 
+    combobox_carreras.set("Seleccione una carrera...")
     # Mostrar el ID de la carrera seleccionada (para debugging)
     print(f"ID de carrera seleccionada: {id_carrera}")
 
     # Abre el formulario y pasa el ID de la carrera seleccionada
     abrir_ventana_form1(id_carrera)
+    
 
 ventana = tk.Tk()
 ventana.title("PREINSCRIPCIÓN ISAUI")
