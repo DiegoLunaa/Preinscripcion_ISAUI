@@ -6,8 +6,16 @@ from interfaz_grafica.config import path_isaui
 def mostrar_confirmacion():
     confirmacion = Toplevel()
     confirmacion.title("Formulario de preinscripción")
-    confirmacion.geometry("600x400")
     confirmacion.configure(bg="#1F6680")
+    window_width = 600
+    window_height = 400
+    confirmacion.geometry(f"{window_width}x{window_height}")
+    screen_width = confirmacion.winfo_screenwidth()
+    screen_height = confirmacion.winfo_screenheight()
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    confirmacion.geometry(f"{window_width}x{window_height}+{x}+{y}")
+   
 
     imagen = Image.open(path_isaui)
     imagen_redimensionada = imagen.resize((400, 250))  # Tamaño ajustado

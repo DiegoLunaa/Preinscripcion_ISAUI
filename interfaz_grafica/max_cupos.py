@@ -6,8 +6,16 @@ from tkinter import messagebox
 def abrir_ventana_max_cupos():
     max = Toplevel()
     max.title("MÁXIMO DE CUPOS")
-    max.geometry("800x600") 
     max.configure(bg="#274357")
+    window_width = 800
+    window_height = 600
+    max.geometry(f"{window_width}x{window_height}")
+    screen_width = max.winfo_screenwidth()
+    screen_height = max.winfo_screenheight()
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    max.geometry(f"{window_width}x{window_height}+{x}+{y}")
+    max.configure(bg="#1F6680")
 
     #frames
     frame1 = Frame(max, bg="#1F6680", width=674, height=450)

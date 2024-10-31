@@ -13,8 +13,16 @@ def abrir_ventana_modificar(aspirante_id, actualizar_lista_aspirantes):
     # Crear la ventana principal
     ventana = Toplevel()
     ventana.title("Modificar Información")
-    ventana.geometry("300x300")
     ventana.configure(bg="#1F6680")
+    window_width = 300
+    window_height = 300
+    ventana.geometry(f"{window_width}x{window_height}")
+    screen_width = ventana.winfo_screenwidth()
+    screen_height = ventana.winfo_screenheight()
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    ventana.geometry(f"{window_width}x{window_height}+{x}+{y}")
+    
 
     # Frame
     frame_titulo = Frame(ventana,bg="#274357", width=217, height=75)
