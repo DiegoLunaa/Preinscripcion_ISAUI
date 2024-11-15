@@ -109,13 +109,13 @@ def abrir_ventana_aspirantes(main_adm):
         respuesta = messagebox.askyesno("Confirmación del aspirante", f"¿Está seguro que desea confirmar al aspirante con ID {aspirante_id}?", parent=aspirantes)
         if respuesta:
             resultado, mensaje = confirmar_aspirante(aspirante_id)
-            confirmar_aspirante_mail(aspirante_id)
             if not resultado:
                 messagebox.showwarning("Error", mensaje, parent=aspirantes) 
             else:
                 nuevo_estado = "Confirmado"
                 arbol.item(item, values=(aspirante_info[0], aspirante_info[1], aspirante_info[2], aspirante_info[3], nuevo_estado, aspirante_info[5]))
                 messagebox.showinfo("Confirmado", mensaje, parent=aspirantes)  
+                confirmar_aspirante_mail(aspirante_id)
         else:
             messagebox.showinfo("Cancelado", "Confirmación cancelada.", parent=aspirantes)
 
@@ -133,13 +133,13 @@ def abrir_ventana_aspirantes(main_adm):
         respuesta = messagebox.askyesno("Lista de espera", f"¿Está seguro que desea poner al aspirante con ID {aspirante_id} en lista de espera?", parent=aspirantes)
         if respuesta:
             resultado, mensaje = poner_en_lista_espera(aspirante_id)
-            mandar_aspirante_espera(aspirante_id)
             if not resultado:
                 messagebox.showwarning("Advertencia", mensaje, parent=aspirantes)
             else:
                 nuevo_estado = "En espera"
                 arbol.item(item, values=(aspirante_info[0], aspirante_info[1], aspirante_info[2], aspirante_info[3], nuevo_estado, aspirante_info[5]))
                 messagebox.showinfo("En espera", mensaje, parent=aspirantes)
+                mandar_aspirante_espera(aspirante_id)
         else:
             messagebox.showinfo("Cancelado", "Operación cancelada.", parent=aspirantes)
 
